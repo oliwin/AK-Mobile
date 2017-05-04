@@ -22,15 +22,16 @@
                        {!! Form::text('prefix', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Prefix"]) !!}
                    </div>
                </div>
+
                <div class="form-group">
-                   <label class="col-md-12 control-label">Type</label>
+                   <label class="col-md-12 control-label">Type <span class="required-field">*</span></label>
                    <div class="col-md-12">
                      {{Form::select('type', array(0 => "Object", 1 => "Field"), null, array("class" => "form-control"))}}
                    </div>
                </div>
 
                <div class="form-group">
-                 <label class="col-md-12 control-label">Value <span class="required-field">*</span></label>
+                 <label class="col-md-12 control-label">Value </label>
                    <div class="col-md-3">
                        {!! Form::text('value', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Value"]) !!}
                    </div>
@@ -57,6 +58,8 @@
                      <?=Form::checkbox('available', 1, TRUE);?>
                    </div>
                </div>
+
+               <div class="clearfix"></div>
                <div class="form-group">
                  @if($prototype_fields->count())
                  <h4>Fields (visibility = 1)</h4>
@@ -70,6 +73,7 @@
                     @endforeach
                  @endif
                </div>
+
                <div class="form-group">
                   <div class="col-lg-10 col-lg-offset-2">
                       <button type="submit" class="btn btn-primary">Add</button>

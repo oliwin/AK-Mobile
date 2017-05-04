@@ -23,10 +23,18 @@
                    </div>
                </div>
 
+               <div class="form-group">
+                   <label class="col-md-12 control-label">Category <span class="required-field">*</span></label>
+                   <div class="col-md-12">
+
+                     {!! Form::select("category", $categories, null, array("class" => "form-control")) !!}
+                   </div>
+               </div>
+
 
 
                               <div class="form-group">
-                                  <label class="col-md-12 control-label">Visibility</label>
+                                  <label class="col-md-12 control-label">Visibility <span class="required-field">*</span></label>
                                   <div class="col-md-3">
                                     <?=Form::selectRange('visibility', 0, 20)?>
                                   </div>

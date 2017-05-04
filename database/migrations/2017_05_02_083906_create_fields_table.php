@@ -16,7 +16,7 @@ class CreatePrototypeFieldsTable extends Migration
       Schema::create('fields', function (Blueprint $table) {
          $table->increments('id');
          $table->string('name');
-         $table->string('prefix')->unique();
+         $table->string('prefix');
          $table->boolean('only_numbers')->nullable();
          $table->integer('available')->unsigned()->default(1);
          $table->integer('prototype_id')->unsigned();

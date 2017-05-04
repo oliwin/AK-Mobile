@@ -16,7 +16,7 @@ class CreatePrototypesTable extends Migration
       Schema::create('prototypes', function (Blueprint $table) {
          $table->increments('id');
          $table->string('name');
-         $table->string('prefix')->unique();
+         $table->string('prefix');
          $table->integer('visibility')->unsigned();
          $table->string('default');
          $table->string('value')->nullable();

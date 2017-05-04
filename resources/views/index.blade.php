@@ -45,7 +45,7 @@
                                   <a class="{{ (Request::is('prototypes') || Request::is('prototypes/*') ? 'active' : '') }} list-group-item"
                                      href="{{url('prototypes')}}">Prototypes</a>
                                      <a class="{{ (Request::is('fields') || Request::is('fields/*') ? 'active' : '') }} list-group-item"
-                                        href="{{url('fields')}}">Fields</a>
+                                        href="{{url('fields')}}">Parameters</a>
             </div>
           </div>
     </div>

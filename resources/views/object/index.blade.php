@@ -36,6 +36,7 @@
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <button class="btn btn-primary">Delete</button>
                     </form>
+                    <a class="btn btn-primary" href="{{url("objects/".$object->id."/clone")}}">Clone</a>
                     </td>
                 </tr>
             @endforeach

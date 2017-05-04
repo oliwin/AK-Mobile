@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateObjectsTable extends Migration
+class CreateFieldCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateObjectsTable extends Migration
      */
     public function up()
     {
-      Schema::create('objects', function (Blueprint $table) {
+      Schema::create('field_categories', function (Blueprint $table) {
          $table->increments('id');
          $table->string('name');
-         $table->string('prefix')->nullable();
-         $table->integer('visibility')->unsigned();
          $table->integer('available')->unsigned()->default(1);
      });
-
     }
 
     /**
@@ -30,6 +27,6 @@ class CreateObjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('objects');
+        Schema::dropIfExists('field_categories');
     }
 }

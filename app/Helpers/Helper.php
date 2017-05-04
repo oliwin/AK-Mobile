@@ -1053,39 +1053,48 @@ class Helper
         }
 
         return $categories;
+
+      }
+
+    public static function pluckObject($object, $key, $value, $placeholder = "Select category")
+    {
+
+      $object = Helpers\Helper::firstEmptyValue($object, $placeholder);
+
+      return $object->pluck($value, $key);
     }
-    
+
     public static function payment($user){
-		
+
 		$payment = array(
 			0 => false,
 			1 => false
 		);
-			
+
 			if(!is_null($user->payment)){
-				
+
 				$_payment = explode(",", $user->payment);
 				$payment[0] = isset($_payment[0]) ? true : false;
 				$payment[1] = isset($_payment[1]) ? true : false;
 			}
-						
+
 			return $payment;
 	}
-	
+
 	 public static function delivery($user){
-		
+
 		$payment = array(
 			0 => false,
 			1 => false
 		);
-			
+
 			if(!is_null($user->delivery)){
-				
+
 				$_payment = explode(",", $user->delivery);
 				$payment[0] = isset($_payment[0]) ? true : false;
 				$payment[1] = isset($_payment[1]) ? true : false;
 			}
-						
+
 			return $payment;
 	}
 

@@ -8,14 +8,28 @@ use App\Object;
 
 use App\Prototype;
 
+use App\FieldCategories;
+
+use App\FieldCategoriesValues;
+
 use View;
 
 use Validator;
+
+use App\Helpers\Helper;
 
 class ObjectController extends Controller
 {
 
   private $limit = 20;
+  private $field_categories = [];
+  private $prototypes = [];
+
+  public function __construct(){
+
+    $this->field_categories = Helper::pluckObject(FieldCategories::all(), "id", "name");
+    $this->prototypes =  Helper::pluckObject(Prototype::all(), "id", "name", "Select prototype");
+  }
 
   private function prototypes($params = array()){
       return Prototype::visibility($params)->get()->pluck("name", "id");
@@ -28,7 +42,7 @@ class ObjectController extends Controller
     public function index(Request $request)
     {
 
-      $objects = Object::where(function ($query) use ($request) {
+      $objects = Object::with("prototypes", "category")->where(function ($query) use ($request) {
 
             // Filter by name
             if (($name = $request->get("name"))) {
@@ -41,6 +55,25 @@ class ObjectController extends Controller
                 $query->where('available', $request->status);
             }
 
+            // Filter by ID
+            if (($request->get("id"))) {
+                $query->where('id', $request->id);
+            }
+
+            // Filter by category
+            if (($request->get("category"))) {
+                $query ->whereHas('category', function ($query) use ($request) {
+                  $query->where('category_id', $request->category);
+                });
+            }
+
+            // Filter by prototype
+            if (($request->get("prototype"))) {
+              $query ->whereHas('prototypes', function ($query) use ($request) {
+                $query->where('prototype_id', $request->prototype_id);
+              });
+            }
+
             // Show by
             if (($request->get("limit"))) {
                 $this->limit = $request->limit;
@@ -51,7 +84,9 @@ class ObjectController extends Controller
 
       return View::make('object.index', [
           "objects" => $objects,
-          "path" => action("ObjectController@create")
+          "path" => action("ObjectController@create"),
+          "categories" => $this->field_categories,
+          "prototypes_list" => $this->prototypes
       ]);
     }
 
@@ -64,7 +99,8 @@ class ObjectController extends Controller
     {
 
       return View::make('object.create', [
-          "prototypes" => $this->prototypes(["visibility" => 1])
+          "prototypes" => $this->prototypes(["visibility" => 1]),
+          "categories" => $this->field_categories
       ]);
     }
 
@@ -82,7 +118,8 @@ class ObjectController extends Controller
          "available" => "integer|nullable",
          "prefix" => "required|string|min:1",
          "prototype_id.*" => "integer",
-         "visibility" => "required|integer"
+         "visibility" => "required|integer",
+         "category" => "required|integer"
      ]);
 
      if ($validator->fails()) {
@@ -95,6 +132,13 @@ class ObjectController extends Controller
      $object->visibility = $request->visibility;
      $object->available = (!is_null($request->available)) ? $request->available : 0;
      $object->save();
+
+     // Bind categories
+
+       $category = new FieldCategoriesValues();
+       $category->object_id = $object->id;
+       $category->category_id = $request->category;
+       $category->save();
 
      // To bind ptototypes to object
      $object->prototypes()->attach($request->prototype_id);
@@ -141,7 +185,8 @@ class ObjectController extends Controller
 
       return View::make('object.edit', [
           "object" => $object,
-          "prototypes" => $prototypes_with_checkes
+          "prototypes" => $prototypes_with_checkes,
+          "categories" => $this->field_categories
       ]);
     }
 
@@ -160,7 +205,8 @@ class ObjectController extends Controller
          "available" => "integer|nullable",
          "prefix" => "required|string|min:1",
          "prototype_id.*" => "integer",
-         "visibility" => "required|integer"
+         "visibility" => "required|integer",
+         "category" => "required|integer"
      ]);
 
       if ($validator->fails()) {
@@ -210,13 +256,53 @@ class ObjectController extends Controller
     public function filterByPrototype($prototype_id)
     {
 
-      $objects = Object::with("prototypes")->paginate(100);
+      $objects = Object::with('prototypes')
+        ->WhereHas('prototypes', function ($query) use ($prototype_id) {
+            $query->where('prototype_id', $prototype_id);
+        })->paginate($this->limit);
 
       return View::make('object.index', [
           "objects" => $objects,
           "path" => action("ObjectController@create")
       ]);
 
+    }
+
+    public function cloneObject(Request $request, $id){
+
+      $validator = Validator::make(array_merge(
+            [
+                'id' => $id
+            ],
+            $request->all()
+        ), [
+            "id" => 'required|integer'
+        ]);
+
+
+      if ($validator->fails()) {
+          return redirect()->back()->withErrors($validator->errors());
+      }
+
+      // Get requisted object
+      $object = Object::findOrFail($id);
+
+      // Create new object except unique fields
+      $object_copied = collect($object)->except('id', 'prefix', 'prototypes')->all();
+
+      // Copy object
+      $new_object = Object::create(
+         $object_copied
+      );
+
+       // Copy prototypes object
+       $prototypes_ids = [];
+       $prototypes_ids = $object->prototypes()->pluck("prototype_id")->toArray();
+       $new_object->prototypes()->attach($prototypes_ids);
+
+      return redirect()->action(
+            'ObjectController@edit', ['id' => $new_object->id]
+        );
     }
 
     /**

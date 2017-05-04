@@ -25,6 +25,12 @@ class PrototypeController extends Controller
     {
       $prototypes = Prototype::where(function ($query) use ($request) {
 
+        // Filter by ID
+        if (($request->get("id"))) {
+            $query->where('id', $request->id);
+        }
+
+
             // Filter by name
             if (($name = $request->get("name"))) {
                 $query->where('name', 'like', '%' . $name . '%');
