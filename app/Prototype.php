@@ -8,18 +8,12 @@ use App\Scopes\AvailableScope;
 class Prototype extends Model
 {
 
-  protected $hidden = ["updated_at", "created_at"];
-
-  protected static function boot()
-   {
-       parent::boot();
-
-       static::addGlobalScope(new AvailableScope);
-   }
+protected $hidden = ["updated_at", "created_at", "pivot", "value", "default"];
 
  public function fields(){
-    return $this->hasMany("App\PrototypeFields");
+    return $this->hasMany("App\FieldsInPrototype");
  }
+
 
  public function objects(){
    return $this->belongsToMany("App\Object", "object_prototype", "prototype_id", "object_id");
@@ -32,4 +26,13 @@ class Prototype extends Model
         }
     }
 
+    ## API ##
+
+    public function parameters(){
+       return $this->hasMany("App\FieldsInPrototype");
+    }
+
+    public function fields_api(){
+       return $this->hasMany("App\PrototypeFields")->where("available", 1);
+    }
 }

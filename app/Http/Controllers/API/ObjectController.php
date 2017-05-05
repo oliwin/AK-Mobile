@@ -24,10 +24,9 @@ class ObjectController extends Controller
     public function index()
     {
 
-        $objects = Object::with("prototypes.fields")->get();
+      $objects = Object::with("_prototypes.parameters.properties")->active()->get();
+      //return $objects->toJson();
 
-        $fields = PrototypeFields::all();
-
-        return response()->json(["objects" => $objects]);
+      return response()->json(["objects" => $objects], 200, [], JSON_PRETTY_PRINT);
     }
 }

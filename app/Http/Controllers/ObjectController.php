@@ -62,15 +62,13 @@ class ObjectController extends Controller
 
             // Filter by category
             if (($request->get("category"))) {
-                $query ->whereHas('category', function ($query) use ($request) {
-                  $query->where('category_id', $request->category);
-                });
+                $query->where('category_id', $request->category);
             }
 
             // Filter by prototype
             if (($request->get("prototype"))) {
               $query ->whereHas('prototypes', function ($query) use ($request) {
-                $query->where('prototype_id', $request->prototype_id);
+                $query->where('prototype_id', $request->prototype);
               });
             }
 
@@ -119,7 +117,7 @@ class ObjectController extends Controller
          "prefix" => "required|string|min:1",
          "prototype_id.*" => "integer",
          "visibility" => "required|integer",
-         "category" => "required|integer"
+         "category_id" => "required|integer"
      ]);
 
      if ($validator->fails()) {
@@ -130,17 +128,9 @@ class ObjectController extends Controller
      $object->name = $request->name;
      $object->prefix = $request->prefix;
      $object->visibility = $request->visibility;
+     $object->category_id = $request->category_id;
      $object->available = (!is_null($request->available)) ? $request->available : 0;
      $object->save();
-
-     // Bind categories
-
-       $category = new FieldCategoriesValues();
-       $category->object_id = $object->id;
-       $category->category_id = $request->category;
-       $category->save();
-
-     // To bind ptototypes to object
      $object->prototypes()->attach($request->prototype_id);
 
      return redirect("objects")->with('success', "Object was created!");
@@ -173,14 +163,11 @@ class ObjectController extends Controller
     {
 
       $prototypes = Prototype::all();
-      $object = Object::with("prototypes")->findOrFail($id);
+      $object = Object::with("prototypes", "category")->findOrFail($id);
 
       $prototypes_with_checkes = $prototypes->map(function ($item, $key) use ($object) {
-        $object->prototypes->each(function ($v, $k) use ($item) {
-          $item->checked = ($item->id == $v->id) ? true : false;
-        });
-
-        return $item;
+          $item->checked = $object->prototypes->contains("id", $item->id);
+          return $item;
       });
 
       return View::make('object.edit', [
@@ -204,10 +191,12 @@ class ObjectController extends Controller
          "name" => "required|string|min:3",
          "available" => "integer|nullable",
          "prefix" => "required|string|min:1",
-         "prototype_id.*" => "integer",
+         "prototype_id.*" => "nullable",
          "visibility" => "required|integer",
-         "category" => "required|integer"
+         "category_id" => "required|integer"
      ]);
+
+     //dd($request->all());
 
       if ($validator->fails()) {
           return redirect()->back()->withErrors($validator->errors());
@@ -217,40 +206,40 @@ class ObjectController extends Controller
           "name" => $request->name,
           "available" => (!is_null($request->available)) ? $request->available : 0,
           "prefix" => $request->prefix,
-          "visibility" => $request->visibility
+          "visibility" => $request->visibility,
+          "category_id" => $request->category_id
       ]);
 
       // Update object prototypes
       $object = Object::with("prototypes")->findOrFail($id);
 
-      if(is_null($request->prototype_id)){
-        $object->prototypes()->detach();
-
-      } else {
-
-        $selected_ptototypes = $object->prototypes()->get()->pluck("name", "id");
-        $selected_ptototypes_edit = $selected_ptototypes;
-
+      if ($request->has('prototype_id')) {
         foreach($request->prototype_id as $k => $v){
 
-          // If value is not in Model
-
-          if(!in_array($v, $selected_ptototypes)){
-            $object->prototypes()->attach($v);
+          if(is_null($v)){
+            if($this->checkIfPrototypeExistsInObject($k, $object)){
+              $object->prototypes()->detach($k);
+            }
 
           } else {
-
-            // If value in Model, delete it
-            unset($selected_ptototypes_edit[$k]);
+            if(!$this->checkIfPrototypeExistsInObject($k, $object)){
+              $object->prototypes()->attach($v);
+            }
           }
         }
-
-        // Detach elements if exists
-        $object->prototypes()->detach($selected_ptototypes_edit);
-
       }
 
       return redirect("objects")->with('success', "Object was updated!");
+    }
+
+    private function checkIfPrototypeExistsInObject($id, $object){
+      foreach($object->prototypes as $k => $v){
+         if($v->pivot->prototype_id == $id){
+           return true;
+         }
+      }
+
+      return false;
     }
 
     public function filterByPrototype($prototype_id)

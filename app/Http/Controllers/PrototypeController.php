@@ -10,6 +10,8 @@ use App\Prototype;
 
 use App\PrototypeFields;
 
+use App\FieldsInPrototype;
+
 use Validator;
 
 class PrototypeController extends Controller
@@ -92,9 +94,7 @@ class PrototypeController extends Controller
          "available" => "integer|nullable",
          "type" => "required|integer",
          "prefix" => "required|string|min:1",
-         "visibility" => "required|integer",
-         "value" => "string",
-         "default" => "required|string"
+         "visibility" => "required|integer"
      ]);
 
      if ($validator->fails()) {
@@ -104,12 +104,20 @@ class PrototypeController extends Controller
      $field = new Prototype();
      $field->name = $request->name;
      $field->prefix = $request->prefix;
-     $field->default = $request->default;
-     $field->value = $request->value;
      $field->visibility = $request->visibility;
      $field->type = (!is_null($request->type)) ? $request->type : 0;
      $field->available = (!is_null($request->available)) ? $request->available : 0;
      $field->save();
+
+     // Attach fields to prototypes
+     if ($request->has('field_id')) {
+       foreach($request->field_id as $k => $v){
+         $fields_prototype = new FieldsInPrototype();
+         $fields_prototype->field_id = $v;
+         $fields_prototype->prototype_id = $field->id;
+         $fields_prototype->save();
+       }
+     }
 
      return redirect("prototypes")->with('success', "Prototype was created!");
     }
@@ -133,11 +141,17 @@ class PrototypeController extends Controller
      */
     public function edit($id)
     {
-      $prototype = Prototype::find($id);
+      $prototype = Prototype::with("fields")->find($id);
+      $fields =   PrototypeFields::all();
+
+      $fields_with_checkes = $fields->map(function ($item, $key) use ($prototype) {
+          $item->checked = $prototype->fields->contains("field_id", $item->id);
+          return $item;
+      });
 
       return View::make('prototype.edit', [
           "prototype" => $prototype,
-          "prototype_fields" => $this->prototypeFields()
+          "prototype_fields" => $fields_with_checkes
       ]);
     }
 
@@ -148,6 +162,17 @@ class PrototypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     private function checkIfPrototypeExistsInObject($id, $object){
+       foreach($object->fields as $k => $v){
+          if($v->field_id == $id){
+            return true;
+          }
+       }
+
+       return false;
+     }
+
     public function update(Request $request, $id)
     {
       $validator = Validator::make($request->all(), [
@@ -157,8 +182,9 @@ class PrototypeController extends Controller
          "type" => "required|integer",
          "prefix" => "required|string|min:1",
          "visibility" => "required|integer",
-         "value" => "string",
-         "default" => "required|string"
+         "field_id.*" => "integer|nullable"
+         //"value" => "string",
+         //"default" => "required|string"
      ]);
 
      if ($validator->fails()) {
@@ -168,12 +194,30 @@ class PrototypeController extends Controller
      Prototype::where("id", $id)->update([
        "name" => $request->name,
        "prefix" => $request->prefix,
-       "default" => $request->default,
-       "value" => $request->value,
        "visibility" => $request->visibility,
        "type" => (!is_null($request->type)) ? $request->type : 0,
        "available" => (!is_null($request->available)) ? $request->available : 0
      ]);
+
+     $object = Prototype::with("fields")->findOrFail($id);
+
+     if ($request->has('field_id')) {
+       foreach($request->field_id as $k => $v){
+
+         if(is_null($v)){
+           if($this->checkIfPrototypeExistsInObject($k, $object)){
+             FieldsInPrototype::where("prototype_id", $id)->where("field_id", $k)->delete();
+           }
+
+         } else {
+
+           if(!$this->checkIfPrototypeExistsInObject($k, $object)){
+             FieldsInPrototype::create(["prototype_id" => $id, "field_id" => $k]);
+
+           }
+         }
+       }
+     }
 
      return redirect("prototypes")->with('success', "Prototype was updated!");
     }

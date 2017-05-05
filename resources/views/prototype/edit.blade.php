@@ -10,7 +10,7 @@
 
        <div class="row">
 
-         {{ Form::model($prototype, array('route' => array('fields.update', $prototype->id), 'files' => false, 'method' => 'PUT')) }}
+         {{ Form::model($prototype, array('route' => array('prototypes.update', $prototype->id), 'files' => false, 'method' => 'PUT')) }}
 
                <div class="form-group">
                  <label class="col-md-12 control-label">Name <span class="required-field">*</span></label>
@@ -32,7 +32,7 @@
                    </div>
                </div>
 
-               <div class="form-group">
+               <!--<div class="form-group">
                  <label class="col-md-12 control-label">Value </label>
                    <div class="col-md-3">
                        {!! Form::text('value', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Value"]) !!}
@@ -44,7 +44,7 @@
                    <div class="col-md-3">
                        {!! Form::text('default', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Default Value"]) !!}
                    </div>
-               </div>
+               </div>-->
 
                <div class="form-group">
                    <label class="col-md-12 control-label">Visibility</label>
@@ -65,11 +65,12 @@
                <div class="form-group">
                  @if($prototype_fields->count())
                  <h4>Fields</h4>
-                    @foreach($prototype_fields as $key => $name)
+                    @foreach($prototype_fields as $k => $v)
                     <div class="row">
                       <div class="col-md-12">
-                        <label>{{$name}}</label>
-                        {{Form::checkbox('prototype_id[]', $key)}}
+                        <label>{{$v->name}}</label>
+                          {{Form::hidden('field_id['.$v->id.']', false)}}
+                        {{Form::checkbox('field_id['.$v->id.']', $v->id, $v->checked)}}
                       </div>
                     </div>
                     @endforeach
@@ -77,7 +78,7 @@
                </div>
                <div class="form-group">
                   <div class="col-lg-10 col-lg-offset-2">
-                      <button type="submit" class="btn btn-primary">Add</button>
+                      <button type="submit" class="btn btn-primary">Update</button>
                   </div>
                 </div>
 

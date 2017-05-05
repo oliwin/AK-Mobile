@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Scopes\AvailableScope;
 
 class PrototypeFields extends Model
 {
@@ -11,16 +10,19 @@ class PrototypeFields extends Model
 
     protected $hidden = ["updated_at", "created_at"];
 
-    protected static function boot()
-     {
-         parent::boot();
+    /* Use this if value field was saves as NULL
+    public function getValueAttribute()
+{
+   return $this->value ? $this->value : $this->default;
+}*/
 
-         static::addGlobalScope(new AvailableScope);
-     }
 
+public function prototype(){
+   return $this->belongsToMany("App\Prototype", "id", "prototype_id");
+}
 
     public function prototypes(){
-      return $this->hasMany("App\FieldsInPrototype", "id", "field_id");
+      return $this->hasMany("App\FieldsInPrototype", "field_id", "id");
     }
 
     public function scopeVisibility($query, $params)

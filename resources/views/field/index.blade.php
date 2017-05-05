@@ -6,7 +6,7 @@
 
 @include('common.action_buttons')
 
-<h4>Prototype Fields</h4>
+<h4>Parameters</h4>
 
     @if(count($fields))
 

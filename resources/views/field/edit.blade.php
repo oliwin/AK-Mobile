@@ -5,7 +5,7 @@
 <div class="block-form">
 
   <fieldset>
-             <legend>Edit prototype field <a class="back-link" href="{{URL::previous()}}">Back</a>
+             <legend>Edit parameter <a class="back-link" href="{{URL::previous()}}">Back</a>
              </legend>
 
        <div class="row">
@@ -61,11 +61,12 @@
                </div>
                <div class="form-group">
                  @if($prototypes->count())
-                    @foreach($prototypes as $key => $name)
+                    @foreach($prototypes as $k => $v)
                     <div class="row">
                       <div class="col-md-12">
-                        <label>{{$name}}</label>
-                        {{Form::checkbox('prototype_id[]', $key)}}
+                        <label>{{$v->name}}</label>
+                        {{Form::hidden('prototype_id['.$v->id.']', false)}}
+                        {{Form::checkbox('prototype_id['.$v->id.']', $v->id, $v->checked)}}
                       </div>
                     </div>
                     @endforeach

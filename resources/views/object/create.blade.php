@@ -28,7 +28,7 @@
                   <label class="col-md-12 control-label">Category <span class="required-field">*</span></label>
                   <div class="col-md-12">
 
-                    {!! Form::select("category", $categories, null, array("class" => "form-control")) !!}
+                    {!! Form::select("category_id", $categories, null, array("class" => "form-control")) !!}
                   </div>
               </div>
 

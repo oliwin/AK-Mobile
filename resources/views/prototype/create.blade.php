@@ -30,7 +30,7 @@
                    </div>
                </div>
 
-               <div class="form-group">
+               <!--<div class="form-group">
                  <label class="col-md-12 control-label">Value </label>
                    <div class="col-md-3">
                        {!! Form::text('value', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Value"]) !!}
@@ -42,7 +42,7 @@
                    <div class="col-md-3">
                        {!! Form::text('default', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Default Value"]) !!}
                    </div>
-               </div>
+               </div>-->
 
                <div class="form-group">
                    <label class="col-md-12 control-label">Visibility</label>
@@ -62,12 +62,12 @@
                <div class="clearfix"></div>
                <div class="form-group">
                  @if($prototype_fields->count())
-                 <h4>Fields (visibility = 1)</h4>
+                 <h4>Fields with visibility = 1</h4>
                     @foreach($prototype_fields as $key => $name)
                     <div class="row">
                       <div class="col-md-12">
                         <label>{{$name}}</label>
-                        {{Form::checkbox('prototype_id[]', $key)}}
+                        {{Form::checkbox('field_id[]', $key)}}
                       </div>
                     </div>
                     @endforeach

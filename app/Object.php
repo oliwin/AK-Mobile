@@ -3,21 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Scopes\AvailableScope;
+#use App\Scopes\AvailableScope;
 
 class Object extends Model
 {
 
   protected $hidden = ["updated_at", "created_at"];
 
-  protected $fillable =  ['name', 'available', 'visibility'];
-
-  protected static function boot()
-   {
-       parent::boot();
-
-       static::addGlobalScope(new AvailableScope);
-   }
+  protected $fillable =  ['name', 'available', 'visibility', 'category_id'];
 
   public function prototypes()
  {
@@ -32,5 +25,13 @@ class Object extends Model
     {
         return $query->where('available', 1);
     }
+
+  ## API ##
+
+  public function _prototypes()
+ {
+     return $this->belongsToMany('App\Prototype', 'object_prototype', 'object_id');
+ }
+
 
 }

@@ -144,10 +144,16 @@ class PrototypeFieldsController extends Controller
      */
     public function edit($id)
     {
+      $prototypes = Prototype::all();
       $field = PrototypeFields::with("prototypes")->findOrFail($id);
 
+      $prototypes_with_checkes = $prototypes->map(function ($item, $key) use ($field) {
+          $item->checked = $field->prototypes->contains("prototype_id", $item->id);
+          return $item;
+      });
+
       return View::make('field.edit', [
-          "prototypes" => $this->prototypes(),
+          "prototypes" => $prototypes_with_checkes,
           "field" => $field
       ]);
     }
@@ -167,7 +173,7 @@ class PrototypeFieldsController extends Controller
         "only_numbers" => "integer|nullable",
         "available" => "integer|nullable",
         "prefix" => "required|string|min:1",
-        "prototype_id" => "integer|nullable",
+        "prototype_id.*" => "nullable",
         "visibility" => "required|integer",
         "value" => "string",
         "default" => "required|string"
@@ -182,13 +188,34 @@ class PrototypeFieldsController extends Controller
           "only_numbers" => (!is_null($request->only_numbers)) ? $request->only_numbers : 0,
           "available" => (!is_null($request->available)) ? $request->available : 0,
           "prefix" => $request->prefix,
-          "prototype_id" => $request->prototype_id,
           "visibility" => $request->visibility,
           "default" => $request->default,
           "value" => $request->value
       ]);
 
+      // Attach fields to prototypes
+      if ($request->has('prototype_id')) {
+        foreach($request->prototype_id as $k => $v){
+          if(is_null($v)){
+
+            if($this->checkIfPrototypeExistsInField($k, $id)){
+               FieldsInPrototype::where("prototype_id", $k)->where("field_id", $id)->delete();
+            }
+
+          } else {
+            if(!$this->checkIfPrototypeExistsInField($v, $id)){
+               FieldsInPrototype::insert(["prototype_id" => $v, "field_id" => $id]);
+            }
+          }
+        }
+      }
+
       return redirect("fields")->with('success', "Prototype field was updated!");
+    }
+
+    private function checkIfPrototypeExistsInField($prototype_id, $field_id){
+      $rows = FieldsInPrototype::where("prototype_id", $prototype_id)->where("field_id", $field_id)->get()->count();
+      return ($rows > 0 ) ? true : false;
     }
 
     /**

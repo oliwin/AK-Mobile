@@ -27,7 +27,7 @@
                    <label class="col-md-12 control-label">Category <span class="required-field">*</span></label>
                    <div class="col-md-12">
 
-                     {!! Form::select("category", $categories, null, array("class" => "form-control")) !!}
+                     {!! Form::select("category_id", $categories, null, array("class" => "form-control")) !!}
                    </div>
                </div>
 
@@ -43,7 +43,7 @@
                <div class="form-group">
                    <label class="col-md-12 control-label">Available</label>
                    <div class="col-md-3">
-                     <?=Form::checkbox('available', 1, TRUE);?>
+                     <?=Form::checkbox('available', 1);?>
                    </div>
                </div>
                <div class="form-group">
@@ -54,7 +54,8 @@
                     <div class="row">
                       <div class="col-md-12">
                         <label>{{$v->name}}</label>
-                          {{Form::checkbox('prototype_id[]', $v->id, $v->checked)}}
+                        {{Form::hidden('prototype_id['.$v->id.']', false)}}
+                          {{Form::checkbox('prototype_id['.$v->id.']', $v->id, $v->checked)}}
                       </div>
                     </div>
                     @endforeach

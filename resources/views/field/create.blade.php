@@ -5,7 +5,7 @@
 <div class="block-form">
 
   <fieldset>
-             <legend>Create new prototype field <a class="back-link" href="{{URL::previous()}}">Back</a>
+             <legend>Create parameter<a class="back-link" href="{{URL::previous()}}">Back</a>
              </legend>
 
        <div class="row">
