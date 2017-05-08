@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Object extends Model
 {
 
-  protected $hidden = ["updated_at", "created_at"];
+  protected $hidden = ["updated_at", "created_at", "visibility", "available"];
 
   protected $fillable =  ['name', 'available', 'visibility', 'category_id'];
 
@@ -30,8 +30,7 @@ class Object extends Model
 
   public function _prototypes()
  {
-     return $this->belongsToMany('App\Prototype', 'object_prototype', 'object_id');
+     return $this->belongsTo('App\Prototype', 'id', 'object_id'); // object_prototype - table
  }
-
 
 }

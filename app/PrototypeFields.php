@@ -8,7 +8,7 @@ class PrototypeFields extends Model
 {
     public $table = "fields";
 
-    protected $hidden = ["updated_at", "created_at"];
+    protected $hidden = ["updated_at", "created_at", "only_numbers", "visibility", "available"];
 
     /* Use this if value field was saves as NULL
     public function getValueAttribute()

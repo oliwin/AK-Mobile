@@ -8,10 +8,15 @@ use App\Scopes\AvailableScope;
 class Prototype extends Model
 {
 
-protected $hidden = ["updated_at", "created_at", "pivot", "value", "default"];
+  protected $table = "object_prototype";
+
+protected $hidden = ["updated_at", "created_at", "pivot", "value", "default", "id", "object_id"];
 
  public function fields(){
     return $this->hasMany("App\FieldsInPrototype");
+ }
+ public function name(){
+   return $this->hasOne("App\PrototypeName", "id", "prototype_id");
  }
 
 
@@ -32,7 +37,7 @@ protected $hidden = ["updated_at", "created_at", "pivot", "value", "default"];
        return $this->hasMany("App\FieldsInPrototype");
     }
 
-    public function fields_api(){
-       return $this->hasMany("App\PrototypeFields")->where("available", 1);
+    public function properties(){
+       return $this->hasMany("App\ObjectPrototypeFields", "prototype_id", "prototype_id");
     }
 }
