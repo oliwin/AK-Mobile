@@ -25,7 +25,7 @@
                    </div>
                </div>
 
-               <div class="form-group">
+               <!--<div class="form-group">
                  <label class="col-md-12 control-label">Value <span class="required-field">*</span></label>
                    <div class="col-md-3">
                        {!! Form::text('value', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Value"]) !!}
@@ -37,7 +37,7 @@
                    <div class="col-md-3">
                        {!! Form::text('default', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Default Value"]) !!}
                    </div>
-               </div>
+               </div>-->
 
                <div class="form-group">
                    <label class="col-md-12 control-label">Available</label>

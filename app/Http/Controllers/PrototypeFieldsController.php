@@ -93,9 +93,7 @@ class PrototypeFieldsController extends Controller
          "available" => "integer|nullable",
          "prefix" => "required|string|min:1",
          "prototype_id.*" => "integer|nullable",
-         "visibility" => "required|integer",
-         "value" => "string",
-         "default" => "required|string"
+         "visibility" => "required|integer"
      ]);
 
      if ($validator->fails()) {
@@ -108,8 +106,6 @@ class PrototypeFieldsController extends Controller
      $field->only_numbers = (!is_null($request->only_numbers)) ? $request->only_numbers : 0;
      $field->available = (!is_null($request->available)) ? $request->available : 0;
      $field->visibility = $request->visibility;
-     $field->default = $request->default;
-     $field->value = $request->value;
      $field->save();
 
      // Attach fields to prototypes
@@ -174,9 +170,7 @@ class PrototypeFieldsController extends Controller
         "available" => "integer|nullable",
         "prefix" => "required|string|min:1",
         "prototype_id.*" => "nullable",
-        "visibility" => "required|integer",
-        "value" => "string",
-        "default" => "required|string"
+        "visibility" => "required|integer"
      ]);
 
       if ($validator->fails()) {
@@ -188,9 +182,7 @@ class PrototypeFieldsController extends Controller
           "only_numbers" => (!is_null($request->only_numbers)) ? $request->only_numbers : 0,
           "available" => (!is_null($request->available)) ? $request->available : 0,
           "prefix" => $request->prefix,
-          "visibility" => $request->visibility,
-          "default" => $request->default,
-          "value" => $request->value
+          "visibility" => $request->visibility
       ]);
 
       // Attach fields to prototypes
