@@ -12,6 +12,8 @@ use App\FieldCategories;
 
 use App\FieldCategoriesValues;
 
+use App\ObjectPrototypeFields;
+
 use View;
 
 use Validator;
@@ -84,7 +86,7 @@ class ObjectController extends Controller
           "objects" => $objects,
           "path" => action("ObjectController@create"),
           "categories" => $this->field_categories,
-          "prototypes_list" => $this->prototypes
+          "prototypes_list" => $this->prototypes->pluck("name", "id")
       ]);
     }
 
@@ -164,14 +166,16 @@ class ObjectController extends Controller
 
       $prototypes = Prototype::all();
       $object = Object::with("prototypes", "category")->findOrFail($id);
+      $fields = ObjectPrototypeFields::with("name")->where("object_id", $id)->where("prototype_id", $object->prototypes->prototype_id)->get();
 
       $prototypes_with_checkes = $prototypes->map(function ($item, $key) use ($object) {
-          $item->checked = $object->prototypes->contains("id", $item->id);
+          $item->checked = ($item->prototype_id == $object->prototypes->prototype_id) ? true : false;
           return $item;
       });
 
       return View::make('object.edit', [
           "object" => $object,
+          "fields" => $fields,
           "prototypes" => $prototypes_with_checkes,
           "categories" => $this->field_categories
       ]);

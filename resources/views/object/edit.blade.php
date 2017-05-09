@@ -48,12 +48,11 @@
                </div>
                <div class="form-group">
 
-
                  @if($prototypes->count() > 0)
                     @foreach($prototypes as $k => $v)
                     <div class="row">
                       <div class="col-md-12">
-                        <label>{{$v->name}}</label>
+                        <label>{{$v->name->name}}</label>
                         {{Form::hidden('prototype_id['.$v->id.']', false)}}
                           {{Form::checkbox('prototype_id['.$v->id.']', $v->id, $v->checked)}}
                       </div>
@@ -61,6 +60,16 @@
                     @endforeach
                  @endif
                </div>
+
+               <div class="form-group">
+                 @if($fields->count() > 0)
+                    @foreach($fields as $k => $v)
+                      <span>{{$v->name->name}}</span>
+                      <input type="text" name="fields[{{$v->object_id}}]" value="{{$v->value}}">
+                     @endforeach
+                 @endif
+               </div>
+
                <div class="form-group">
                   <div class="col-lg-10 col-lg-offset-2">
                       <button type="submit" class="btn btn-primary">Update</button>

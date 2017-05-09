@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-#use App\Scopes\AvailableScope;
 
 class Object extends Model
 {
@@ -14,7 +13,7 @@ class Object extends Model
 
   public function prototypes()
  {
-     return $this->belongsToMany('App\Prototype', 'object_prototype', 'object_id');
+     return $this->belongsTo('App\Prototype', 'id', 'object_id');
  }
 
  public function category(){
@@ -28,9 +27,18 @@ class Object extends Model
 
   ## API ##
 
-  public function _prototypes()
+  public function prototypez()
  {
+
      return $this->belongsTo('App\Prototype', 'id', 'object_id'); // object_prototype - table
+ }
+
+ public function fields(){
+   return $this->hasMany("App\FieldsInPrototype", "id", "objet_id");
+ }
+
+ public function prototypeFields(){
+   return $this->hasMany("App\ObjectPrototypeFields", "object_id", "id");
  }
 
 }

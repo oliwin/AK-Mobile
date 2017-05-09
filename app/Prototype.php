@@ -21,7 +21,7 @@ protected $hidden = ["updated_at", "created_at", "pivot", "value", "default", "i
 
 
  public function objects(){
-   return $this->belongsToMany("App\Object", "object_prototype", "prototype_id", "object_id");
+   return $this->hasMany("App\Object", "id", "object_id");
  }
 
  public function scopeVisibility($query, $params)
