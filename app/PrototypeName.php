@@ -8,4 +8,8 @@ class PrototypeName extends Model
 {
     protected $table = "prototypes";
 
+    public function objects(){
+      return $this->hasMany("App\Object", "prototype_id", "id");
+    }
+
 }

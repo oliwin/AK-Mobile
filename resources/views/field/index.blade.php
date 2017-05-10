@@ -16,6 +16,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Prefix</th>
+                <th>Prototype</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -28,6 +29,13 @@
                     <th scope="row">{{ $field->id }}</th>
                     <td>{{ $field->name}}</td>
                     <td>{{ $field->prefix }}</td>
+                    <td>@if(!is_null($field->prototype))
+
+                      @foreach($field->prototype as $k => $v)
+                          {{$v->name->name}}
+                      @endforeach
+
+                       @else - @endif</td>
                     <td>@if($field->available == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
                     <td><a class="btn btn-primary" href="fields/{{$field->id}}/edit">Edit</a>
 

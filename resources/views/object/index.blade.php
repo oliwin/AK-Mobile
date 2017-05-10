@@ -16,6 +16,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Prefix</th>
+                <th>Prototype</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -28,6 +29,7 @@
                     <td>{{ $object->id }}</td>
                     <td>{{ $object->name}}</td>
                     <td>{{ $object->prefix }}</td>
+                    <td>@if(!is_null($object->prototypes)) {{$object->prototypes->name}} @else - @endif</td>
                     <td>@if($object->available == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
                     <td><a class="btn btn-primary" href="objects/{{$object->id}}/edit">Edit</a>
 

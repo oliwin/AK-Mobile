@@ -14,3 +14,10 @@ use Illuminate\Http\Request;
 */
 
 Route::get('objects', "API\ObjectController@index");
+
+## Get JSON by ways ##
+Route::get('config/db', "API\ObjectController@showJson");
+Route::get('config/json', "API\ObjectController@showJsonFromFile");
+
+## Update JSON file from model ##
+Route::get("config/update", "API\ObjectController@updateJsonFile");

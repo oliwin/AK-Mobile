@@ -13,11 +13,11 @@
       </div>
     @endif
     @if(isset($prototypes_list))
-    <div class="col-md-2">
+    <div class="col-md-3">
       {{Form::select('prototype', $prototypes_list, null, array("class" => "form-control"))}}
     </div>
     @endif
-    <div class="col-md-2">
+    <div class="col-md-1">
       {{Form::select('limit', array('10' => '10', '25' => '25', '50' => '50', '100' => '100'), null, array("class" => "form-control"))}}
     </div>
     <div class="col-md-2">

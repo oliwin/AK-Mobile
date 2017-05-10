@@ -8,20 +8,16 @@ use App\Scopes\AvailableScope;
 class Prototype extends Model
 {
 
-  protected $table = "object_prototype";
+protected $table = "prototypes";
 
-protected $hidden = ["updated_at", "created_at", "pivot", "value", "default", "id", "object_id"];
+protected $hidden = ["updated_at", "created_at"];
 
  public function fields(){
     return $this->hasMany("App\FieldsInPrototype");
  }
- public function name(){
-   return $this->hasOne("App\PrototypeName", "id", "prototype_id");
- }
-
 
  public function objects(){
-   return $this->hasMany("App\Object", "id", "object_id");
+   return $this->belongsOne("App\Object", "id", "prototype_id");
  }
 
  public function scopeVisibility($query, $params)

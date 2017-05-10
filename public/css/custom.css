@@ -606,8 +606,13 @@ span.tags {
 .search-filter {
     margin-bottom: 30px;
 }
+
+#search select {
+  width: 100 !important;
+}
+
 .search-filter input {
-    width: 100%;
+    width: 100 !important;
     background: #fff;
     height: 40px;
     padding: 10px;

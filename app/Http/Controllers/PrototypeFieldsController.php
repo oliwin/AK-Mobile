@@ -32,7 +32,7 @@ class PrototypeFieldsController extends Controller
     public function index(Request $request)
     {
 
-      $fields = PrototypeFields::where(function ($query) use ($request) {
+      $fields = PrototypeFields::with("prototype.name")->where(function ($query) use ($request) {
 
         // Filter by ID
         if (($request->get("id"))) {

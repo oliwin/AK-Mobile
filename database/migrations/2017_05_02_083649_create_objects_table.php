@@ -17,7 +17,7 @@ class CreateObjectsTable extends Migration
          $table->increments('id');
          $table->string('name');
          $table->string('prefix')->nullable();
-         $table->integer('visibility')->unsigned();
+         $table->integer('visibility')->unsigned()->default(1);
          $table->integer('category_id')->unsigned();
          $table->integer('available')->unsigned()->default(1);
      });

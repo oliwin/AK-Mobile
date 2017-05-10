@@ -52,7 +52,7 @@
                     <div class="row">
                       <div class="col-md-12">
                         <label>{{$name}}</label>
-                        {{Form::checkbox('prototype_id[]', $key)}}
+                        {{Form::radio('prototype_id', $key)}}
                       </div>
                     </div>
                     @endforeach

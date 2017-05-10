@@ -28,8 +28,8 @@
 
                 <tr>
                     <th scope="row">{{ $prototype->id }}</th>
-                    <td>{{ $prototype->name->name}}</td>
-                    <td>{{ $prototype->name->prefix }}</td>
+                    <td>{{ $prototype->name}}</td>
+                    <td>{{ $prototype->prefix }}</td>
                     <td>@if($prototype->available == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
                     <td><a class="btn btn-primary" href="prototypes/{{$prototype->id}}/edit">Edit</a>
 
