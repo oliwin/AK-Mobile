@@ -254,14 +254,16 @@ class ObjectController extends Controller
 
       // Delete old data from previous Prototype
 
-      $fields_prototype = ObjectPrototypeFields::where("prototype_id", $request->prototype_id)->where("object_id", $id)->delete();
+      ObjectPrototypeFields::where("prototype_id", $request->prototype_id)->where("object_id", $id)->delete();
 
       // Add new fields for new Prototype
+
+      $fields_prototype = FieldsInPrototype::where("prototype_id", $request->prototype_id)->get();
 
       foreach($fields_prototype as $k => $v){
         ObjectPrototypeFields::insert([
           "prototype_id" => $v->prototype_id,
-          "object_id" => $object->id,
+          "object_id" => $id,
           "field_id" => $v->field_id
         ]);
       }
