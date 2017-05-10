@@ -188,8 +188,6 @@ class ObjectController extends Controller
       $object = Object::with("prototypes", "category")->findOrFail($id);
       $fields = ObjectPrototypeFields::with("name")->where("object_id", $id)->where("prototype_id", $object->prototype_id)->get();
 
-      // default
-
       $multiplied = $fields->map(function ($item, $key) {
           if(is_null($item->value) || empty($item->value)){
             $item->value = $item->name->default;
@@ -244,13 +242,28 @@ class ObjectController extends Controller
           "prototype_id" => $request->prototype_id
       ]);
 
-      // Update fiels for object in prototypes */
+      // Update fiels for object in prototypes
+
       if($request->has("fields")){
          foreach($request->fields as $field_id => $v){
            ObjectPrototypeFields::where("object_id", $id)->where("field_id", $field_id)->update([
              "value" => $v
            ]);
          }
+      }
+
+      // Delete old data from previous Prototype
+
+      $fields_prototype = ObjectPrototypeFields::where("prototype_id", $request->prototype_id)->where("object_id", $id)->delete();
+
+      // Add new fields for new Prototype
+
+      foreach($fields_prototype as $k => $v){
+        ObjectPrototypeFields::insert([
+          "prototype_id" => $v->prototype_id,
+          "object_id" => $object->id,
+          "field_id" => $v->field_id
+        ]);
       }
 
       // Update object prototypes for multiple

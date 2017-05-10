@@ -38,7 +38,7 @@ class ObjectController extends Controller
   private function getParameters($parameters){
     $this->parameters = [];
     foreach($parameters as $k => $parameter){
-        $this->parameters[$parameter->name->prefix] = $parameter->value;
+        $this->parameters[$parameter->name->prefix] = (is_null($parameter->value) || empty($parameter->value)) ? $parameter->name->default : $parameter->value;
     }
 
     return $this->parameters;
