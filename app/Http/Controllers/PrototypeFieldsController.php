@@ -89,6 +89,7 @@ class PrototypeFieldsController extends Controller
       $validator = Validator::make($request->all(), [
 
          "name" => "required|string|min:3",
+         "default" => "required|string",
          "only_numbers" => "integer|nullable",
          "available" => "integer|nullable",
          "prefix" => "required|string|min:1",
@@ -106,6 +107,7 @@ class PrototypeFieldsController extends Controller
      $field->only_numbers = (!is_null($request->only_numbers)) ? $request->only_numbers : 0;
      $field->available = (!is_null($request->available)) ? $request->available : 0;
      $field->visibility = $request->visibility;
+     $field->default = $request->default;
      $field->save();
 
      // Attach fields to prototypes
@@ -170,6 +172,7 @@ class PrototypeFieldsController extends Controller
         "available" => "integer|nullable",
         "prefix" => "required|string|min:1",
         "prototype_id.*" => "nullable",
+        "default" => "required|string",
         "visibility" => "required|integer"
      ]);
 
@@ -182,7 +185,8 @@ class PrototypeFieldsController extends Controller
           "only_numbers" => (!is_null($request->only_numbers)) ? $request->only_numbers : 0,
           "available" => (!is_null($request->available)) ? $request->available : 0,
           "prefix" => $request->prefix,
-          "visibility" => $request->visibility
+          "visibility" => $request->visibility,
+          "default" => $request->default
       ]);
 
       // Attach fields to prototypes

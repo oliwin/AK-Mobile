@@ -17,6 +17,7 @@ class CreatePrototypeFieldsTable extends Migration
          $table->increments('id');
          $table->string('name');
          $table->string('prefix');
+         $table->string('default');
          $table->boolean('only_numbers')->nullable();
          $table->integer('available')->unsigned()->default(1);
          $table->integer('visibility')->unsigned();

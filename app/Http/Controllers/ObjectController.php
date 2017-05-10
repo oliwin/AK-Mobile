@@ -188,6 +188,16 @@ class ObjectController extends Controller
       $object = Object::with("prototypes", "category")->findOrFail($id);
       $fields = ObjectPrototypeFields::with("name")->where("object_id", $id)->where("prototype_id", $object->prototype_id)->get();
 
+      // default
+
+      $multiplied = $fields->map(function ($item, $key) {
+          if(is_null($item->value) || empty($item->value)){
+            $item->value = $item->name->default;
+          }
+
+          return $item;
+      });
+
       $prototypes_with_checkes = $prototypes->map(function ($item, $key) use ($object) {
           $item->checked = ($item->id == $object->prototype_id) ? true : false;
           return $item;
