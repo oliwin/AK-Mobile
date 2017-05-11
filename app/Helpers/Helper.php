@@ -1197,4 +1197,13 @@ class Helper
         }
     }
 
+    public static function validateFiled($value, $type){
+
+        if ($type == 1) {
+          return is_numeric($value);
+        } else {
+          return is_string($value);
+        }
+    }
+
 }

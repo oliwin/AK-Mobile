@@ -40,7 +40,7 @@
             @if($prototypes->count() > 0)
             @foreach($prototypes as $k => $v)
             <div class="row">
-               <div class="col-md-12">
+               <div class="col-md-12 prototype_item">
                   <label>{{$v->name}}</label>
                   <!--{{Form::hidden('prototype_id', false)}}-->
                   {{Form::radio('prototype_id', $v->id, $v->checked)}} <!-- 'prototype_id['.$v->id.']' -->
@@ -48,14 +48,17 @@
             </div>
             @endforeach
             @endif
+
          </div>
-         <div class="form-group">
-            @if($fields->count() > 0)
-            @foreach($fields as $k => $v)
-            <span>{{$v->name->name}}</span>
-            <input type="text" name="fields[{{$v->field_id}}]" value="{{$v->value}}">
-            @endforeach
-            @endif
+         <div class="form-group" id="FieldsInPrototype">
+           <div class="list">
+              @if($fields->count() > 0)
+              @foreach($fields as $k => $v)
+              <span>{{$v->name->name}}</span>
+              <input type="text" name="fields[{{$v->field_id}}]" value="{{$v->value}}">
+              @endforeach
+              @endif
+          </div>
          </div>
          <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">

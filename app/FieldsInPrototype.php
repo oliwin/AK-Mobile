@@ -29,4 +29,8 @@ class FieldsInPrototype extends Model
   public function fieldname(){
     return $this->belongsTo("App\PrototypeFields", "object_id", "id");
   }
+
+  public function field_details(){
+    return $this->belongsTo("App\PrototypeFields", "field_id", "id");
+  }
 }

@@ -46,10 +46,14 @@
                      <?=Form::checkbox('available', 1, TRUE);?>
                    </div>
                </div>
+
+               <div class="clearfix"></div>
                <div class="form-group">
+
                  @if($prototypes->count())
+                 <p>Will be dislayed prototypes with visibility = 1</p>
                     @foreach($prototypes as $key => $name)
-                    <div class="row">
+                    <div class="row prototype_item">
                       <div class="col-md-12">
                         <label>{{$name}}</label>
                         {{Form::radio('prototype_id', $key)}}
@@ -57,6 +61,12 @@
                     </div>
                     @endforeach
                  @endif
+
+                 <div id="FieldsInPrototype">
+                   <div class="list">
+                   </div>
+                </div>
+
                </div>
                <div class="form-group">
                   <div class="col-lg-10 col-lg-offset-2">

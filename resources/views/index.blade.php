@@ -22,6 +22,9 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
 
+
+            <script src="{{URL::asset('js/custom.js')}}"></script>
+
     <!-- CSS -->
     <link href="{{URL::asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{URL::asset('css/custom.css')}}" rel="stylesheet">

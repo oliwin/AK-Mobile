@@ -27,5 +27,6 @@ Route::group(['middleware' => ['auth:web']], function () {
   ## PROTOTYPES ##
 
   ## FIELDS ##
+  Route::get("prototype/fields/{id}", "PrototypeFieldsController@fieldsInPrototype");
 
 });

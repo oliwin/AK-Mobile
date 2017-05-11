@@ -226,4 +226,13 @@ class PrototypeFieldsController extends Controller
 
       return redirect("fields")->with('success', "Field was deleted!");
     }
+
+    public function fieldsInPrototype($id){
+      $fields = fieldsInPrototype::with("fieldname")->where("prototype_id", $id)->get();
+      $fields_format = $fields->map(function ($item, $key) {
+          return ["id" => $item->field_id, "name" => $item->field_details->name, "default" => $item->field_details->default];
+      });
+
+      return response()->json($fields_format->all());
+    }
 }

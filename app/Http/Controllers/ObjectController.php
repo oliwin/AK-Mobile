@@ -22,6 +22,8 @@ use App\Helpers\Helper;
 
 use App\FieldsInPrototype;
 
+use App\PrototypeFields;
+
 class ObjectController extends Controller
 {
 
@@ -126,7 +128,8 @@ class ObjectController extends Controller
          "prefix" => "required|string|min:1",
          "prototype_id" => "integer",
          "visibility" => "required|integer",
-         "category_id" => "required|integer"
+         "category_id" => "required|integer",
+         "fields.*" => "nullable"
      ]);
 
      if ($validator->fails()) {
@@ -143,7 +146,7 @@ class ObjectController extends Controller
      $object->save();
 
      // Get all prototype fields
-     $fields_prototype = FieldsInPrototype::where("prototype_id", $request->prototype_id)->get();
+     $fields_prototype = FieldsInPrototype::with("field_details")->where("prototype_id", $request->prototype_id)->get();
 
      foreach($fields_prototype as $k => $v){
        ObjectPrototypeFields::insert([
@@ -153,10 +156,29 @@ class ObjectController extends Controller
        ]);
      }
 
-     //$object->prototypes()->attach($request->prototype_id);
+     // Update fields values in prototype
+     if($request->has("fields")){
+        foreach($request->fields as $field_id => $v){
+
+          if(!Helper::validateFiled($v, $this->_getFieldType($field_id))){
+            $message = "The filed ".$v." should be contain only number forat";
+            return redirect()->back()->withErrors([$message]);
+          }
+
+          ObjectPrototypeFields::where("object_id", $object->id)->where("field_id", $field_id)->update([
+            "value" => $v
+          ]);
+
+        }
+     }
 
      return redirect("objects")->with('success', "Object was created!");
 
+    }
+
+    private function _getFieldType($field_id){
+          $collection_fields = PrototypeFields::all();
+          return $collection_fields->where("id", $field_id)->first()->only_numbers;
     }
 
     /**
@@ -216,6 +238,32 @@ class ObjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     private function isExistsPrototype($prototype_id, $object_id){
+         $fields = ObjectPrototypeFields::where("prototype_id", $prototype_id)->where("object_id", $object_id)->get();
+         
+         return $fields->contains('prototype_id', $prototype_id);
+
+     }
+
+     private function updatePrototypeFieldsInobject($request, $id){
+
+       if($request->has("fields")){
+          foreach($request->fields as $field_id => $value){
+
+            if(!Helper::validateFiled($value, $this->_getFieldType($field_id))){
+              $message = "The filed ".$value." should be contain only number forat";
+              return redirect()->back()->withErrors([$message]);
+            }
+
+            ObjectPrototypeFields::where("object_id", $id)->where("field_id", $field_id)->update([
+              "value" => $value
+            ]);
+          }
+       }
+
+     }
+
     public function update(Request $request, $id)
     {
       $validator = Validator::make($request->all(), [
@@ -242,51 +290,33 @@ class ObjectController extends Controller
           "prototype_id" => $request->prototype_id
       ]);
 
-      // Update fiels for object in prototypes
+      if($this->isExistsPrototype($request->prototype_id, $id)){
+            $this->updatePrototypeFieldsInobject($request, $id);
 
-      if($request->has("fields")){
-         foreach($request->fields as $field_id => $v){
-           ObjectPrototypeFields::where("object_id", $id)->where("field_id", $field_id)->update([
-             "value" => $v
-           ]);
-         }
-      }
+      } else {
 
-      // Delete old data from previous Prototype
+        // Delete old data from previous Prototype
+        ObjectPrototypeFields::where("object_id", $id)->delete();
 
-      ObjectPrototypeFields::where("prototype_id", $request->prototype_id)->where("object_id", $id)->delete();
+        // Add new fields that are required in Prototype
+        $fields_prototype = FieldsInPrototype::where("prototype_id", $request->prototype_id)->get();
 
-      // Add new fields for new Prototype
+        foreach($fields_prototype as $k => $v){
 
-      $fields_prototype = FieldsInPrototype::where("prototype_id", $request->prototype_id)->get();
-
-      foreach($fields_prototype as $k => $v){
-        ObjectPrototypeFields::insert([
-          "prototype_id" => $v->prototype_id,
-          "object_id" => $id,
-          "field_id" => $v->field_id
-        ]);
-      }
-
-      // Update object prototypes for multiple
-      /*
-      $object = Object::with("prototypes")->findOrFail($id);
-
-      if ($request->has('prototype_id')) {
-        foreach($request->prototype_id as $k => $v){
-
-          if(is_null($v)){
-            if($this->checkIfPrototypeExistsInObject($k, $object)){
-              $object->prototypes()->detach($k);
-            }
-
-          } else {
-            if(!$this->checkIfPrototypeExistsInObject($k, $object)){
-              $object->prototypes()->attach($v);
-            }
+          if(!Helper::validateFiled($request->fields[$v->field_id], $this->_getFieldType($field_id))){
+            $message = "The filed ".$request->fields[$v->field_id]." should be contain only number forat";
+            return redirect()->back()->withErrors([$message]);
           }
+
+          ObjectPrototypeFields::insert([
+            "prototype_id" => $v->prototype_id,
+            "object_id" => $id,
+            "field_id" => $v->field_id,
+            "value" => $request->fields[$v->field_id]
+          ]);
         }
-      }*/
+
+      }
 
       return redirect("objects")->with('success', "Object was updated!");
     }
@@ -342,13 +372,6 @@ class ObjectController extends Controller
       $new_object = Object::create(
          $object_copied
       );
-
-       // Copy prototypes object for multiple prototypes / unused
-
-       /* $prototypes_ids = [];
-       $prototypes_ids = $object->prototypes()->pluck("prototype_id")->toArray();
-       $new_object->prototypes()->attach($prototypes_ids);
-       */
 
       return redirect()->action(
             'ObjectController@edit', ['id' => $new_object->id]

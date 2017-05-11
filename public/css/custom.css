@@ -787,3 +787,7 @@ nav .navbar-header span {
 #profile-menu ul {
   list-style: none;
 }
+
+#FieldsInPrototype {
+  display: none;
+}
