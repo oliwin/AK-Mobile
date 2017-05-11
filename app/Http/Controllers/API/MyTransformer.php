@@ -18,7 +18,7 @@ abstract class MyTransformer {
   }
 
   public function getFields($object, $allowed){
-
+    // TODO
   }
 
   public abstract function output();

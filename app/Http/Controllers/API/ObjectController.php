@@ -64,7 +64,12 @@ class ObjectController extends Controller
     }
 
       public function showJsonFromFile(){
-          return $this->readFile();
+          $json = $this->readFile();
+          return response($json)->header('Content-Type', "json");
+      }
+
+      private function checkTypePrototype(){
+        // TODO
       }
 
       public function showJson()

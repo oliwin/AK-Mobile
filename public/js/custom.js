@@ -5,7 +5,8 @@
 var config = {
    'path' : 'http://localhost:8888/dev/laravel/public/',
    'routes' : {
-     'prototype_fields' : 'prototype/fields/'
+     'prototype_fields' : 'prototype/fields/',
+     'fields_multi' : 'fields/type/multi/'
    }
 };
 
@@ -29,4 +30,27 @@ $(function() {
       );
 
     });
+
+    // Select type parameter with loading fields
+
+    $('.select-parameter-type select').on('change', function() {
+        var value = $(this).val();
+
+            if(value == 1){
+
+                //$('.input-disable').attr("disabled", true);
+
+                $.get(
+                  config['path'] + config['routes']['fields_multi'] + value,
+                  function(data) {
+                      $(".content-fields-multi").html(data);
+                  },
+                  'html'
+                );
+
+              } else {
+                //$('.input-disable').attr("disabled", false);
+              }
+    })
+
 });

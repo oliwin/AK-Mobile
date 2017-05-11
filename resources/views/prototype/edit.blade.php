@@ -25,12 +25,12 @@
                    </div>
                </div>
 
-               <div class="form-group">
+               <!--<div class="form-group">
                  <label class="col-md-12 control-label">Type <span class="required-field">*</span></label>
                    <div class="col-md-3">
                          {{Form::select('type', array(0 => "Object", 1 => "Field"), null, array("class" => "form-control"))}}
                    </div>
-               </div>
+               </div>-->
 
                <!--<div class="form-group">
                  <label class="col-md-12 control-label">Value </label>

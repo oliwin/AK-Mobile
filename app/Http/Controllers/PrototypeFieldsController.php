@@ -14,6 +14,8 @@ use View;
 
 use Validator;
 
+use App\FieldRelation;
+
 class PrototypeFieldsController extends Controller
 {
 
@@ -86,6 +88,7 @@ class PrototypeFieldsController extends Controller
      */
     public function store(Request $request)
     {
+
       $validator = Validator::make($request->all(), [
 
          "name" => "required|string|min:3",
@@ -118,6 +121,18 @@ class PrototypeFieldsController extends Controller
          $fields_prototype->prototype_id = $v;
          $fields_prototype->save();
        }
+     }
+
+     // Bind fields to created field
+     if($request->has("field_child")){
+        foreach ($request->field_child as $key => $value) {
+          $data[] = array(
+            "field_id" => $field->id,
+            "parent_id" => $value
+          );
+        }
+
+          FieldRelation::insert($data);
      }
 
      return redirect("fields")->with('success', "Field was created!");
@@ -212,6 +227,18 @@ class PrototypeFieldsController extends Controller
     private function checkIfPrototypeExistsInField($prototype_id, $field_id){
       $rows = FieldsInPrototype::where("prototype_id", $prototype_id)->where("field_id", $field_id)->get()->count();
       return ($rows > 0 ) ? true : false;
+    }
+
+    public function fields($type, $view = 1){
+
+      $fields = PrototypeFields::all()->pluck("name", "id");
+
+      if($view == 1){
+          return view('field.list', ['fields' => $fields]);
+      }
+
+      return response()->json($fields);
+
     }
 
     /**

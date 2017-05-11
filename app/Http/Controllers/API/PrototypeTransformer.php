@@ -14,9 +14,6 @@ class PrototypeTransformer extends TransformerAbstract {
 
     public function transform(Prototype $prototype)
     {
-
-      dd($prototype);
-
         return [
             'id' => (int) $prototype->prototype_id,
             'name' => "Prototype 1",

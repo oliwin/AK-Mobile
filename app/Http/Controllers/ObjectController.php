@@ -241,7 +241,7 @@ class ObjectController extends Controller
 
      private function isExistsPrototype($prototype_id, $object_id){
          $fields = ObjectPrototypeFields::where("prototype_id", $prototype_id)->where("object_id", $object_id)->get();
-         
+
          return $fields->contains('prototype_id', $prototype_id);
 
      }

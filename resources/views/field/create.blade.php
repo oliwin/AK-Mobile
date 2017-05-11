@@ -27,7 +27,7 @@
              <div class="form-group">
                  <label class="col-md-12 control-label">Default value <span class="required-field">*</span></label>
                    <div class="col-md-3">
-                       {!! Form::text('default', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Default Value"]) !!}
+                       {!! Form::text('default', null, ['class' => 'form-control input-disable', 'required' => 'required', 'placeholder' => "Default Value"]) !!}
                    </div>
                </div>
 
@@ -63,6 +63,23 @@
                     @endforeach
                  @endif
                </div>
+
+
+               <div class="form-group">
+                 <label class="col-md-12 control-label">Type <span class="required-field">*</span></label>
+                   <div class="col-md-3 select-parameter-type">
+                         {{Form::select('type', array(1 => "Multy", 2 => "Single"), 2, array("class" => "form-control"))}}
+                   </div>
+               </div>
+
+
+               <div class="form-group">
+                 <label class="col-md-12 control-label">Fields for multiply</label>
+                   <div class="col-md-3 content-fields-multi">
+
+                   </div>
+               </div>
+
                <div class="form-group">
                   <div class="col-lg-10 col-lg-offset-2">
                       <button type="submit" class="btn btn-primary">Add</button>
