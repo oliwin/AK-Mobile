@@ -125,6 +125,23 @@ class PrototypeFieldsController extends Controller
          $fields_prototype->prototype_id = $v;
          $fields_prototype->save();
        }
+
+       // Add to all objects this field_id
+       $objects_ids = ObjectPrototypeFields::whereIn("prototype_id", $request->prototype_id)->get()->unique();
+
+       if($objects_ids->count() > 0){
+           foreach($objects_ids as $k => $v){
+             $data[] = array(
+               "prototype_id" => $v->prototype_id,
+               "object_id" => $v->object_id,
+               "field_id" => $field->id,
+               "value" => $field->default
+             );
+           }
+
+           ObjectPrototypeFields::insert($data);
+      }
+
      }
 
      // Bind fields to created field
@@ -138,22 +155,6 @@ class PrototypeFieldsController extends Controller
 
           FieldRelation::insert($_data);
      }
-
-     // Add to all objects this field_id
-     $objects_ids = ObjectPrototypeFields::whereIn("prototype_id", $request->prototype_id)->get()->unique();
-
-     if($objects_ids->count() > 0){
-         foreach($objects_ids as $k => $v){
-           $data[] = array(
-             "prototype_id" => $v->prototype_id,
-             "object_id" => $v->object_id,
-             "field_id" => $field->id,
-             "value" => $field->default
-           );
-         }
-
-         ObjectPrototypeFields::insert($data);
-    }
 
      return redirect("fields")->with('success', "Field was created!");
     }

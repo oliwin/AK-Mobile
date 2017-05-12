@@ -24,7 +24,7 @@
          <td>@if(!is_null($object->prototypes)) {{$object->prototypes->name}} @else - @endif</td>
          <td>@if($object->available == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
          <td>
-            <a class="label label-primary" href="objects/{{$object->id}}/edit">Edit</a>
+            <a class="label label-info" href="objects/{{$object->id}}/edit">Edit</a>
             <form action="{{ URL::route('objects.destroy', $object->id) }}" method="POST">
                <input type="hidden" name="_method" value="DELETE">
                <input type="hidden" name="_token" value="{{ csrf_token() }}">

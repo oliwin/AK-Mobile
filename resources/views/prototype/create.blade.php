@@ -33,7 +33,7 @@
          <div class="form-group">
             <div class="col-md-12 prototype-list">
                @if($prototype_fields->count())
-               <span class="help-block">Fields with visibility = 1</span>
+               <h4>Parameters</h4><span class="help-block">visibility = 1</span>
                @foreach($prototype_fields as $key => $name)
                <div class="row item">
                   <div class="col-md-11">
