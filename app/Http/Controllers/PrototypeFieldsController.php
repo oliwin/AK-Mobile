@@ -264,8 +264,6 @@ class PrototypeFieldsController extends Controller
 
       fieldsInPrototype::where("field_id", $id)->delete();
 
-      ////////////
-
       return redirect("fields")->with('success', "Parameter was deleted!");
     }
 
