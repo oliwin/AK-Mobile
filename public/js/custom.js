@@ -11,7 +11,7 @@ var config = {
 };
 
 $(function() {
-  $('.prototype_item input:radio').click(function() {
+  $('.prototype-list input:radio').click(function() {
 
       var value = $(this).val();
 
@@ -21,7 +21,7 @@ $(function() {
           $("#FieldsInPrototype .list").html('');
 
           $.each(data, function(index, value) {
-            var content = "<div><span>" + value.name + "</span><input type='text' name='fields[" + value.id + "]' value='" + value.default + "'/></div>";
+            var content = "<div class='col-md-12'><span>" + value.name + "</span><input class='form-control' type='text' name='fields[" + value.id + "]' value='" + value.default + "'/></div>";
             $("#FieldsInPrototype .list").append(content);
           });
 
@@ -52,5 +52,11 @@ $(function() {
                 //$('.input-disable').attr("disabled", false);
               }
     })
+
+    /* Confirmation click */
+
+    $(".delete").on("submit", function(){
+       return confirm("Do you want to delete this item?");
+   });
 
 });

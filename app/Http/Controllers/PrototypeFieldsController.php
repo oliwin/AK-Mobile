@@ -16,6 +16,8 @@ use Validator;
 
 use App\FieldRelation;
 
+use App\ObjectPrototypeFields;
+
 class PrototypeFieldsController extends Controller
 {
 
@@ -41,7 +43,6 @@ class PrototypeFieldsController extends Controller
             $query->where('id', $request->id);
         }
 
-
             // Filter by name
             if (($name = $request->get("name"))) {
                 $query->where('name', 'like', '%' . $name . '%');
@@ -50,7 +51,8 @@ class PrototypeFieldsController extends Controller
 
             // Filter by status
             if (($request->get("available"))) {
-                $query->where('available', $request->status);
+                $status = ($request->available == 2) ? 0 : $request->available;
+                $query->where('available', $status);
             }
 
             // Show by
@@ -92,12 +94,13 @@ class PrototypeFieldsController extends Controller
       $validator = Validator::make($request->all(), [
 
          "name" => "required|string|min:3",
-         "default" => "required|string",
+         "default" => "string|required_without:type",
          "only_numbers" => "integer|nullable",
          "available" => "integer|nullable",
          "prefix" => "required|string|min:1",
          "prototype_id.*" => "integer|nullable",
-         "visibility" => "required|integer"
+         "visibility" => "required|integer",
+         "type" => "required|integer"
      ]);
 
      if ($validator->fails()) {
@@ -111,6 +114,7 @@ class PrototypeFieldsController extends Controller
      $field->available = (!is_null($request->available)) ? $request->available : 0;
      $field->visibility = $request->visibility;
      $field->default = $request->default;
+     $field->type = $request->type;
      $field->save();
 
      // Attach fields to prototypes
@@ -126,35 +130,34 @@ class PrototypeFieldsController extends Controller
      // Bind fields to created field
      if($request->has("field_child")){
         foreach ($request->field_child as $key => $value) {
-          $data[] = array(
+          $_data[] = array(
             "field_id" => $field->id,
             "parent_id" => $value
           );
         }
 
-          FieldRelation::insert($data);
+          FieldRelation::insert($_data);
      }
+
+     // Add to all objects this field_id
+     $objects_ids = ObjectPrototypeFields::whereIn("prototype_id", $request->prototype_id)->get()->unique();
+
+     if($objects_ids->count() > 0){
+         foreach($objects_ids as $k => $v){
+           $data[] = array(
+             "prototype_id" => $v->prototype_id,
+             "object_id" => $v->object_id,
+             "field_id" => $field->id,
+             "value" => $field->default
+           );
+         }
+
+         ObjectPrototypeFields::insert($data);
+    }
 
      return redirect("fields")->with('success', "Field was created!");
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        // TODO
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
       $prototypes = Prototype::all();
@@ -188,7 +191,8 @@ class PrototypeFieldsController extends Controller
         "prefix" => "required|string|min:1",
         "prototype_id.*" => "nullable",
         "default" => "required|string",
-        "visibility" => "required|integer"
+        "visibility" => "required|integer",
+        "type" => "required|integer"
      ]);
 
       if ($validator->fails()) {
@@ -201,7 +205,8 @@ class PrototypeFieldsController extends Controller
           "available" => (!is_null($request->available)) ? $request->available : 0,
           "prefix" => $request->prefix,
           "visibility" => $request->visibility,
-          "default" => $request->default
+          "default" => $request->default,
+          "type" => $request->type
       ]);
 
       // Attach fields to prototypes
@@ -211,6 +216,7 @@ class PrototypeFieldsController extends Controller
 
             if($this->checkIfPrototypeExistsInField($k, $id)){
                FieldsInPrototype::where("prototype_id", $k)->where("field_id", $id)->delete();
+               ObjectPrototypeFields::where("field_id", $id)->delete();
             }
 
           } else {
@@ -251,7 +257,15 @@ class PrototypeFieldsController extends Controller
     {
       PrototypeFields::destroy($id);
 
-      return redirect("fields")->with('success', "Field was deleted!");
+      FieldRelation::where("parent_id", $id)->orWhere("field_id", $id)->delete();
+
+      ObjectPrototypeFields::where("field_id", $id)->delete();
+
+      fieldsInPrototype::where("field_id", $id)->delete();
+
+      ////////////
+
+      return redirect("fields")->with('success', "Parameter was deleted!");
     }
 
     public function fieldsInPrototype($id){

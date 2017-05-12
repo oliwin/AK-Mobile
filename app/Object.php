@@ -16,10 +16,6 @@ class Object extends Model
      return $this->hasone('App\PrototypeName', 'id', 'prototype_id');
  }
 
- public function category(){
-   return $this->hasOne('App\FieldCategoriesValues');
- }
-
  public function scopeActive($query)
     {
         return $query->where('available', 1);

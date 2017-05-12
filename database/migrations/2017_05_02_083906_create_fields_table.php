@@ -21,6 +21,7 @@ class CreatePrototypeFieldsTable extends Migration
          $table->integer('parent_id')->unsigned();
          $table->boolean('only_numbers')->nullable();
          $table->integer('available')->unsigned()->default(1);
+         $table->integer('type')->unsigned()->default(2);
          $table->integer('visibility')->unsigned();
      });
     }

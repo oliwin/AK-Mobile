@@ -8,13 +8,13 @@
          {{ Form::model($object, array('route' => array('objects.update', $object->id), 'files' => false, 'method' => 'PUT')) }}
          <div class="form-group">
             <label class="col-md-12 control-label">Name <span class="required-field">*</span></label>
-            <div class="col-md-3">
+            <div class="col-md-12">
                {!! Form::text('name', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Name"]) !!}
             </div>
          </div>
          <div class="form-group">
             <label class="col-md-12 control-label">Prefix <span class="required-field">*</span></label>
-            <div class="col-md-3">
+            <div class="col-md-12">
                {!! Form::text('prefix', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Prefix"]) !!}
             </div>
          </div>
@@ -36,32 +36,57 @@
                <?=Form::checkbox('available', 1);?>
             </div>
          </div>
-         <div class="form-group">
-            @if($prototypes->count() > 0)
-            @foreach($prototypes as $k => $v)
-            <div class="row">
-               <div class="col-md-12 prototype_item">
-                  <label>{{$v->name}}</label>
-                  <!--{{Form::hidden('prototype_id', false)}}-->
-                  {{Form::radio('prototype_id', $v->id, $v->checked)}} <!-- 'prototype_id['.$v->id.']' -->
-               </div>
-            </div>
-            @endforeach
-            @endif
 
+         <div class="form-group prototype-list">
+           <div class="col-md-12 row">
+            @if($prototypes->count() > 0)
+            <h4>Prototypes</h4>
+            @foreach($prototypes as $k => $v)
+            <div class="item row">
+               <div class="col-md-11">
+                  <label>{{$v->name}}</label></div>
+                  <div class="col-md-1">
+                  {{Form::radio('prototype_id', $v->id, $v->checked)}}
+                </div>
+               </div>
+            @endforeach
+            </div>
+            @endif
+          </div>
          </div>
-         <div class="form-group" id="FieldsInPrototype">
-           <div class="list">
+         <div class="form-group fields-list" id="FieldsInPrototype">
+           <div class="row list">
               @if($fields->count() > 0)
-              @foreach($fields as $k => $v)
-              <span>{{$v->name->name}}</span>
-              <input type="text" name="fields[{{$v->field_id}}]" value="{{$v->value}}">
-              @endforeach
+              <h4>Parameters in prototype</h4>
+                @foreach($fields as $k => $v)
+
+                <div class="item">
+                  <div class="col-md-4">
+                    <span>{{$v->field_details->name}} ({{$v->field_details->prefix}})</span>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" name="fields[{{$v->field_id}}]" value="{{$v->field_details->default}}">
+                  </div>
+                </div>
+
+                @if(!is_null($v->children))
+                  @foreach($v->children as $k => $child)
+                    <div class="child item">
+                      <div class="col-md-4">
+                      <span>{{$v->name->name}} ({{$v->name->prefix}})</span>
+                    </div>
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="fields[{{$child->field_id}}]" value="{{$child->name->default}}">
+                    </div>
+                    </div>
+                  @endforeach
+                @endif
+                @endforeach
               @endif
           </div>
          </div>
          <div class="form-group">
-            <div class="col-lg-10 col-lg-offset-2">
+            <div class="col-lg-12">
                <button type="submit" class="btn btn-primary">Update</button>
             </div>
          </div>

@@ -12,7 +12,7 @@
                                 <li><span class="name">{{Auth::user()->name}}</span></li>
                                 <li><a href="#" onclick="event.preventDefault();
                                                              document.getElementById('logout-form').submit();">
-                                        <i class="icon-key"></i>Logout</a></li>
+                                        <i class="glyphicon glyphicon-log-out"></i></a></li>
                             </ul>
 
                             <form id="logout-form" action="{{ url('/logout') }}" method="POST"

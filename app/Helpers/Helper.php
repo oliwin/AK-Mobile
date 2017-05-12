@@ -1011,7 +1011,7 @@ class Helper
         return self::$countries;
     }
 
-    public static function firstEmptyValue($collection, $title = "Select category")
+    public static function firstEmptyValue($collection, $title = "Category")
     {
 
         $collection = $collection->sortBy("name");
@@ -1056,10 +1056,14 @@ class Helper
 
       }
 
-    public static function pluckObject($object, $key, $value, $placeholder = "Select category")
+    public static function pluckObject($object, $key, $value, $placeholder = "Category", $orderBy = null)
     {
 
       $object = Helpers\Helper::firstEmptyValue($object, $placeholder);
+
+      if(!is_null($orderBy)){
+        $object = $object->sortBy($orderBy);
+      }
 
       return $object->pluck($value, $key);
     }

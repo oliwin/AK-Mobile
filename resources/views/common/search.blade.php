@@ -8,15 +8,18 @@
       {{Form::text('name', null, array("placeholder" => "Name\Prefix", "class" => "form-control"))}}
     </div>
     @if(isset($categories))
-      <div class="col-md-3">
+      <div class="col-md-2">
         {{Form::select('category', $categories, null, array("class" => "form-control"))}}
       </div>
     @endif
     @if(isset($prototypes_list))
-    <div class="col-md-3">
+    <div class="col-md-2">
       {{Form::select('prototype', $prototypes_list, null, array("class" => "form-control"))}}
     </div>
     @endif
+    <div class="col-md-2">
+      {{Form::select('available', ["0" => "Status", "1" => "Available", "2" => "Not available"], null, array("class" => "form-control"))}}
+    </div>
     <div class="col-md-1">
       {{Form::select('limit', array('10' => '10', '25' => '25', '50' => '50', '100' => '100'), null, array("class" => "form-control"))}}
     </div>

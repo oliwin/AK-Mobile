@@ -11,6 +11,8 @@ class ObjectPrototypeFields extends Model
 
   protected $table = "object_prototype_fields";
 
+  protected $fillable = ["prototype_id", "object_id", "field_id", "value"];
+
   protected $hidden = ["updated_at", "created_at"];
 
   public function name(){
@@ -19,5 +21,9 @@ class ObjectPrototypeFields extends Model
 
   public function object_name(){
      return $this->belongsTo("App\Object", "object_id", "id");
+  }
+
+  public function children(){
+    return $this->hasMany("App\FieldRelation", "field_id", "field_id");
   }
 }

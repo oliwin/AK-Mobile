@@ -39,9 +39,11 @@ class PrototypeController extends Controller
                 $query->orWhere('prefix', 'like', '%' . $name . '%');
             }
 
+
             // Filter by status
             if (($request->get("available"))) {
-                $query->where('available', $request->status);
+                $status = ($request->available == 2) ? 0 : $request->available;
+                $query->where('available', $status);
             }
 
             // Show by
@@ -92,7 +94,6 @@ class PrototypeController extends Controller
 
          "name" => "required|string|min:3",
          "available" => "integer|nullable",
-         "type" => "required|integer",
          "prefix" => "required|string|min:1",
          "visibility" => "required|integer"
      ]);
@@ -105,7 +106,6 @@ class PrototypeController extends Controller
      $field->name = $request->name;
      $field->prefix = $request->prefix;
      $field->visibility = $request->visibility;
-     $field->type = (!is_null($request->type)) ? $request->type : 0;
      $field->available = (!is_null($request->available)) ? $request->available : 0;
      $field->save();
 
@@ -179,7 +179,6 @@ class PrototypeController extends Controller
 
          "name" => "required|string|min:3",
          "available" => "integer|nullable",
-         "type" => "required|integer",
          "prefix" => "required|string|min:1",
          "visibility" => "required|integer",
          "field_id.*" => "integer|nullable"
@@ -195,7 +194,6 @@ class PrototypeController extends Controller
        "name" => $request->name,
        "prefix" => $request->prefix,
        "visibility" => $request->visibility,
-       "type" => (!is_null($request->type)) ? $request->type : 0,
        "available" => (!is_null($request->available)) ? $request->available : 0
      ]);
 

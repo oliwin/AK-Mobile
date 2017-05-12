@@ -24,4 +24,8 @@ class PrototypeFields extends Model
              return $query->where('visibility', $params["visibility"]);
            }
        }
+
+       public function childs(){
+         return $this->hasMany("App\FieldRelation", "parent_id", "id");
+       }
 }

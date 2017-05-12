@@ -17,6 +17,7 @@ class CreatePrototypesTable extends Migration
          $table->increments('id');
          $table->string('name');
          $table->string('prefix');
+         $table->integer('type')->unsigned()->default(1);
          $table->integer('visibility')->unsigned();
          $table->string('default');
          $table->string('value')->nullable();
