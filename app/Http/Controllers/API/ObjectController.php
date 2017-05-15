@@ -46,6 +46,7 @@ class ObjectController extends Controller
         /* Prototypes */
 
         $prototypes = new Prototypes();
+        $prototypes->parents();
         $prototypes->iterate();
 
         /* Objects */

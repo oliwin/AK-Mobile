@@ -8,7 +8,8 @@ class FieldRelation extends Model
 {
     protected $table = "field_relation";
 
-    public function name(){
-       return $this->hasOne("App\PrototypeFields", "id", "field_id");
+    public function name()
+    {
+        return $this->hasOne("App\PrototypeFields", "id", "field_id");
     }
 }

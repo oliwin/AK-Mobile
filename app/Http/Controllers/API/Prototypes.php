@@ -16,6 +16,8 @@ class Prototypes extends Objects
 
     protected $prototypes = [];
 
+    protected $_prototypes = [];
+
 
     public function __construct()
     {
@@ -29,7 +31,7 @@ class Prototypes extends Objects
 
         foreach ($this->prototypes as $key => $prototype) {
 
-            $this->prototypes[$prototype->prefix] = $this->fields($prototype);
+            $this->_prototypes[$prototype->prefix] = $this->fields($prototype);
 
             $this->addObject($prototype);
 
@@ -50,7 +52,7 @@ class Prototypes extends Objects
 
         $arr = parent::get();
 
-        $arr["prototypes"] = $this->prototypes;
+        $arr["prototypes"] = $this->_prototypes;
 
         return $arr;
     }

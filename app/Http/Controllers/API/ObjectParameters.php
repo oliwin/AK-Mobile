@@ -12,26 +12,26 @@ use App\PrototypeName;
  * Date: 5/13/17
  * Time: 7:00 PM
  */
-
 class ObjectParameters extends AbstractObjectParameters
 {
 
     private $parameters_object = [];
 
-
     public function parents()
     {
         $this->parents = FieldRelation::with("name")->get()->groupBy('parent_id');
-
     }
 
     public function format()
     {
 
-        foreach ($this->parameters as $k => $parameter) {
+        /* Only simple parameters, not nested */
 
-            $this->fillParametersObject($parameter->object_id, $parameter->name->prefix, $this->value($parameter));
-        }
+        $this->parameters->filter(function ($item) {
+            if ($item->name->type == 2) {
+                $this->fillParametersObject($item, $this->value($item));
+            }
+        });
     }
 
     public function value($parameter)
@@ -39,17 +39,34 @@ class ObjectParameters extends AbstractObjectParameters
 
         /* Complicated parameter with nested properties */
 
-        if ($parameter->type == 1) {
+        $parents = $this->parent_children($parameter->field_id);
 
-            return $this->parent_children($parameter->parameter_id);
+
+        if (count($parents) > 0) {
+
+            $value = $parents;
+
+        } else if (is_null($parameter->value) || empty($parameter->value)) {
+
+            $value = $parameter->name->default;
+
+        } else {
+
+            $value = $parameter->value;
         }
 
-        return (is_null($parameter->value) || empty($parameter->value)) ? $parameter->name->default : $parameter->value;
+        return $value;
+
     }
 
-    private function fillParametersObject($object_id, $parameter_prefix, $value)
+    private function fillParametersObject($parameter, $value)
     {
-        $this->parameters_object[$object_id][$parameter_prefix] = $value;
+
+        $id_object = $parameter->object_id;
+        $prefix = $parameter->name->prefix;
+
+        $this->parameters_object[$id_object][$prefix] = $value;
+
     }
 
     public function get()

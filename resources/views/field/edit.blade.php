@@ -60,13 +60,15 @@
          <div class="form-group">
             <label class="col-md-12 control-label">Parent</label>
             <div class="col-md-3 select-parameter-type">
-               {{Form::select('type', array(1 => "Multy", 2 => "Single"), 2, array("class" => "form-control"))}}
+               {{Form::select('type', array(1 => "Multy", 2 => "Single"), $field->type, array("class" => "form-control"))}}
             </div>
          </div>
+
          <div class="form-group">
             <div class="col-md-12 content-fields-multi">
             </div>
          </div>
+
          <div class="form-group">
             <div class="col-lg-12">
                <button type="submit" class="btn btn-primary">Update</button>
@@ -74,6 +76,7 @@
          </div>
          {!! Form::close() !!}
       </div>
-</div>
+
 </fieldset>
+</div>
 @endsection

@@ -21,9 +21,18 @@ abstract class AbstractObjectParameters
         $this->parameters = $object;
     }
 
-    public function parent_children($parameter_id){
+    public function parent_children($field_id){
 
-        return array_key_exists ( $parameter_id , $this->parents ) ? $this[$parameter_id] : [];
+        $parents = $this->parents->toArray();
+        $arr = [];
+
+        if (array_key_exists ( $field_id , $parents)) {
+            foreach($parents[$field_id] as $k => $v) {
+                $arr[$v['name']['prefix']] = $v['name']['default'];
+            }
+        }
+
+        return $arr;
     }
 
     abstract public function parents();

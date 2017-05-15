@@ -24,12 +24,12 @@
                {!! Form::select("category_id", $categories, null, array("class" => "form-control")) !!}
             </div>
          </div>
-         <div class="form-group">
+         <!--<div class="form-group">
             <label class="col-md-12 control-label">Visibility <span class="required-field">*</span></label>
             <div class="col-md-3">
                <?=Form::selectRange('visibility', 0, 20)?>
             </div>
-         </div>
+         </div>-->
          <div class="form-group">
             <label class="col-md-12 control-label">Available</label>
             <div class="col-md-3">
