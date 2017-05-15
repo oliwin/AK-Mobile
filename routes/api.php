@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 Route::get('objects', "API\ObjectController@index");
 
 ## Get JSON by ways ##
-Route::get('config/db', "API\ObjectController@showJson");
-Route::get('config/json', "API\ObjectController@showJsonFromFile");
+Route::get('config/db', "API\ObjectController@db");
+Route::get('config/json', "API\ObjectController@json");
 
 ## Update JSON file from model ##
-Route::get("config/update", "API\ObjectController@updateJsonFile");
+Route::get("config/update", "API\ObjectController@update");

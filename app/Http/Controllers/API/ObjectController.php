@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-
-use Validator;
-
-use Illuminate\Support\Facades\Redirect;
-
 use App\Http\Controllers\Controller;
 
-use App\PrototypeName;
+use App\Http\Controllers\API\ObjectParameters;
 
-use File;
+use App\Http\Controllers\API\ObjectWriterReaderFile;
 
-use App\FieldRelation;
+use App\Http\Controllers\API\ObjectWriterReaderDb;
+
+use App\Http\Controllers\API\Prototypes;
 
 /*
  *
@@ -26,108 +20,66 @@ use App\FieldRelation;
 class ObjectController extends Controller
 {
 
-  private $file_config = "config.json";
 
-  private $prototypes = [];
+    private $writerReaderFile;
 
-  private $formattedObject = [];
-
-  private $parentRelations = [];
+    private $writerReaderDb;
 
 
-  private function getParameters($params){
-    $parameters = [];
-    foreach($params as $k => $parameter){
-        $default = (is_null($parameter->value) || empty($parameter->value)) ? $parameter->name->default : $parameter->value;
-        $parameters[$parameter->name->prefix] = $default; // $this->getChildren($parameter->field_id, $default);
-    }
-
-    return $parameters;
-  }
-
-  private function getObjects($objects){
-     $objects_out = [];
-      foreach($objects as $k => $object){
-        $objects_out[$object->prefix] = $this->getParameters($object->parameters);
-      }
-
-      return $objects_out;
-  }
-
-  private function prototypesAll(){
-    $this->prototypes = PrototypeName::with("objects.parameters.name")->get();
-  }
-
-    public function init()
+    public function __construct()
     {
 
-      $this->parentRelations();
-      $this->prototypesAll();
+        $this->writerReaderFile = new ObjectWriterReaderFile();
+        $this->writerReaderDb = new ObjectWriterReaderDb();
 
-      foreach ($this->prototypes as $key => $value) {
-         $this->formattedObject[$value->prefix] = $this->getObjects($value->objects);
-      }
     }
 
-      public function showJsonFromFile(){
-          return response($this->readFile())->header('Content-Type', "json");
-      }
+    public function json()
+    {
+        $this->writerReaderFile->read();
 
-      public function showJson()
-      {
-          $this->init();
+        return $this->writerReaderFile->toJson();
+    }
 
-         echo json_encode($this->formattedObject);
-      }
+    private function execute(){
 
-      public function updateJsonFile(){
-        $this->init();
-        $data = json_encode($this->formattedObject);
-        $this->writeFile($data, $this->file_config);
-      }
+        /* Prototypes */
 
-      ////
-      private function writeFile($content, $path){
+        $prototypes = new Prototypes();
+        $prototypes->iterate();
 
-         return File::put($path, $content);
-      }
+        /* Objects */
 
-      private function readFile(){
+        $prototypes->format();
 
-        return File::get($this->file_config);
-      }
+        /* Combine all objects */
 
-      /////////////////
+        $combiner = new CombinerArray($prototypes);
+        $combiner->_formatOutput();
 
-      private function parentRelations()
-      {
-        $realatedFields = FieldRelation::with("name")->get();
+        /* Return object as Json */
 
-        $this->parentRelations = $realatedFields->groupBy('parent_id');
+        return $combiner->output;
+    }
 
-      }
+    public function db()
+    {
+        $array = $this->execute();
 
-      private function getChildren($field_id, $default_return){
+        $this->writerReaderDb->add($array);
 
-          $all_parent_child_list = $this->rebuildParentRelatonsStructure($this->parentRelations);
+        return $this->writerReaderDb->read();
 
-          return array_key_exists ( $field_id , $all_parent_child_list ) ? $all_parent_child_list[$field_id] : $default_return;
-      }
+    }
 
-      private function rebuildParentRelatonsStructure($collection){
+    public function update()
+    {
+        $array = $this->execute();
 
-        $arr_rebuilt = [];
+        $this->writerReaderFile->write($array);
 
-        foreach($collection as $p_k => $parent){
-          foreach($parent as $c_k => $child){
-            $arr_rebuilt[$p_k][] = array(
-              $child->name->prefix => $child->name->default
-            );
-          }
-        }
+        echo "Information was updated in file: config.json <br> Call <strong>/config/json</strong>strong> or <strong>/config/db</strong> to display data";
 
-        return $arr_rebuilt;
-
-      }
+    }
 
 }
