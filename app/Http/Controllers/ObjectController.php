@@ -81,14 +81,9 @@ class ObjectController extends Controller
                 });
             }
 
-            // Show by
+            // Limit
             if (($request->get("limit"))) {
                 $this->limit = $request->limit;
-            }
-
-            // Filter by fields in prototypes
-            if ($request->get("fields")) {
-                // TODO
             }
 
 
@@ -151,11 +146,6 @@ class ObjectController extends Controller
         if ($request->has("fields")) {
 
             foreach ($request->fields as $field_id => $v) {
-                if (!Helper::validateFiled($v, $this->_getFieldType($field_id))) {
-                    $message = "The filed " . $v . " should be contain only number forat";
-                    return redirect()->back()->withErrors([$message]);
-                }
-
                 $data[] = [
                     "value" => $v,
                     "object_id" => $object->id,

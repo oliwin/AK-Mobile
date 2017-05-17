@@ -31,9 +31,10 @@
             </div>
          </div>
          <div class="form-group">
-            <label class="col-md-12 control-label">Visibility <span class="required-field">*</span></label>
+            <label class="col-md-12 control-label">Visibility <span class="required-field">*</span> </label>
             <div class="col-md-9">
-               <?=Form::selectRange('visibility', 0, 20)?>
+               <span class="help-block">Visibility (1) for prototypes</span>
+               <?=Form::selectRange('visibility', 0, 20, 1)?>
             </div>
          </div>
          <div class="form-group">

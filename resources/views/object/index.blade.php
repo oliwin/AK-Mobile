@@ -8,8 +8,8 @@
    <thead>
       <tr>
          <th>Id</th>
-         <th>Name</th>
-         <th>Prefix</th>
+         <th>Name\Prefi</th>
+         <th>Category</th>
          <th>Prototype</th>
          <th>Status</th>
          <th>Action</th>
@@ -19,8 +19,8 @@
       @foreach ($objects as $index => $object)
       <tr>
          <td>{{ $object->id }}</td>
-         <td>{{ $object->name}}</td>
-         <td>{{ $object->prefix }}</td>
+         <td>{{ $object->name}} \ {{ $object->prefix }}</td>
+         <td>{{ $categories[$object->category_id] }}</td>
          <td>@if(!is_null($object->prototypes)) {{$object->prototypes->name}} @else - @endif</td>
          <td>@if($object->available == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
          <td>

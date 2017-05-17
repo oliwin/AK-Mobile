@@ -17,9 +17,9 @@ class CombinerArray
 
     public function __construct(Prototypes $prototypes)
     {
-        
-        $this->combined = $prototypes->get();
 
+        $this->combined = $prototypes->get();
+        
     }
 
     public function _formatOutput()
