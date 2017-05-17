@@ -43,29 +43,41 @@
             </div>
          </div>
          <div class="form-group prototype-list">
+            <label class="col-md-12 control-label">Prototypes</label>
             @if($prototypes->count())
-            @foreach($prototypes as $k => $v)
-            <div class="row item">
-               <div class="col-md-11">
-                  <span>{{$v->name}}</span>
+               @foreach($prototypes as $k => $v)
+               <div>
+                  <div class="col-md-11">
+                     <span>{{$v->name}}</span>
+                  </div>
+                  <div class="col-md-1">
+                     {{Form::hidden('prototype_id['.$v->id.']', false)}}
+                     {{Form::checkbox('prototype_id['.$v->id.']', $v->id, $v->checked)}}
+                  </div>
                </div>
-               <div class="col-md-1">
-                  {{Form::hidden('prototype_id['.$v->id.']', false)}}
-                  {{Form::checkbox('prototype_id['.$v->id.']', $v->id, $v->checked)}}
-               </div>
-            </div>
-            @endforeach
+               @endforeach
             @endif
          </div>
          <div class="form-group">
-            <label class="col-md-12 control-label">Parent</label>
+            <label class="col-md-12 control-label">Type</label>
             <div class="col-md-3 select-parameter-type">
-               {{Form::select('type', array(1 => "Multy", 2 => "Single"), $field->type, array("class" => "form-control"))}}
+               <input type="hidden" name="parent" id="parent_id" value="{{$field->id}}">
+               {{Form::select('type', array(1 => "Multi", 2 => "Single"), $field->type, array("class" => "form-control"))}}
             </div>
          </div>
 
-         <div class="form-group">
-            <div class="col-md-12 content-fields-multi">
+         <div class="form-group content-fields-multi">
+            <label class="col-md-12 control-label">Select fields inside</label>
+            <div class="col-md-12">
+               <div class="fields-list row">
+                  @foreach($parents as $k => $v)
+                        <div class="col-md-4">{{$v->name}}</div>
+                        <div class="col-md-8">
+                           {{Form::checkbox('field_child['.$v->id.']', $v->id, $v->checked)}}
+                        </div>
+                  @endforeach
+               </div>
+
             </div>
          </div>
 

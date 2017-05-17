@@ -110,11 +110,11 @@ class PrototypeFieldsController extends Controller
         $field = new PrototypeFields();
         $field->name = $request->name;
         $field->prefix = $request->prefix;
-        $field->only_numbers = (!is_null($request->only_numbers)) ? $request->only_numbers : 0;
-        $field->available = (!is_null($request->available)) ? $request->available : 0;
         $field->visibility = $request->visibility;
         $field->default = $request->default;
         $field->type = $request->type;
+        $field->only_numbers = (!is_null($request->only_numbers)) ? $request->only_numbers : 0;
+        $field->available = (!is_null($request->available)) ? $request->available : 0;
         $field->save();
 
         // Attach fields to prototypes
@@ -149,7 +149,8 @@ class PrototypeFieldsController extends Controller
             foreach ($request->field_child as $key => $value) {
                 $_data[] = array(
                     "field_id" => $value,
-                    "parent_id" => $field->id
+                    "parent_id" => $field->id,
+                    "type" => 1
                 );
             }
 
@@ -162,14 +163,21 @@ class PrototypeFieldsController extends Controller
     public function edit($id)
     {
         $prototypes = Prototype::all();
-        $field = PrototypeFields::with("prototypes")->findOrFail($id);
+        $field = PrototypeFields::with("prototypes", "children.name")->findOrFail($id);
+        $fields = PrototypeFields::where("type", 2)->get();
 
-        $prototypes_with_checkes = $prototypes->map(function ($item, $key) use ($field) {
+        $parents = $fields->map(function ($item) use ($field) {
+            $item->checked = $field->children->contains("field_id", $item->id);
+            return $item;
+        });
+
+        $prototypes_with_checkes = $prototypes->map(function ($item) use ($field) {
             $item->checked = $field->prototypes->contains("prototype_id", $item->id);
             return $item;
         });
 
         return View::make('field.edit', [
+            "parents" => $parents,
             "prototypes" => $prototypes_with_checkes,
             "field" => $field
         ]);
@@ -192,7 +200,6 @@ class PrototypeFieldsController extends Controller
             "prefix" => "required|string|min:1",
             "prototype_id.*" => "nullable",
             "default" => "required|string",
-            "visibility" => "required|integer",
             "type" => "required|integer"
         ]);
 
@@ -200,7 +207,7 @@ class PrototypeFieldsController extends Controller
             return redirect()->back()->withErrors($validator->errors());
         }
 
-        $field = PrototypeFields::where("id", $id)->update([
+        PrototypeFields::where("id", $id)->update([
             "name" => $request->name,
             "only_numbers" => (!is_null($request->only_numbers)) ? $request->only_numbers : 0,
             "available" => (!is_null($request->available)) ? $request->available : 0,
@@ -210,7 +217,29 @@ class PrototypeFieldsController extends Controller
             "type" => $request->type
         ]);
 
-        // Attach fields to prototypes
+        if($request->type == "2"){
+
+            FieldRelation::where("parent_id", $id)->delete();
+
+        } else {
+
+            FieldRelation::where("parent_id", $id)->delete();
+
+            // Bind fields to created field
+            if ($request->has("field_child")) {
+                foreach ($request->field_child as $key => $value) {
+                    $_data[] = array(
+                        "field_id" => $value,
+                        "parent_id" => $id,
+                        "type" => 1
+                    );
+                }
+
+                FieldRelation::insert($_data);
+            }
+
+        }
+
         if ($request->has('prototype_id')) {
             foreach ($request->prototype_id as $k => $v) {
                 if (is_null($v)) {
@@ -237,16 +266,14 @@ class PrototypeFieldsController extends Controller
         return ($rows > 0) ? true : false;
     }
 
-    public function fields($type, $view = 1)
+    public function fields($except_id)
     {
 
-        $fields = PrototypeFields::where("type", 2)->get()->pluck("name", "id");
 
-        if ($view == 1) {
-            return view('field.list', ['fields' => $fields]);
-        }
+        $fields = PrototypeFields::with("children.name")->where("type", 2)->where("id", "!=", $except_id)->get()->pluck("name", "id");
 
-        return response()->json($fields);
+        return view('field.list-checkboxes', ['fields' => $fields]);
+
 
     }
 
@@ -271,11 +298,9 @@ class PrototypeFieldsController extends Controller
 
     public function fieldsInPrototype($id)
     {
-        $fields = fieldsInPrototype::with("fieldname")->where("prototype_id", $id)->get();
-        $fields_format = $fields->map(function ($item, $key) {
-            return ["id" => $item->field_id, "name" => $item->field_details->name, "default" => $item->field_details->default];
-        });
+        $fields = fieldsInPrototype::with("field_details.children.name")->where("prototype_id", $id)->get();
 
-        return response()->json($fields_format->all());
+        return view('field.list', ['fields' => $fields]);
+
     }
 }

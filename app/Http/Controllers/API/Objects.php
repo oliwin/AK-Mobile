@@ -19,7 +19,7 @@ class Objects extends ObjectParameters
     {
 
         foreach ($objects->objects as $k => $object) {
-
+        
             $this->add($object->parameters);
 
             $this->objects[$objects->prefix][$object->prefix] = $this->fields($object);

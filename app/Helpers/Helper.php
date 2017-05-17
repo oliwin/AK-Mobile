@@ -997,7 +997,7 @@ class Helper
     {
 
         if (Auth::check()) {
-            if(Auth::user()->id == $id){
+            if (Auth::user()->id == $id) {
                 return true;
             }
         }
@@ -1017,7 +1017,7 @@ class Helper
         $collection = $collection->sortBy("name");
 
         $arr = [
-            "id" => "0",
+            "id" => "",
             "name" => $title
         ];
 
@@ -1054,53 +1054,55 @@ class Helper
 
         return $categories;
 
-      }
+    }
 
     public static function pluckObject($object, $key, $value, $placeholder = "Category", $orderBy = null)
     {
 
-      $object = Helpers\Helper::firstEmptyValue($object, $placeholder);
+        $object = Helpers\Helper::firstEmptyValue($object, $placeholder);
 
-      if(!is_null($orderBy)){
-        $object = $object->sortBy($orderBy);
-      }
+        if (!is_null($orderBy)) {
+            $object = $object->sortBy($orderBy);
+        }
 
-      return $object->pluck($value, $key);
+        return $object->pluck($value, $key);
     }
 
-    public static function payment($user){
+    public static function payment($user)
+    {
 
-		$payment = array(
-			0 => false,
-			1 => false
-		);
+        $payment = array(
+            0 => false,
+            1 => false
+        );
 
-			if(!is_null($user->payment)){
+        if (!is_null($user->payment)) {
 
-				$_payment = explode(",", $user->payment);
-				$payment[0] = isset($_payment[0]) ? true : false;
-				$payment[1] = isset($_payment[1]) ? true : false;
-			}
+            $_payment = explode(",", $user->payment);
+            $payment[0] = isset($_payment[0]) ? true : false;
+            $payment[1] = isset($_payment[1]) ? true : false;
+        }
 
-			return $payment;
-	}
+        return $payment;
+    }
 
-	 public static function delivery($user){
+    public static function delivery($user)
+    {
 
-		$payment = array(
-			0 => false,
-			1 => false
-		);
+        $payment = array(
+            0 => false,
+            1 => false
+        );
 
-			if(!is_null($user->delivery)){
+        if (!is_null($user->delivery)) {
 
-				$_payment = explode(",", $user->delivery);
-				$payment[0] = isset($_payment[0]) ? true : false;
-				$payment[1] = isset($_payment[1]) ? true : false;
-			}
+            $_payment = explode(",", $user->delivery);
+            $payment[0] = isset($_payment[0]) ? true : false;
+            $payment[1] = isset($_payment[1]) ? true : false;
+        }
 
-			return $payment;
-	}
+        return $payment;
+    }
 
     public static function statusAnnouncement($status)
     {
@@ -1201,12 +1203,13 @@ class Helper
         }
     }
 
-    public static function validateFiled($value, $type){
+    public static function validateFiled($value, $type)
+    {
 
         if ($type == 1) {
-          return is_numeric($value);
+            return is_numeric($value);
         } else {
-          return is_string($value);
+            return is_string($value);
         }
     }
 

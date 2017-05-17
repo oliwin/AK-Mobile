@@ -39,9 +39,34 @@
                      href="{{url('prototypes')}}">Prototypes</a>
                   <a class="{{ (Request::is('fields') || Request::is('fields/*') ? 'active' : '') }} list-group-item"
                      href="{{url('fields')}}">Parameters</a>
+                  <a class="{{ (Request::is('categories') || Request::is('categories/*') ? 'active' : '') }} list-group-item"
+                     href="{{url('categories')}}">Categories</a>
                </div>
             </div>
+
+            <div class="panel">
+               <div class="panel-heading">
+                  <h3 class="panel-title">System</h3>
+               </div>
+               <div class="panel-body profile-block">
+                  @if(Auth::check())
+                        <ul role="menu">
+                           <li><span class="name">{{Auth::user()->name}}</span></li>
+                           <li><a href="#" onclick="event.preventDefault();
+                                                             document.getElementById('logout-form').submit();">
+                                 <i class="glyphicon glyphicon-log-out"></i></a></li>
+                        </ul>
+
+                        <form id="logout-form" action="{{ url('/logout') }}" method="POST"
+                              style="display: none;">
+                           {{ csrf_field() }}
+                        </form>
+                  @endif
+                  </div>
+               </div>
+
          </div>
+
          <div class="col-sm-9">
             <div id="content">
                @include('common.messages-success')

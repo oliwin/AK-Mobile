@@ -1,1 +1,1 @@
-{"cars":{"bmw":[],"bmw2":[]},"boats":{"titanic":[]},"guns":{"kakarov":[]},"toys":{"duck":{"swim":"900","swim_hard":{"speed":"100"}}}}
+{"cars":{"bmw":{"speed":"20","acceleration":"4","weight":"800"},"opel":{"speed":"10","acceleration":"2","weight":"400"},"KIA":{"speed":"1","acceleration":"2","weight":"3"}}}

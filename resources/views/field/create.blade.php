@@ -30,12 +30,13 @@
                <?=Form::checkbox('available', 1, TRUE);?>
             </div>
          </div>
-         <!--<div class="form-group">
-            <label class="col-md-12 control-label">Visibility <span class="required-field">*</span></label>
+         <div class="form-group">
+            <label class="col-md-12 control-label">Visibility <span class="required-field">*</span> </label>
             <div class="col-md-9">
-               <?=Form::selectRange('visibility', 0, 20)?>
+               <span class="help-block">Visibility (1) for prototypes</span>
+               <?=Form::selectRange('visibility', 0, 20, 1)?>
             </div>
-         </div>-->
+         </div>
          <div class="form-group">
             <label class="col-md-12 control-label">Only numbers</label>
             <div class="col-md-3">
@@ -45,32 +46,23 @@
 
             @if($prototypes->count())
                <div class="form-group prototype-list">
-                  <div class="col-md-12">
-                     <legend>Prototypes <span class="required-field">*</span>
-                     </legend>
-
+                  <label class="col-md-12 control-label">Prototypes</label>
                      @foreach($prototypes as $key => $name)
-                     <div class="row item">
-                        <div class="col-md-11">{{$name}}</div>
-                        <div class="col-md-1">{{Form::checkbox('prototype_id[]', $key)}}</div>
-                     </div>
+                        <div class="col-md-5">{{$name}}</div>
+                        <div class="col-md-7">{{Form::checkbox('prototype_id[]', $key)}}</div>
                      @endforeach
-                  </div>
                </div>
             @endif
          <div class="form-group">
             <label class="col-md-12 control-label">Type</label>
             <div class="col-md-3 select-parameter-type">
-               {{Form::select('type', array(1 => "Multy", 2 => "Single"), 2, array("class" => "form-control"))}}
+               {{Form::select('type', array(1 => "Multi", 2 => "Single"), 2, array("class" => "form-control"))}}
             </div>
          </div>
-
-
           <div class="form-group">
-            <div class="col-md-12 content-fields-multi">
+            <div class="col-md-12 content-fields-multi row">
             </div>
          </div>
-
          <div class="form-group">
             <div class="col-lg-12">
                <button type="submit" class="btn btn-primary">Add</button>

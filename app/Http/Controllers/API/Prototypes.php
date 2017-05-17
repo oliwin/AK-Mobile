@@ -24,6 +24,7 @@ class Prototypes extends Objects
 
         $this->prototypes = PrototypeName::with("objects.parameters.name")->get();
 
+
     }
 
     public function iterate()
@@ -39,7 +40,7 @@ class Prototypes extends Objects
     }
 
     private function fields($prototype){
-
+        
         return array(
             "id" => $prototype->id,
             "name" => $prototype->name,

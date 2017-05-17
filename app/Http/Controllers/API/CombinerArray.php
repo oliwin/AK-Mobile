@@ -19,7 +19,7 @@ class CombinerArray
     {
 
         $this->combined = $prototypes->get();
-
+        
     }
 
     public function _formatOutput()

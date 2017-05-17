@@ -16,15 +16,19 @@ abstract class AbstractObjectParameters
     protected $parents = array();
 
 
-    public function add($object){
+    public function add($object)
+    {
 
-        $this->parameters = $object;
+        // Attention here
+
+        $this->parameters[] = $object;
+
     }
 
     public function parent_children($field_id){
 
-        $parents = $this->parents->toArray();
         $arr = [];
+        $parents = $this->parents->toArray();;
 
         if (array_key_exists ( $field_id , $parents)) {
             foreach($parents[$field_id] as $k => $v) {

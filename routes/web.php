@@ -20,6 +20,7 @@ Route::group(['middleware' => ['auth:web']], function () {
   Route::resource('objects', 'ObjectController');
   Route::resource('prototypes', 'PrototypeController');
   Route::resource('fields', 'PrototypeFieldsController');
+  Route::resource('categories', 'CategoryController');
 
   ## OBJECTS ##
   Route::get("prototypes/{id}/objects", "ObjectController@filterByPrototype");
@@ -27,6 +28,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 
   ## FIELDS ##
   Route::get("prototype/fields/{id}", "PrototypeFieldsController@fieldsInPrototype");
-  Route::get("fields/type/{type}/{show}", "PrototypeFieldsController@fields");
+  Route::get("fields/type/{id}", "PrototypeFieldsController@fields");
+
 
 });

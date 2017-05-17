@@ -10,8 +10,6 @@ use App\Prototype;
 
 use App\FieldCategories;
 
-use App\FieldCategoriesValues;
-
 use App\ObjectPrototypeFields;
 
 use View;
@@ -40,7 +38,8 @@ class ObjectController extends Controller
 
     private function prototypes($params = array())
     {
-        return Prototype::visibility($params)->get()->pluck("name", "id");
+        //visibility($params)
+        return Prototype::get()->pluck("name", "id");
     }
 
     /**
@@ -61,8 +60,8 @@ class ObjectController extends Controller
 
             // Filter by status
             if (($request->get("available"))) {
-                $status = ($request->status == 2) ? 0 : $status;
-                $query->where('available', $request->status);
+                $status = ($request->status == 2) ? 0 : $request->get("available");
+                $query->where('available', $status);
             }
 
             // Filter by ID
@@ -82,14 +81,9 @@ class ObjectController extends Controller
                 });
             }
 
-            // Show by
+            // Limit
             if (($request->get("limit"))) {
                 $this->limit = $request->limit;
-            }
-
-            // Filter by fields in prototypes
-            if ($request->get("fields")) {
-                // TODO
             }
 
 
@@ -130,7 +124,7 @@ class ObjectController extends Controller
             "name" => "required|string|min:3",
             "available" => "integer|nullable",
             "prefix" => "required|string|min:1",
-            "prototype_id" => "integer",
+            "prototype_id" => "required|integer",
             "visibility" => "integer",
             "category_id" => "required|integer",
             "fields.*" => "nullable"
@@ -149,36 +143,24 @@ class ObjectController extends Controller
         $object->available = (!is_null($request->available)) ? $request->available : 0;
         $object->save();
 
-        // Get all prototype fields
-        $fields_prototype = FieldsInPrototype::with("field_details")->where("prototype_id", $request->prototype_id)->get();
-
-        foreach ($fields_prototype as $k => $v) {
-            ObjectPrototypeFields::insert([
-                "prototype_id" => $v->prototype_id,
-                "object_id" => $object->id,
-                "field_id" => $v->field_id
-            ]);
-        }
-
-        // Update fields values in prototype
         if ($request->has("fields")) {
+
             foreach ($request->fields as $field_id => $v) {
-
-                if (!Helper::validateFiled($v, $this->_getFieldType($field_id))) {
-                    $message = "The filed " . $v . " should be contain only number forat";
-                    return redirect()->back()->withErrors([$message]);
-                }
-
-                ObjectPrototypeFields::where("object_id", $object->id)->where("field_id", $field_id)->update([
-                    "value" => $v
-                ]);
-
+                $data[] = [
+                    "value" => $v,
+                    "object_id" => $object->id,
+                    "field_id" => $field_id,
+                    "prototype_id" => $object->prototype_id
+                ];
             }
+
+            ObjectPrototypeFields::insert($data);
         }
 
         return redirect("objects")->with('success', "Object was created!");
 
     }
+
 
     private function _getFieldType($field_id)
     {
@@ -214,17 +196,15 @@ class ObjectController extends Controller
         return ObjectPrototypeFields::with("name")->where("object_id", $object_id)->where("prototype_id", $prototype_id)->get();
     }
 
-    private function getFieldValueById($ObjectPrototypeFields, $field_id)
-    {
-        return (isset($ObjectPrototypeFields[$field_id])) ? $ObjectPrototypeFields[$field_id] : null;
-    }
-
     private function fieldsObjectValues($object)
     {
         $fields_with_value = $this->fieldsObjectPrototype($object->id, $object->prototype_id)->pluck("value", "field_id");
         $fields_with_default_value = $this->getFieldsByPrototype($object->prototype_id);
 
-        $multiplied = $fields_with_default_value->map(function ($item, $key) use ($fields_with_value) {
+        $multiplied = $fields_with_default_value->map(function ($item) use ($fields_with_value) {
+
+            $item->children = $item->field_details->children;
+
             if (isset($fields_with_value[$item->field_id]) && !empty($fields_with_value[$item->field_id])) {
                 $item->field_details->default = $fields_with_value[$item->field_id];
             }
@@ -239,7 +219,7 @@ class ObjectController extends Controller
 
     private function getFieldsByPrototype($prototype_id)
     {
-        return FieldsInPrototype::with("field_details")->where("prototype_id", $prototype_id)->get();
+        return FieldsInPrototype::with("field_details.children.name")->where("prototype_id", $prototype_id)->get();
     }
 
     public function edit($id)
@@ -248,14 +228,6 @@ class ObjectController extends Controller
         $prototypes = Prototype::all();
         $object = Object::with("prototypes")->findOrFail($id);
         $fields = $this->fieldsObjectValues($object);
-
-        /*$fields = $fields->filter(function ($item) {
-            if ($item->name->type == 2) {
-                return $item;
-            }
-        });
-
-        dd($fields);*/
 
         $prototypes_with_checkes = $prototypes->map(function ($item) use ($object) {
             $item->checked = ($item->id == $object->prototype_id) ? true : false;
@@ -278,51 +250,24 @@ class ObjectController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private function isExistsPrototype($prototype_id, $object_id)
-    {
-        $fields = ObjectPrototypeFields::where("prototype_id", $prototype_id)->where("object_id", $object_id)->get();
-
-        return $fields->contains('prototype_id', $prototype_id);
-
-    }
-
     private function updatePrototypeFieldsInobject($request, $id)
     {
 
         if ($request->has("fields")) {
 
+            ObjectPrototypeFields::where("object_id", $id)->delete();
+
             foreach ($request->fields as $field_id => $value) {
 
-                if (!Helper::validateFiled($value, $this->_getFieldType($field_id))) {
-                    return redirect()->back()->withErrors(["The filed " . $value . " should be contain only number format!"]);
-                }
-
-                $data = [
+                $data[] = [
                     "object_id" => $id,
                     "field_id" => $field_id,
                     "prototype_id" => $request->prototype_id,
                     "value" => $value
                 ];
-
-                $looking = [
-                    "object_id" => $id,
-                    "field_id" => $field_id,
-                    "prototype_id" => $request->prototype_id
-                ];
-
-                // find
-
-                $found = ObjectPrototypeFields::where($looking);
-
-                if ($found->count() > 0) {
-
-                    $found->update($data);
-
-                } else {
-
-                    ObjectPrototypeFields::create($data);
-                }
             }
+
+            ObjectPrototypeFields::insert($data);
         }
 
     }
@@ -334,7 +279,7 @@ class ObjectController extends Controller
             "name" => "required|string|min:3",
             "available" => "integer|nullable",
             "prefix" => "required|string|min:1",
-            "prototype_id" => "nullable",
+            "prototype_id" => "required|integer",
             "visibility" => "integer",
             "category_id" => "required|integer",
             "fields.*" => "nullable"
@@ -346,53 +291,16 @@ class ObjectController extends Controller
 
         Object::with("prototypes")->where("id", $id)->update([
             "name" => $request->name,
-            "available" => (!is_null($request->available)) ? $request->available : 0,
             "prefix" => $request->prefix,
             "visibility" => $request->visibility,
             "category_id" => $request->category_id,
-            "prototype_id" => $request->prototype_id
+            "prototype_id" => $request->prototype_id,
+            "available" => (!is_null($request->available)) ? $request->available : 0
         ]);
 
-        if ($this->isExistsPrototype($request->prototype_id, $id)) {
-            $this->updatePrototypeFieldsInobject($request, $id);
-
-        } else {
-
-            // Delete old data from previous Prototype
-            ObjectPrototypeFields::where("object_id", $id)->delete();
-
-            // Add new fields that are required in Prototype
-            $fields_prototype = FieldsInPrototype::where("prototype_id", $request->prototype_id)->get();
-
-            foreach ($fields_prototype as $k => $v) {
-
-                if (!Helper::validateFiled($request->fields[$v->field_id], $this->_getFieldType($v->field_id))) {
-                    $message = "The filed " . $request->fields[$v->field_id] . " should be contain only number forat";
-                    return redirect()->back()->withErrors([$message]);
-                }
-
-                ObjectPrototypeFields::insert([
-                    "prototype_id" => $v->prototype_id,
-                    "object_id" => $id,
-                    "field_id" => $v->field_id,
-                    "value" => $request->fields[$v->field_id]
-                ]);
-            }
-
-        }
+        $this->updatePrototypeFieldsInobject($request, $id);
 
         return redirect("objects")->with('success', "Object was updated!");
-    }
-
-    private function checkIfPrototypeExistsInObject($id, $object)
-    {
-        foreach ($object->prototypes as $k => $v) {
-            if ($v->pivot->prototype_id == $id) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function filterByPrototype($prototype_id)
@@ -452,6 +360,8 @@ class ObjectController extends Controller
     public function destroy($id)
     {
         Object::destroy($id);
+
+        ObjectPrototypeFields::where("object_id", $id)->delete();
 
         return redirect("objects")->with('success', "Object was deleted!");
 

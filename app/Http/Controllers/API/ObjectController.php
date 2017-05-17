@@ -41,7 +41,10 @@ class ObjectController extends Controller
         return $this->writerReaderFile->toJson();
     }
 
-    private function execute(){
+    ///////////////////////////////////
+
+    private function execute()
+    {
 
         /* Prototypes */
 
@@ -62,6 +65,8 @@ class ObjectController extends Controller
 
         return $combiner->output;
     }
+
+    ///////////////////////////////////////////
 
     public function db()
     {

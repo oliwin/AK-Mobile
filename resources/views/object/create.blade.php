@@ -38,12 +38,11 @@
          </div>
          <div class="clearfix"></div>
          <div class="form-group prototype-list">
-            <div class="col-md-12">
-               <h5>Choose ptototype</h5>
                @if($prototypes->count())
-               <p class="help-block">Will be dislayed prototypes with visibility = 1</p>
+               <label class="col-md-12 control-label">Choose prototype <span class="required-field">*</span></label>
+               <div class="col-md-12"><p class="help-block">Will be dislayed prototypes with visibility = 1</p></div>
                @foreach($prototypes as $key => $name)
-               <div class="row item">
+               <div class="item">
                   <div class="col-md-11">
                      <label>{{$name}}</label>
                   </div>
@@ -53,7 +52,6 @@
                </div>
                @endforeach
                @endif
-            </div>
             <div id="FieldsInPrototype">
                <div class="list">
                </div>

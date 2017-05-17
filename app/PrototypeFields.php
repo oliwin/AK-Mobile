@@ -10,22 +10,26 @@ class PrototypeFields extends Model
 
     protected $hidden = ["updated_at", "created_at", "only_numbers", "visibility", "available"];
 
-    public function prototype(){
-       return $this->hasMany("App\FieldsInPrototype", "field_id", "id");
+
+    public function prototype()
+    {
+        return $this->hasMany("App\FieldsInPrototype", "field_id", "id");
     }
 
-    public function prototypes(){
-      return $this->hasMany("App\FieldsInPrototype", "field_id", "id");
+    public function prototypes()
+    {
+        return $this->hasMany("App\FieldsInPrototype", "field_id", "id");
     }
 
     public function scopeVisibility($query, $params)
-       {
-           if(isset($params["visibility"])){
-             return $query->where('visibility', $params["visibility"]);
-           }
-       }
+    {
+        if (isset($params["visibility"])) {
+            return $query->where('visibility', $params["visibility"]);
+        }
+    }
 
-       public function childs(){
-         return $this->hasMany("App\FieldRelation", "parent_id", "id");
-       }
+    public function children()
+    {
+        return $this->hasMany("App\FieldRelation", "parent_id", "id");
+    }
 }

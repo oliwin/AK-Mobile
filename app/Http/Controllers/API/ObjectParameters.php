@@ -20,6 +20,7 @@ class ObjectParameters extends AbstractObjectParameters
     public function parents()
     {
         $this->parents = FieldRelation::with("name")->get()->groupBy('parent_id');
+        
     }
 
     public function format()
@@ -27,11 +28,14 @@ class ObjectParameters extends AbstractObjectParameters
 
         /* Only simple parameters, not nested */
 
-        $this->parameters->filter(function ($item) {
-            if ($item->name->type == 2) {
-                $this->fillParametersObject($item, $this->value($item));
+        foreach ($this->parameters as $k => $i){
+
+            foreach ($i as $k => $item) {
+                if ($item->name->type == 2) {
+                    $this->fillParametersObject($item, $this->value($item));
+                }
             }
-        });
+        }
     }
 
     public function value($parameter)

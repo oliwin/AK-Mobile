@@ -40,9 +40,9 @@
          <div class="form-group prototype-list">
            <div class="col-md-12 row">
             @if($prototypes->count() > 0)
-            <h4>Prototypes</h4>
+                   <label class="col-md-12 control-label">Choose prototype <span class="required-field">*</span></label>
             @foreach($prototypes as $k => $v)
-            <div class="item row">
+            <div class="item">
                <div class="col-md-11">
                   <label>{{$v->name}}</label></div>
                   <div class="col-md-1">
@@ -57,30 +57,33 @@
          <div class="form-group fields-list" id="FieldsInPrototype">
            <div class="row list">
               @if($fields->count() > 0)
-              <h4>Parameters in prototype</h4>
+                   <label class="col-md-12 control-label">Choose parameters <span class="required-field">*</span></label>
                 @foreach($fields as $k => $v)
 
                 <div class="item">
                   <div class="col-md-4">
-                    <span>{{$v->field_details->name}} ({{$v->field_details->prefix}})</span>
+                    <div>{{$v->field_details->name}} </div>
+                      <div class="mini-text">({{$v->field_details->prefix}})</div>
                   </div>
                   <div class="col-md-8">
                     <input type="text" class="form-control" name="fields[{{$v->field_id}}]" value="{{$v->field_details->default}}">
                   </div>
                 </div>
 
-                @if(!is_null($v->children))
+                <!--@if(!is_null($v->children))
                   @foreach($v->children as $k => $child)
                     <div class="child item">
                       <div class="col-md-4">
-                      <span>{{$v->name->name}} ({{$v->name->prefix}})</span>
+                      <div>{{$child->name->name}}</div>
+                          <div class="mini-text">({{$child->name->prefix}})</div>
                     </div>
                     <div class="col-md-8">
                       <input type="text" class="form-control" name="fields[{{$child->field_id}}]" value="{{$child->name->default}}">
                     </div>
                     </div>
                   @endforeach
-                @endif
+                @endif-->
+
                 @endforeach
               @endif
           </div>

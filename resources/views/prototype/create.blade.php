@@ -18,12 +18,12 @@
                {!! Form::text('prefix', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Prefix"]) !!}
             </div>
          </div>
-         <div class="form-group">
+         <!--<div class="form-group">
             <label class="col-md-12 control-label">Visibility</label>
             <div class="col-md-3">
                <?=Form::selectRange('visibility', 0, 20)?>
             </div>
-         </div>
+         </div>-->
          <div class="form-group">
             <label class="col-md-12 control-label">Available</label>
             <div class="col-md-12">
@@ -33,7 +33,7 @@
          <div class="form-group">
             <div class="col-md-12 prototype-list">
                @if($prototype_fields->count())
-               <h4>Parameters</h4><span class="help-block">visibility = 1</span>
+               <h4>Parameters<span class="help-block">fields with visibility = 1</span></h4>
                @foreach($prototype_fields as $key => $name)
                <div class="row item">
                   <div class="col-md-11">
