@@ -28,7 +28,6 @@ class ObjectController extends Controller
 
     public function __construct()
     {
-        echo phpinfo();
 
         $this->writerReaderFile = new ObjectWriterReaderFile();
         $this->writerReaderDb = new ObjectWriterReaderDb();
