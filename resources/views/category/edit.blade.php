@@ -5,7 +5,7 @@
             <legend>Edit category <a class="back-link" href="{{URL::previous()}}">Back</a>
             </legend>
             <div class="row">
-                {{ Form::model($category, array('route' => array('categories.update', $category->id), 'files' => false, 'method' => 'PUT')) }}
+                {{ Form::model($category, array('route' => array('categories.update', $category["_id"]), 'files' => false, 'method' => 'PUT')) }}
                 <div class="form-group">
                     <label class="col-md-12 control-label">Name <span class="required-field">*</span></label>
                     <div class="col-md-12">

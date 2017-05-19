@@ -12,23 +12,29 @@
 */
 
 Auth::routes();
-
 Route::get("/", "HomeController@index");
 
 Route::group(['middleware' => ['auth:web']], function () {
+
+
+  ## SEARCH ##
+  Route::get("objects/search", "ObjectController@search");
+  Route::get("prototypes/search", "PrototypeController@search");
+  Route::get("fields/search", "PrototypeFieldsController@search");
+
+  ## FIELDS ##
+  Route::get("fields/prototype/{type}", "PrototypeFieldsController@fields");
+  Route::get("prototype/fields/{prototype_id}", "PrototypeFieldsController@fieldsBYID");
+
+  ## OBJECTS ##
+  Route::get("prototypes/{id}/objects", "ObjectController@filterByPrototype");
+  Route::get("objects/{id}/clone", "ObjectController@cloneObject");
 
   Route::resource('objects', 'ObjectController');
   Route::resource('prototypes', 'PrototypeController');
   Route::resource('fields', 'PrototypeFieldsController');
   Route::resource('categories', 'CategoryController');
 
-  ## OBJECTS ##
-  Route::get("prototypes/{id}/objects", "ObjectController@filterByPrototype");
-  Route::get("objects/{id}/clone", "ObjectController@cloneObject");
-
-  ## FIELDS ##
-  Route::get("prototype/fields/{id}", "PrototypeFieldsController@fieldsInPrototype");
-  Route::get("fields/type/{id}", "PrototypeFieldsController@fields");
 
 
 });

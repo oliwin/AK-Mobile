@@ -6,117 +6,103 @@ use Illuminate\Http\Request;
 
 use View;
 
-use App\Prototype;
-
-use App\PrototypeFields;
-
-use App\FieldsInPrototype;
-
-use App\ObjectPrototypeFields;
-
 use Validator;
+
+use App\Http\Controllers\Prototype\Prototype as PrototypeLibrary;
+
+use App\Http\Controllers\Parameter\Parameter as ParameterLibrary;
+
+use App\Http\Controllers\Prototype\PrototypeModel;
+
 
 class PrototypeController extends Controller
 {
 
-    private $limit = 20;
+    private $prototypeLibrary;
+
+    private $parameterLibrary;
+
+    private $prototypes;
+
+    private $fields;
+
+
+    public function __construct()
+    {
+        $this->prototypeLibrary = new PrototypeLibrary();
+        $this->prototypeLibrary->all();
+        $this->prototypes = $this->prototypeLibrary->document();
+
+        $this->parameterLibrary = new ParameterLibrary();
+        $this->parameterLibrary->all();
+        $this->fields = $this->parameterLibrary->document();
+    }
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $prototypes = Prototype::where(function ($query) use ($request) {
 
-            // Filter by ID
-            if (($request->get("id"))) {
-                $query->where('id', $request->id);
-            }
+        return $this->view();
+    }
 
+    public function search(Request $request)
+    {
 
-            // Filter by name
-            if (($name = $request->get("name"))) {
-                $query->where('name', 'like', '%' . $name . '%');
-                $query->orWhere('prefix', 'like', '%' . $name . '%');
-            }
+        $prototypes = SearchController::create(SearchController::PROTOTYPE);
 
+        $search = new SearchController($request, $prototypes);
 
-            // Filter by status
-            if (($request->get("available"))) {
-                $status = ($request->available == 2) ? 0 : $request->available;
-                $query->where('available', $status);
-            }
+        $this->prototypes = $search->done();
 
-            // Show by
-            if (($request->get("limit"))) {
-                $this->limit = $request->limit;
-            }
+        return $this->view();
+    }
 
-        })->orderBy('id', 'desc')->paginate($this->limit);
+    private function view()
+    {
 
         return View::make('prototype.index', [
-            "prototypes" => $prototypes,
-            "path" => action("PrototypeController@create")
+            "prototypes" => $this->prototypes,
+            "path" => action("PrototypeController@create"),
+            "search_path" => "/prototypes/search"
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
 
-        //echo "asd"; die();
-
         return View::make('prototype.create', [
-            "prototype_fields" => $this->prototypeFields(["visibility" => 1])
+            "fields" => $this->fields
         ]);
     }
-
-    private function prototypeFields()
-    {
-        return prototypeFields::visibility(["visibility" => 1])->get()->pluck("name", "id");
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
 
             "name" => "required|string|min:3",
-            "available" => "integer|nullable",
-            "prefix" => "required|string|min:1",
-            //"visibility" => "required|integer"
+            "available" => "integer|nullable"
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors());
         }
 
-        $field = new Prototype();
-        $field->name = $request->name;
-        $field->prefix = $request->prefix;
-        $field->visibility = $request->visibility;
-        $field->available = (!is_null($request->available)) ? $request->available : 0;
-        $field->save();
+        try {
 
-        // Attach fields to prototypes
-        if ($request->has('field_id')) {
-            foreach ($request->field_id as $k => $v) {
-                $fields_prototype = new FieldsInPrototype();
-                $fields_prototype->field_id = $v;
-                $fields_prototype->prototype_id = $field->id;
-                $fields_prototype->save();
-            }
+            $prototypeModel = new PrototypeModel();
+            $prototypeModel->fill($request);
+            
+            $this->prototypeLibrary->prepare($prototypeModel->data());
+            $this->prototypeLibrary->add();
+
+        } catch (\Exception $e) {
+
+            echo 'Выброшено исключение: ', $e->getMessage(), "\n";
+            dd();
         }
 
         return redirect("prototypes")->with('success', "Prototype was created!");
@@ -126,38 +112,12 @@ class PrototypeController extends Controller
     public function edit($id)
     {
 
-
-        $prototype = Prototype::with("fields")->find($id);
-        $fields = prototypeFields::visibility(["visibility" => 1])->get();
-
-        $fields_with_checkes = $fields->map(function ($item) use ($prototype) {
-            $item->checked = $prototype->fields->contains("field_id", $item->id);
-            return $item;
-        });
+        $prototype = $this->prototypeLibrary->getOne(array("_id" => new \MongoId($id)));
 
         return View::make('prototype.edit', [
             "prototype" => $prototype,
-            "prototype_fields" => $fields_with_checkes
+            "fields" => $this->fields
         ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-
-    private function checkIfPrototypeExistsInObject($id, $object)
-    {
-        foreach ($object->fields as $k => $v) {
-            if ($v->field_id == $id) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function update(Request $request, $id)
@@ -166,60 +126,26 @@ class PrototypeController extends Controller
 
             "name" => "required|string|min:3",
             "available" => "integer|nullable",
-            "prefix" => "required|string|min:1",
-            //"visibility" => "required|integer",
             "field_id.*" => "integer|nullable"
-            //"value" => "string",
-            //"default" => "required|string"
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors());
         }
 
-        Prototype::where("id", $id)->update([
-            "name" => $request->name,
-            "prefix" => $request->prefix,
-            "visibility" => $request->visibility,
-            "available" => (!is_null($request->available)) ? $request->available : 0
-        ]);
+        $prototypeModel = new PrototypeModel();
+        $prototypeModel->fill($request);
 
-        $object = Prototype::with("fields")->findOrFail($id);
-
-        if ($request->has('field_id')) {
-            foreach ($request->field_id as $k => $v) {
-
-                if (is_null($v)) {
-                    if ($this->checkIfPrototypeExistsInObject($k, $object)) {
-                        FieldsInPrototype::where("prototype_id", $id)->where("field_id", $k)->delete();
-                    }
-
-                } else {
-
-                    if (!$this->checkIfPrototypeExistsInObject($k, $object)) {
-                        FieldsInPrototype::create(["prototype_id" => $id, "field_id" => $k]);
-
-                    }
-                }
-            }
-        }
+        $this->prototypeLibrary->prepare($prototypeModel->data());
+        $data = $this->prototypeLibrary->document();
+        $this->prototypeLibrary->update(array("_id" => new \MongoId($id)), $data);
 
         return redirect("prototypes")->with('success', "Prototype was updated!");
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
-        Prototype::destroy($id);
-
-        ObjectPrototypeFields::where("prototype_id", $id)->delete();
-
-        FieldsInPrototype::where("prototype_id", $id)->delete();
+        $this->prototypeLibrary->delete($id);
 
         return redirect("prototypes")->with('success', "Prototype was deleted!");
     }

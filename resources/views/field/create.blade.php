@@ -13,12 +13,6 @@
             </div>
          </div>
          <div class="form-group">
-            <label class="col-md-12 control-label">Prefix <span class="required-field">*</span></label>
-            <div class="col-md-12">
-               {!! Form::text('prefix', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Prefix"]) !!}
-            </div>
-         </div>
-         <div class="form-group">
             <label class="col-md-12 control-label">Default value <span class="required-field">*</span></label>
             <div class="col-md-12">
                {!! Form::text('default', null, ['class' => 'form-control input-disable', 'required' => 'required', 'placeholder' => "Default Value"]) !!}
@@ -33,7 +27,6 @@
          <div class="form-group">
             <label class="col-md-12 control-label">Visibility <span class="required-field">*</span> </label>
             <div class="col-md-9">
-               <span class="help-block">Visibility (1) for prototypes</span>
                <?=Form::selectRange('visibility', 0, 20, 1)?>
             </div>
          </div>
@@ -43,20 +36,10 @@
                <?=Form::checkbox('only_numbers');?>
             </div>
          </div>
-
-            @if($prototypes->count())
-               <div class="form-group prototype-list">
-                  <label class="col-md-12 control-label">Prototypes</label>
-                     @foreach($prototypes as $key => $name)
-                        <div class="col-md-5">{{$name}}</div>
-                        <div class="col-md-7">{{Form::checkbox('prototype_id[]', $key)}}</div>
-                     @endforeach
-               </div>
-            @endif
          <div class="form-group">
-            <label class="col-md-12 control-label">Type</label>
+            <label class="col-md-12 control-label">Type <span class="required-field">*</span></label>
             <div class="col-md-3 select-parameter-type">
-               {{Form::select('type', array(1 => "Multi", 2 => "Single"), 2, array("class" => "form-control"))}}
+               {{Form::select('type', array(1 => "Scalar", 2 => "Object", 3 => "Array"), 1, array("class" => "form-control"))}}
             </div>
          </div>
           <div class="form-group">
@@ -70,6 +53,6 @@
          </div>
          {!! Form::close() !!}
       </div>
-</div>
 </fieldset>
+</div>
 @endsection

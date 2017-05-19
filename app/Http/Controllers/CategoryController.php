@@ -6,24 +6,34 @@ use Illuminate\Http\Request;
 
 use View;
 
-use App\FieldCategories;
-
 use Validator;
+
+use App\Http\Controllers\Category\Category as CategoryLibrary;
+
+use App\Http\Controllers\Category\CategoryModel;
 
 class CategoryController extends Controller
 {
 
-    private $limit = 20;
+    private $categoryLibrary;
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+
+    public function __construct()
+    {
+        $this->categoryLibrary = new CategoryLibrary();
+    }
+
+    public function index()
     {
 
-        $categories = FieldCategories::orderBy('id', 'desc')->paginate($this->limit);
+        $this->categoryLibrary->all();
+
+        $categories = $this->categoryLibrary->document();
 
         return View::make('category.index', [
             "categories" => $categories
@@ -57,9 +67,18 @@ class CategoryController extends Controller
             return redirect()->back()->withErrors($validator->errors());
         }
 
-        $category = new FieldCategories();
-        $category->name = $request->name;
-        $category->save();
+        try {
+
+            $categoryModel = new CategoryModel();
+            $categoryModel->fill($request);
+            
+            $this->categoryLibrary->prepare($categoryModel->data());
+            $this->categoryLibrary->add();
+
+        } catch (\Exception $e){
+
+            echo 'Выброшено исключение: ',  $e->getMessage(), "\n"; dd();
+        }
 
         return redirect("categories")->with('success', "Category was created!");
     }
@@ -68,7 +87,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
 
-        $category = FieldCategories::find($id);
+        $category = $this->categoryLibrary->getOne(array("_id" => new \MongoId($id)));
 
         return View::make('category.edit', [
             "category" => $category
@@ -86,9 +105,7 @@ class CategoryController extends Controller
             return redirect()->back()->withErrors($validator->errors());
         }
 
-        FieldCategories::where("id", $id)->update([
-            "name" => $request->name
-        ]);
+        $this->categoryLibrary->update(array("_id" => new \MongoId($id)), array("name" => $request->name));
 
         return redirect("categories")->with('success', "Category was updated!");
     }
@@ -101,7 +118,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        FieldCategories::destroy($id);
+
+        $this->categoryLibrary->delete($id);;
 
         return redirect("categories")->with('success', "Category was deleted!");
     }

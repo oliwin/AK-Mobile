@@ -9,8 +9,7 @@
       <tr>
          <th>Id</th>
          <th>Name</th>
-         <th>Prefix</th>
-         <th>Prototype</th>
+         <th>Type</th>
          <th>Status</th>
          <th>Action</th>
       </tr>
@@ -18,20 +17,15 @@
    <tbody>
       @foreach ($fields as $index => $field)
       <tr>
-         <th>{{ $field->id }}</th>
-         <td>{{ $field->name}}</td>
+         <th>{{ $field['_id'] }}</th>
+         <td>{{ $field['name']}}</td>
          <td>
-            {{ $field->prefix }}
-            <div class="multi_field">@if($field->type == 1) Multi @endif</div>
+            <div class="multi_field">{{\App\Helpers\Helper::getTypeParameterName($field['type'])}}</div>
          </td>
-         <td>@if($field->prototype->count() > 0)
-            {{$field->prototype->pluck("name", "id")->implode('name', ', ')}}
-            @else - @endif
-         </td>
-         <td>@if($field->available == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
+         <td>@if($field['available'] == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
          <td>
-            <a class="label label-info" href="fields/{{$field->id}}/edit">Edit</a>
-            <form action="{{ URL::route('fields.destroy', $field->id) }}" method="POST">
+            <a class="label label-info" href="fields/{{$field['_id']}}/edit">Edit</a>
+            <form action="{{ URL::route('fields.destroy', $field['_id']) }}" method="POST">
                <input type="hidden" name="_method" value="DELETE">
                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                <button class="delete label label-danger">Delete</button>
@@ -44,5 +38,4 @@
 @else
 <p class="notification-center">There are not rows</p>
 @endif
-{!!$fields->render()!!}
 @endsection

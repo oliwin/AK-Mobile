@@ -18,9 +18,7 @@ use App\Category;
 
 use App\Helpers;
 
-use App\Library\Location;
-
-use App\Library\Settings;
+use Illuminate\Support\Collection;
 
 use Illuminate\Support\Facades\App;
 
@@ -1056,16 +1054,19 @@ class Helper
 
     }
 
-    public static function pluckObject($object, $key, $value, $placeholder = "Category", $orderBy = null)
+    public static function pluckObject($object, $key, $value, $placeholder = "Select", $replace = true)
     {
+        if ($replace) {
 
-        $object = Helpers\Helper::firstEmptyValue($object, $placeholder);
-
-        if (!is_null($orderBy)) {
-            $object = $object->sortBy($orderBy);
+            $arr = ["" => $placeholder];
         }
 
-        return $object->pluck($value, $key);
+        foreach ($object as $k => $v) {
+            $id = $v[$key]->{'$id'};
+            $arr[$id] = $v[$value];
+        }
+
+        return $arr;
     }
 
     public static function payment($user)
@@ -1212,5 +1213,40 @@ class Helper
             return is_string($value);
         }
     }
+
+    public static function getMongoIDString($id)
+    {
+
+        return new \MongoId($id);
+
+    }
+
+    public static function getTypeParameterName($type)
+    {
+
+        switch ((int)$type) {
+
+            case 1:
+                return "Scalar";
+                break;
+
+            case 2:
+                return "Object";
+                break;
+
+            case 3:
+                return "Array";
+                break;
+        }
+
+    }
+
+    public static function inArray($value, $array)
+    {
+
+        return (key_exists($value, $array)) ? $array[$value] : "-";
+
+    }
+
 
 }

@@ -13,18 +13,6 @@
             </div>
          </div>
          <div class="form-group">
-            <label class="col-md-12 control-label">Prefix <span class="required-field">*</span></label>
-            <div class="col-md-12">
-               {!! Form::text('prefix', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Prefix"]) !!}
-            </div>
-         </div>
-         <!--<div class="form-group">
-            <label class="col-md-12 control-label">Visibility</label>
-            <div class="col-md-3">
-               <?=Form::selectRange('visibility', 0, 20)?>
-            </div>
-         </div>-->
-         <div class="form-group">
             <label class="col-md-12 control-label">Available</label>
             <div class="col-md-12">
                <?=Form::checkbox('available', 1, TRUE);?>
@@ -32,14 +20,14 @@
          </div>
          <div class="form-group">
             <div class="col-md-12 prototype-list">
-               @if($prototype_fields->count())
+               @if(count($fields) > 0)
                <h4>Parameters<span class="help-block">fields with visibility = 1</span></h4>
-               @foreach($prototype_fields as $key => $name)
+               @foreach($fields as $k => $v)
                <div class="row item">
                   <div class="col-md-11">
-                     <span>{{$name}}</span>
+                     <span>{{$v["name"]}}</span>
                   </div>
-                  <div class="col-md-1">{{Form::checkbox('field_id[]', $key)}}</div>
+                  <div class="col-md-1">{{Form::checkbox('parameters[]', App\Helpers\Helper::getMongoIDString($v["_id"]))}}</div>
                </div>
                @endforeach
                @endif
@@ -52,6 +40,6 @@
          </div>
          {!! Form::close() !!}
       </div>
-</div>
 </fieldset>
+</div>
 @endsection

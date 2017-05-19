@@ -18,11 +18,11 @@
             <tbody>
             @foreach ($categories as $index => $field)
                 <tr>
-                    <th>{{ $field->id }}</th>
-                    <td>{{ $field->name}}</td>
+                    <th>{{ $field['_id'] }}</th>
+                    <td>{{ $field['name']}}</td>
                     <td>
-                        <a class="label label-info" href="categories/{{$field->id}}/edit">Edit</a>
-                        <form action="{{ URL::route('categories.destroy', $field->id) }}" method="POST">
+                        <a class="label label-info" href="categories/{{$field['_id']}}/edit">Edit</a>
+                        <form action="{{ URL::route('categories.destroy', $field['_id']) }}" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <button class="delete label label-danger">Delete</button>
@@ -35,5 +35,4 @@
     @else
         <p class="notification-center">There are not rows</p>
     @endif
-    {!!$categories->render()!!}
 @endsection

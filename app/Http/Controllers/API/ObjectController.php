@@ -4,13 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Controllers\API\ObjectParameters;
-
-use App\Http\Controllers\API\ObjectWriterReaderFile;
-
-use App\Http\Controllers\API\ObjectWriterReaderDb;
-
-use App\Http\Controllers\API\Prototypes;
+use App\Http\Controllers\Object\Object;
 
 /*
  *
@@ -46,24 +40,11 @@ class ObjectController extends Controller
     private function execute()
     {
 
-        /* Prototypes */
+       $objects = new Object();
 
-        $prototypes = new Prototypes();
-        $prototypes->parents();
-        $prototypes->iterate();
+       $objects->all();
 
-        /* Objects */
-
-        $prototypes->format();
-
-        /* Combine all objects */
-
-        $combiner = new CombinerArray($prototypes);
-        $combiner->_formatOutput();
-
-        /* Return object as Json */
-
-        return $combiner->output;
+       return $objects->document();
     }
 
     ///////////////////////////////////////////

@@ -9,7 +9,6 @@
       <tr>
          <th>Id</th>
          <th>Name</th>
-         <th>Prefix</th>
          <th>Status</th>
          <th>Action</th>
          <th>Objects</th>
@@ -18,20 +17,19 @@
    <tbody>
       @foreach ($prototypes as $index => $prototype)
       <tr>
-         <th>{{ $prototype->id }}</th>
-         <td>{{ $prototype->name}}</td>
-         <td>{{ $prototype->prefix }}</td>
-         <td>@if($prototype->available == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
+         <th>{{ $prototype['_id'] }}</th>
+         <td>{{ $prototype['name']}}</td>
+         <td>@if($prototype['available'] == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
          <td>
-            <a class="label label-info" href="prototypes/{{$prototype->id}}/edit">Edit</a>
-            <form action="{{ URL::route('prototypes.destroy', $prototype->id) }}" method="POST">
+            <a class="label label-info" href="prototypes/{{$prototype['_id']}}/edit">Edit</a>
+            <form action="{{ URL::route('prototypes.destroy', $prototype['_id']) }}" method="POST">
                <input type="hidden" name="_method" value="DELETE">
                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                <button class="delete label label-danger">Delete</button>
             </form>
          </td>
          <td>
-            <a class="label label-warning" href=" prototypes/{{$prototype->id}}/objects">Show</a>
+            <a class="label label-warning" href=" prototypes/{{$prototype['_id']}}/objects">Show</a>
          </td>
       </tr>
       @endforeach
@@ -40,5 +38,4 @@
 @else
 <p class="notification-center">There are not rows</p>
 @endif
-{!!$prototypes->render()!!}
 @endsection

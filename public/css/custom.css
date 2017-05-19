@@ -995,15 +995,13 @@ button {
 }
 
 .fields-list {
-    padding-top: 20px;
-    padding-bottom: 20px;
+
 }
 
 .fields-list .item {
     width: 100%;
     display: block;
-    height: 55px;
-    padding: 15px;
+    padding: 5px;
 }
 
 .multi_field {
@@ -1016,6 +1014,33 @@ button {
     font-size: 11px;
 }
 
+.content-fields {
+    padding-bottom: 30px;
+}
+
 .pagination {
     text-align: center;
+}
+
+* {
+.border-radius(0) !important;
+}
+
+#field {
+    margin-bottom:20px;
+}
+
+
+.content-fields .item-row {
+    min-height: 55px;
+    clear: both;
+}
+
+.content-fields-multi .item-row {
+    min-height: 55px;
+    clear: both;
+}
+
+.content-fields-multi {
+    padding-bottom: 30px;
 }
