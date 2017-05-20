@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Controllers\Object\Object;
 
 /*
  *
@@ -40,11 +39,11 @@ class ObjectController extends Controller
     private function execute()
     {
 
-       $objects = new Object();
+        $results = new CombinerArray();
 
-       $objects->all();
+        $results->_formatOutput();
 
-       return $objects->document();
+        return $results->_return();
     }
 
     ///////////////////////////////////////////

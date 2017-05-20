@@ -1,7 +1,7 @@
 @extends('index')
 @section('content')
 <div class="block-form">
-   <fieldset>
+    <fieldset>
       <legend>Edit object <a class="back-link" href="{{URL::previous()}}">Back</a>
       </legend>
       <div class="row">
@@ -25,34 +25,33 @@
             </div>
          </div>
          <div class="form-group prototype-list">
-           <div class="col-md-12 row">
-            @if(count($prototypes))
-                   <label class="col-md-12 control-label">Choose prototype <span class="required-field">*</span></label>
-            @foreach($prototypes as $k => $v)
-            <div class="item">
-               <div class="col-md-11">
-                  <label>{{$v}}</label></div>
-                  <div class="col-md-1">
-                  {{Form::radio('prototype_id', $k, FALSE)}}
+
+             <div class="col-md-12 row">
+                @if(count($prototypes))
+                       <label class="col-md-12 control-label">Choose prototype <span class="required-field">*</span></label>
+                @foreach($prototypes as $k => $v)
+                <div class="item">
+                   <div class="col-md-11">
+                      <label>{{$v}}</label></div>
+                      <div class="col-md-1">
+                      {{Form::radio('prototype_id', $k, FALSE)}}
+                    </div>
                 </div>
-               </div>
-            @endforeach
-            </div>
-            @endif
+                @endforeach
+                @endif
           </div>
-         </div>
-
-            @include('object.parameters')
-
+             </div>
          <div class="form-group fields-list" id="FieldsInPrototype">
-           <div class="row list"></div>
+           <div class="row list">@include('object.parameters')</div>
          </div>
          <div class="form-group">
             <div class="col-lg-12">
+               <input type="hidden" name="action" value="edit"/>
                <button type="submit" class="btn btn-primary">Update</button>
             </div>
          </div>
          {!! Form::close() !!}
-</fieldset>
+      </div>
+    </fieldset>
 </div>
 @endsection

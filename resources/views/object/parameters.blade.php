@@ -10,7 +10,7 @@
                         <div class="row item">
                             <div class="col-md-6">
                                 <label>{{$kp}}</label>
-                                <input autocomplete="off" class="input form-control" name="parameters[{{$k}}]" type="text"
+                                <input class="input form-control" name="parameters[{{$k}}]" type="text"
                                        value="{{$parameter}}"/>
                             </div>
                         </div>
@@ -29,7 +29,7 @@
                         <div class="row item">
                             <div class="col-md-6">
                                 <label>{{$kp}}</label>
-                                <input autocomplete="off" class="input form-control" name="parameters[{{$k}}]" type="text"
+                                <input class="input form-control" name="parameters[{{$k}}]" type="text"
                                        value="{{$parameter}}"/>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                 @foreach($v as $kp => $parameter)
                     <div class="row item">
                         <div class="col-md-6">
-                            <input autocomplete="off" class="input form-control" name="parameters[{{$k}}]" type="text"
+                            <input class="input form-control" name="parameters[{{$k}}][]" type="text"
                                    value="{{$parameter}}"/>
                         </div>
                     </div>

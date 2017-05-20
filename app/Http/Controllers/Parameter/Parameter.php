@@ -40,13 +40,18 @@ abstract class ParameterAbstract extends MongoConnection
         return $this->inserted["_id"]->{'$id'};
     }
 
-    public function all()
+    public function all($return = false)
     {
 
         $cursor = $this->collection->find()->sort($this->sortBy);
 
         foreach ($cursor as $id => $value) {
             array_push($this->document, $value);
+        }
+
+        if ($return) {
+
+            return $this->document;
         }
     }
 
@@ -157,10 +162,20 @@ class Parameter extends ParameterAbstract
         return $keys;
     }
 
-    public function getValuesParametersByID($parameters_ids = array(), $with_type = false)
+    public function replaceValuesFromForm($parameters, $parameters_form)
+    {
+
+        /* foreach ($parameters["parameters"] as $id => $v){
+             dd($parameters_form);
+         }*/
+    }
+
+    public function getValuesParametersByID($parameters_ids = array())
     {
 
         $array_with_types = [];
+
+        $array_types = [];
 
         $values = [];
 
@@ -187,17 +202,16 @@ class Parameter extends ParameterAbstract
                     break;
             }
 
+            $array_types[$id] = (int)$v["type"];
             $array_with_types[$v["type"]][$id] = $values[$id];
 
         }
 
-        if ($with_type) {
-            $values = $array_with_types;
-        }
-
-        /* Set as value om object */
-
-        return $values;
+        return array(
+            "types" => $array_types,
+            "parameters_with_type" => $array_with_types,
+            "parameters" => $values
+        );
 
     }
 
@@ -214,39 +228,4 @@ class Parameter extends ParameterAbstract
 
         return $arr;
     }
-
-
-    public function replaceDefaultValueFromCollection($parameters_collection = array(), $parameters_default = array())
-    {
-
-        foreach ($parameters_default as $type => $value) {
-
-            foreach ($value as $k => $v) {
-
-                $key = key($parameters_collection[$k]);
-
-                $parameters_default[$type][$k][$key] = $parameters_collection[$k][$key];
-            }
-        }
-
-        return $parameters_default;
-    }
-
-    public function replaceDefaultValueOnReal(Request $request, $parameters = array())
-    {
-
-        if ($request->has("parameters")) {
-
-            foreach ($request->parameters as $k => $v) {
-
-                $key = key($parameters[$k]);
-
-                $parameters[$k][$key] = $v;
-            }
-
-        }
-
-        return $parameters;
-    }
-
 }

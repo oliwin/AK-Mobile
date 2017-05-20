@@ -139,16 +139,10 @@ class ObjectController extends Controller
 
         $object = $this->objectLibrary->getOne(array("_id" => new \MongoId($id)));
 
-        $parameters = new Parameter();
-
-        $p = (!is_null($object["parameters"])) ? array_keys($object["parameters"]) : [];
-
-        $default = $parameters->getValuesParametersByID($parameters->convertIdStringToMongoID($p), true);
-
-        $parameters = $parameters->replaceDefaultValueFromCollection($object["parameters"], $default);
-        
         $this->prototypes = Helper::pluckObject($this->prototypes, "_id", "name", "Select prototype", false);
 
+        $parameters = $this->objectLibrary->formatParametersWithTypes($object);
+        
         return View::make('object.edit', [
             "object" => $object,
             "parameters" => $parameters,
@@ -174,6 +168,7 @@ class ObjectController extends Controller
         }
 
         $objectModel = new ObjectModel();
+
         $objectModel->fill($request);
 
         $this->objectLibrary->update(array("_id" => new \MongoId($id)), $objectModel->data());

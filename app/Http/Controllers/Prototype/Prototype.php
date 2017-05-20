@@ -31,13 +31,23 @@ abstract class PrototypeAbstract extends MongoConnection
         return $this->document;
     }
 
-    public function all()
+    public function extractStringID($id)
+    {
+
+        return (string)$id["_id"];
+    }
+
+    public function all($return = false)
     {
 
         $cursor = $this->collection->find()->sort($this->sortBy);
 
         foreach ($cursor as $id => $value) {
             array_push($this->document, $value);
+        }
+
+        if($return){
+            return $this->document;
         }
     }
 

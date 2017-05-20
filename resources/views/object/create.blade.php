@@ -47,11 +47,11 @@
          </div>
          <div class="form-group">
             <div class="col-lg-12">
+               <input type="hidden" name="action" value="add"/>
                <button type="submit" class="btn btn-primary">Add</button>
             </div>
          </div>
          {!! Form::close() !!}
       </div>
-</div>
 </fieldset>
 @endsection

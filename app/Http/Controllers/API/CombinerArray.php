@@ -8,28 +8,85 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Prototype\Prototype;
+
+use App\Http\Controllers\Object\Object;
+
+use App\Http\Controllers\Parameter\Parameter;
+
 
 class CombinerArray
 {
-    public $output = [];
+    private $output = [];
 
-    private $combined = array();
+    private $objects;
 
-    public function __construct(Prototypes $prototypes)
+    private $prototypes;
+
+    private $parameters;
+
+    private $prototypesClass;
+
+    private $parametersClass;
+
+    private $objectsClass;
+
+    public function __construct()
     {
 
-        $this->combined = $prototypes->get();
-        
+        $this->prototypesClass = new Prototype();
+        $this->parametersClass = new Parameter();
+        $this->objectsClass = new Object();
+
+        $this->prototypes = $this->prototypesClass->all(true);
+        $this->parameters = $this->parametersClass->all(true);
+        $this->objects = $this->objectsClass->all(true);
+
+    }
+
+    private function objectParameters($object)
+    {
+
+        $parameters = [];
+
+        foreach ($object["parameters"] as $k => $value) {
+
+            $parameters[] = $value;
+        }
+
+        return $parameters;
+    }
+
+    private function objectsByPrototype($prototype_id)
+    {
+
+        $object_m = [];
+
+        $objects = $this->objectsClass->objectsByPrototype($prototype_id);
+
+        foreach ($objects as $k => $object) {
+
+            $object_m[$object["name"]] = $this->objectParameters($object);
+        }
+
+        return $object_m;
     }
 
     public function _formatOutput()
     {
 
-        foreach ($this->combined["objects"] as $k => $v) {
-            foreach ($v as $t => $a) {
-                $this->output[$k][$a['prefix']] = (isset($this->combined["parameters"][$a['id']])) ? $this->combined["parameters"][$a['id']] : [];
-            }
+        foreach ($this->prototypes as $key => $prototype) {
+
+            $prototypeName = $prototype["name"];
+
+            $this->output[$prototypeName] = $this->objectsByPrototype($this->prototypesClass->extractStringID($prototype));
         }
+    }
+
+    public function _return()
+    {
+
+        return $this->output;
     }
 
 }

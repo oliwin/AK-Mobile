@@ -24,6 +24,8 @@ class ObjectModel extends AbstractModel
 
     protected $parameters = [];
 
+    protected $parameters_type = [];
+
 
     public function fill(Request $request)
     {
@@ -50,8 +52,37 @@ class ObjectModel extends AbstractModel
 
         $parameters = $parametersClass->getValuesParametersByID($fields_id);
 
-        $this->parameters = $parametersClass->replaceDefaultValueOnReal($request, $parameters);
+        $this->parameters = $parameters["parameters"];
 
+        $this->parameters_type = $parameters["types"];
+
+        
+        //////////////
+
+        if ($request->has("action") && $request->action == "edit") {
+
+            $parameters_temp = $this->parameters;
+
+            foreach ($parameters_temp as $k => $array) {
+
+                $type = $this->parameters_type[$k];
+
+                if ($type == 3) {
+
+                    $parameters_temp[$k] = $request->parameters[$k];
+
+                } else {
+
+                    foreach ($array as $d => $value) {
+
+                        $parameters_temp[$k][$d] = $request->parameters[$k];
+
+                    }
+                }
+            }
+
+            $this->parameters = $parameters_temp;
+        }
     }
 
 

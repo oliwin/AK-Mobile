@@ -33,7 +33,7 @@ abstract class ObjectAbstract extends MongoConnection
         return $this->document;
     }
 
-    public function all()
+    public function all($return = false)
     {
 
         $cursor = $this->collection->find()->sort($this->sortBy);
@@ -41,6 +41,17 @@ abstract class ObjectAbstract extends MongoConnection
         foreach ($cursor as $id => $value) {
             array_push($this->document, $value);
         }
+
+        if($return){
+
+            return $this->document;
+        }
+    }
+
+    public function extractStringID($id)
+    {
+
+        return (string)$id["_id"];
     }
 
     private function exceptID($object)
@@ -128,7 +139,6 @@ class Object extends ObjectAbstract
     public function get($selector = array())
     {
 
-
         $this->cursor = $this->collection->find($selector);
 
         $this->document = $this->cursor;
@@ -149,6 +159,34 @@ class Object extends ObjectAbstract
         $this->get($parameters);
 
         return $this->document;
+    }
+
+    public function objectsByPrototype($prototype_id){
+
+        $selector = array('prototype_id' => $prototype_id);
+
+        $this->get($selector);
+
+        return $this->document;
+    }
+
+    public function formatParametersWithTypes($object){
+
+        $parameters = $object["parameters"];
+
+        $types = $object["parameters_type"];
+
+        $format = [];
+
+        foreach($parameters as $id => $v){
+
+            $type = $types[$id];
+
+            $format[$type][$id] = $v;
+        }
+        
+        return $format;
+
     }
 
 }
