@@ -1,1 +1,1 @@
-{"Planes":{"Bmw":[{"Speed":"900"}]},"Boats":[],"Cars":[]}
+{"Boats":{"Skuter":{"xui":"900","HArd":["A","V","B"],"oBJECT":{"Speed":"900","Weight":"1200"}}},"Cars":{"Bmw":{"Speed":"900","Weight":"1200","Acceleration":"2","Blabla":"777","aaaaa":"aaa","dadad":"adad","xui":"2000"},"Aopel":{"Speed":"900","Weight":"1200","Acceleration":"2","Blabla":"777","aaaaa":"aaa","Jaaad":"adad","adadadadad":"adadad","dadad":"adad","xui":"2000"}}}
