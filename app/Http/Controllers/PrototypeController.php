@@ -90,9 +90,7 @@ class PrototypeController extends Controller
 
             $prototypeModel = new PrototypeModel();
             $prototypeModel->fill($request);
-            
-            $this->prototypeLibrary->prepare($prototypeModel->data());
-            $this->prototypeLibrary->add();
+            $this->prototypeLibrary->add($prototypeModel);
 
         } catch (\Exception $e) {
 
@@ -130,10 +128,7 @@ class PrototypeController extends Controller
 
         $prototypeModel = new PrototypeModel();
         $prototypeModel->fill($request);
-
-        $this->prototypeLibrary->prepare($prototypeModel->data());
-        $data = $this->prototypeLibrary->document();
-        $this->prototypeLibrary->update(array("_id" => new \MongoId($id)), $data);
+        $this->prototypeLibrary->update(array("_id" => new \MongoId($id)), $prototypeModel);
 
         return redirect("prototypes")->with('success', "Prototype was updated!");
     }

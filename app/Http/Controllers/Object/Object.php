@@ -44,7 +44,7 @@ abstract class ObjectAbstract extends MongoConnection
             array_push($this->document, $value);
         }
 
-        if($return){
+        if ($return) {
 
             return $this->document;
         }
@@ -108,16 +108,38 @@ abstract class ObjectAbstract extends MongoConnection
         $this->inserted = $clonedObj;
 
 
+        /* Clone object parameters */
+
+
+        $this->changeCollection("object_parameters");
+
+        $this->document = $this->collection->find(array("object_id" =>  $id));
+
+        $this->document = iterator_to_array($this->document);
+
+
+        $id = (string)$this->inserted["_id"];
+
+
+        foreach ($this->document as $k => $v){
+
+            $v["object_id"] = $id;
+
+            unset($v["_id"]);
+
+            $this->collection->insert($v);
+        }
+
     }
 
 
-    public abstract function add();
+    public abstract function add(ObjectModel $data);
 
     public abstract function search($parameters);
 
     public abstract function get($selector);
 
-    public abstract function update($selector, $data);
+    public abstract function update($selector, ObjectModel $data);
 
 }
 
@@ -131,10 +153,41 @@ class Object extends ObjectAbstract
         $this->model = new ObjectModel();
     }
 
-    public function add()
+    private function addValues()
     {
 
-        $this->collection->insert($this->document);
+        $this->changeCollection("object_parameters");
+
+        $object_id = $this->_insertedID();
+
+        foreach ($this->document["values"] as $_id => $arr) {
+
+            foreach ($arr as $type => $v) {
+
+                $data = [
+                    "object_id" => $object_id,
+                    "parameter_id" => $_id,
+                    "value" => $v
+                ];
+
+                $this->collection->insert($data);
+            }
+        }
+    }
+
+    public function add(ObjectModel $objectModel)
+    {
+
+        $this->document = $objectModel->data();
+
+        $data_excepted = $objectModel->except(["_id", "selected", "values"], $this->document); /* Contains unique _id for all types -1 */
+
+        $this->collection->insert($data_excepted);
+
+        $this->inserted = $data_excepted;
+
+        $this->addValues();
+
 
     }
 
@@ -149,10 +202,37 @@ class Object extends ObjectAbstract
 
     }
 
-    public function update($where, $data)
+    public function update($where, ObjectModel $objectModel)
     {
 
-        $this->collection->update($where, $data);
+        $excepted_data = $objectModel->except(["_id", "values"], $objectModel->data());
+
+        $this->collection->update($where, $excepted_data);
+
+        $id = $this->extractStringID($where);
+
+        $this->changeCollection("object_parameters");
+
+        $this->collection->remove(array('object_id' => $id));
+
+
+        ///////////
+
+
+        foreach ($objectModel->values() as $_id => $arr) {
+
+            foreach ($arr as $type => $v) {
+
+                $data = [
+                    "object_id" => $id,
+                    "parameter_id" => $_id,
+                    "value" => $v
+                ];
+
+                $this->collection->insert($data);
+            }
+        }
+
     }
 
     public function search($parameters)
@@ -163,7 +243,8 @@ class Object extends ObjectAbstract
         return $this->document;
     }
 
-    public function objectsByPrototype($prototype_id){
+    public function objectsByPrototype($prototype_id)
+    {
 
         $selector = array('prototype_id' => $prototype_id);
 
@@ -172,28 +253,18 @@ class Object extends ObjectAbstract
         return $this->document;
     }
 
-    public function formatParametersWithTypes($object){
+    public function parameters($object)
+    {
 
-        $format = [];
+        $this->changeCollection("object_parameters");
 
-        $parameters = $object["parameters"];
+        $object_id = $this->extractStringID($object);
 
-        $types = $object["parameters_type"];
+        $selector = ["object_id" => $object_id];
 
+        $this->get($selector);
 
-        /////////////
-
-
-        foreach($parameters as $k => $d){
-
-            foreach ($d as $id => $v) {
-
-                $type = $types[$id];
-                $format[$type][$id] = $v;
-            }
-        }
-
-        return $format;
+        return $this->document;
 
     }
 

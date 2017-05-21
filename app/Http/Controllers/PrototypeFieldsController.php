@@ -88,10 +88,10 @@ class PrototypeFieldsController extends Controller
         try {
 
             $parameterModel = new ParameterModel();
+
             $parameterModel->fill($request);
 
-            $this->parameterLibrary->prepare($parameterModel->data());
-            $this->parameterLibrary->add();
+            $this->parameterLibrary->add($parameterModel);
 
         } catch (\Exception $e) {
 
@@ -144,16 +144,14 @@ class PrototypeFieldsController extends Controller
         $parametersModel = new ParameterModel();
         $parametersModel->fill($request);
 
-        $this->parameterLibrary->prepare($parametersModel->data());
-        $data = $this->parameterLibrary->document();
-        
-        $this->parameterLibrary->update(array("_id" => new \MongoId($id)), $data);
+        $this->parameterLibrary->update(array("_id" => new \MongoId($id)), $parametersModel);
 
         return redirect("fields")->with('success', "Prototype field was updated!");
     }
 
     public function fields($type)
     {
+
 
         switch ($type) {
 
@@ -175,9 +173,13 @@ class PrototypeFieldsController extends Controller
     public function fieldsBYID($id)
     {
 
+        /* Get list of parameters in prototype */
+
         $prototype = new Prototype();
 
         $parameters_id = $prototype->getFieldsPrototype($id);
+
+        /* Get values of parameters */
 
         $parameters = new Parameter();
 

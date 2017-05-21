@@ -61,7 +61,7 @@ abstract class CategoryAbstract extends MongoConnection
 
         $new = array('$set' => array("category_id" => null));
 
-        $this->changeCollection("object_categories");
+        $this->changeCollection("objects");
 
         $this->collection->update(array("category_id" => $id), $new);
 
@@ -78,7 +78,7 @@ abstract class CategoryAbstract extends MongoConnection
 
     }
 
-    public abstract function add();
+    public abstract function add(CategoryModel $data);
 
     public abstract function get($selector);
 
@@ -111,10 +111,14 @@ class Category extends CategoryAbstract
         $this->collection->update($where, $data);
     }
 
-    public function add()
+    public function add(CategoryModel $categoryModel)
     {
 
-        $this->collection->insert($this->document);
+        $this->document = $categoryModel->data();
+
+        $data_excepted = $categoryModel->except(["_id"], $this->document);;
+
+        $this->collection->insert($data_excepted);
     }
 
 }

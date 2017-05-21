@@ -71,9 +71,8 @@ class CategoryController extends Controller
 
             $categoryModel = new CategoryModel();
             $categoryModel->fill($request);
-            
-            $this->categoryLibrary->prepare($categoryModel->data());
-            $this->categoryLibrary->add();
+
+            $this->categoryLibrary->add($categoryModel);
 
         } catch (\Exception $e){
 
@@ -119,7 +118,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
 
-        $this->categoryLibrary->delete($id);;
+        $this->categoryLibrary->delete($id);
 
         return redirect("categories")->with('success', "Category was deleted!");
     }

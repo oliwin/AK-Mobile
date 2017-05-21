@@ -31,13 +31,11 @@ class AbstractModel
     public function data()
     {
 
-        $exists = get_object_vars($this);
+        return get_object_vars($this);
 
-        return $this->except(["_id", "selected"], $exists);
-        
     }
 
-    protected function except($except, $data)
+    public function except($except, $data)
     {
         $except = array_flip($except);
 

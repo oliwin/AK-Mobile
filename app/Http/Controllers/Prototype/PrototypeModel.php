@@ -27,7 +27,7 @@ class PrototypeModel extends AbstractModel
 
         $this->name = $request->name;
 
-        $this->parameters = (is_null($request->parameters)) ? [] : $request->parameters;
+        $this->parameters = $request->parameters;
         
 
     }

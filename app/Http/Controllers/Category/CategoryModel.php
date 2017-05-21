@@ -23,7 +23,5 @@ class CategoryModel extends AbstractModel
         $this->validate($request);
 
         $this->name = $request->name;
-
-        $this->available = $request->available;
     }
 }

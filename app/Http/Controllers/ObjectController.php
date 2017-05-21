@@ -119,8 +119,7 @@ class ObjectController extends Controller
             $objectModel = new ObjectModel();
             $objectModel->fill($request);
 
-            $this->objectLibrary->prepare($objectModel->data());
-            $this->objectLibrary->add();
+            $this->objectLibrary->add($objectModel);
 
         } catch (\Exception $e) {
 
@@ -135,15 +134,27 @@ class ObjectController extends Controller
     public function edit($id)
     {
 
+        $parameters_id = [];
+
         $object = $this->objectLibrary->getOne(array("_id" => new \MongoId($id)));
 
         $this->prototypes = Helper::pluckObject($this->prototypes, "_id", "name", "Prototype", false);
 
-        $parameters = $this->objectLibrary->formatParametersWithTypes($object);
-        
+        $parameters = $this->objectLibrary->parameters($object);
+
+        foreach ($parameters as $k => $v){
+            array_push($parameters_id, Helper::getMongoIDString($v["parameter_id"]));
+        }
+
+        // Get all parameters
+
+        $parametersClass = new Parameter();
+
+        $parameters = $parametersClass->getValuesFilled($parameters_id, $parameters);
+
         return View::make('object.edit', [
             "object" => $object,
-            "parameters" => $parameters,
+            "parameters" => $parameters["parameters_with_type"],
             "prototypes" => $this->prototypes,
             "categories" => $this->categories
         ]);
@@ -169,7 +180,7 @@ class ObjectController extends Controller
 
         $objectModel->fill($request);
 
-        $this->objectLibrary->update(array("_id" => new \MongoId($id)), $objectModel->data());
+        $this->objectLibrary->update(array("_id" => new \MongoId($id)), $objectModel);
 
         return redirect("objects")->with('success', "Object was updated!");
     }

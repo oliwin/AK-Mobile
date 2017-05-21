@@ -94,11 +94,11 @@ abstract class PrototypeAbstract extends MongoConnection
 
     }
 
-    public abstract function add();
+    public abstract function add(PrototypeModel $prototypeModel);
 
     public abstract function get($selector);
 
-    public abstract function update($selector, $data);
+    public abstract function update($selector, PrototypeModel $prototypeModel);
 
 }
 
@@ -113,10 +113,12 @@ class Prototype extends PrototypeAbstract
     }
 
 
-    public function add()
+    public function add(PrototypeModel $prototypeModel)
     {
 
-        $this->collection->insert($this->document);
+        $data_excepted = $prototypeModel->except(["_id"], $prototypeModel->data());
+
+        $this->collection->insert($data_excepted);
 
     }
 
@@ -127,85 +129,38 @@ class Prototype extends PrototypeAbstract
         $this->document = $this->cursor;
     }
 
-    public function updateRelations($data = array(), $id)
+    public function update($where, PrototypeModel $prototypeModel)
+    {
+
+        $data_excepted = $prototypeModel->except(["_id"], $prototypeModel->data());
+
+        $this->collection->update($where, $data_excepted);
+
+        $this->updateRelation($data_excepted, $where);
+
+
+    }
+
+    private function updateRelation($data, $where)
     {
 
 
-        $id = (string)$id["_id"];
-
-        $this->getOne(array("_id" => Helper::getMongoIDString($id)));
-
-
-        if (!isset($this->document["parameters"])) {
-            $this->document["parameters"] = [];
-        }
-
-
-        $collection = array_flip($this->document["parameters"]);
-
-        $selected = array_flip($data["parameters"]);
-
-        $diff = array_diff_key($selected, $collection);
-
-        //////////////////
-
-        $this->changeCollection("parameters");
-
-        $newdata = [];
-
-
-        foreach ($diff as $id_parameter => $v) {
-
-            $parameter = $this->getParametersDetails($id_parameter);
-
-            $newdata[] = array($id_parameter => array($parameter["name"] => $parameter["value"]));
-
-            $types[$id_parameter] = $parameter["type"];
-
-        }
-
-        ///////////////////
+        $id = (string)$where["_id"];
 
         $this->changeCollection("objects");
 
-        foreach ($newdata as $k => $v) {
+        $new = array('$set' => array("parameters" => []));
 
-            $this->collection->update(
-                ["prototype_id" => $id],
-                ['$push' => ["parameters" => $v]],
-                ["multiple" => true]);
-        }
-
-        foreach( $newdata as $key => $v){
-
-            $key = key($v);
-
-            $this->collection->update(
-                ["prototype_id" => $id],
-                ['$set' => ["parameters_type." . $key => $types[$key]]],
-                ["multiple" => true]);
-        }
+        $this->collection->update(array("prototype_id" => $id), $new);
 
 
-    }
+        /// Insert
 
-    private function getParametersDetails($id_parameter)
-    {
+        $data = (!isset($data["parameters"]) || is_null($data["parameters"])) ? [] : $data["parameters"];
+        
+        $insert = array('$set' => array("parameters" => $data));
 
-        $selector = array('_id' => new \MongoId($id_parameter));
-
-        return $this->getOne($selector);
-
-    }
-
-    public function update($where, $data)
-    {
-        $this->updateRelations($data, $where);
-
-        $this->changeCollection("prototypes");
-
-        $this->collection->update($where, $data);
-
+        $this->collection->update(array("prototype_id" => $id), $insert);
 
     }
 
