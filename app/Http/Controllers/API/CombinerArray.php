@@ -51,9 +51,11 @@ class CombinerArray
 
         foreach ($object["parameters"] as $k => $value) {
 
-            $parameters[] = $value;
-        }
+            $key = key($value);
 
+            $parameters[$key] = $value[$key];
+        }
+        
         return $parameters;
     }
 

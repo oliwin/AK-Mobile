@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Prototype;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\MongoConnection;
 
 /**
@@ -46,7 +47,7 @@ abstract class PrototypeAbstract extends MongoConnection
             array_push($this->document, $value);
         }
 
-        if($return){
+        if ($return) {
             return $this->document;
         }
     }
@@ -123,10 +124,67 @@ class Prototype extends PrototypeAbstract
         $this->document = $this->cursor;
     }
 
+    public function updateRelations($data = array(), $id)
+    {
+
+        $this->changeCollection("parameters");
+
+        foreach ($data["parameters"] as $k => $id_parameter) {
+
+            $parameter = $this->getParametersDetails($id_parameter);
+
+            $newdata[] = array($id_parameter => array($parameter["name"] => $parameter["value"]));
+
+            $types[$id_parameter] = $parameter["type"];
+
+        }
+
+        ///////////////////
+
+        $id = (string)$id["_id"];
+
+        $this->changeCollection("objects");
+
+
+        // Get only selected prototypes
+
+        // Get values of object and set them below
+
+        foreach ($newdata as $k => $v) {
+
+            foreach ($v as $gg => $data) {
+
+                $this->collection->update(
+                    ["prototype_id" => $id],
+                    ['$set' => ["parameters.".$gg => $data]],
+                    ["multiple" => true]);
+
+                $this->collection->update(
+                    ["prototype_id" => $id],
+                    ['$set' => ["parameters_type.".$gg => $types[$gg]]],
+                    ["multiple" => true]);
+        }
+
+        }
+
+    }
+
+    private function getParametersDetails($id_parameter)
+    {
+
+        $selector = array('_id' => new \MongoId($id_parameter));
+
+        return $this->getOne($selector);
+
+    }
+
     public function update($where, $data)
     {
 
         $this->collection->update($where, $data);
+
+        $this->updateRelations($data, $where);
+
     }
 
     public function search($parameters)
@@ -140,10 +198,12 @@ class Prototype extends PrototypeAbstract
     public function getFieldsPrototype($prototype_id)
     {
 
+        $parameters_ids = [];
+
         $selector = array('_id' => new \MongoId($prototype_id));
 
         $prototype = $this->getOne($selector);
-        
+
         foreach ($prototype["parameters"] as $k => $v) {
 
             $parameters_ids[] = new \MongoID($v);

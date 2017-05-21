@@ -36,7 +36,7 @@ class ObjectController extends Controller
 
         $categories = new CategoryLibrary();
         $categories->all();
-        $this->categories = Helper::pluckObject($categories->document(), "_id", "name", "Select category");
+        $this->categories = Helper::pluckObject($categories->document(), "_id", "name", "Category");
 
         // Prototypes
 
@@ -61,9 +61,7 @@ class ObjectController extends Controller
 
     private function view()
     {
-
-        $this->prototypes = Helper::pluckObject($this->prototypes, "_id", "name", "Select prototype");
-
+        
         return View::make('object.index', [
             "objects" => $this->objects,
             "categories" => $this->categories,
@@ -93,7 +91,7 @@ class ObjectController extends Controller
     public function create()
     {
 
-        $this->prototypes = Helper::pluckObject($this->prototypes, "_id", "name", "Select prototype", false);
+        $this->prototypes = Helper::pluckObject($this->prototypes, "_id", "name", "Prototype", false);
 
         return View::make('object.create', [
             "prototypes" => $this->prototypes,
@@ -139,7 +137,7 @@ class ObjectController extends Controller
 
         $object = $this->objectLibrary->getOne(array("_id" => new \MongoId($id)));
 
-        $this->prototypes = Helper::pluckObject($this->prototypes, "_id", "name", "Select prototype", false);
+        $this->prototypes = Helper::pluckObject($this->prototypes, "_id", "name", "Prototype", false);
 
         $parameters = $this->objectLibrary->formatParametersWithTypes($object);
         

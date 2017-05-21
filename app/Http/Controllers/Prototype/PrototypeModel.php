@@ -18,8 +18,6 @@ class PrototypeModel extends AbstractModel
 
     protected $name;
 
-    protected $prototype_id;
-
     protected $parameters = [];
 
     public function fill(Request $request)
@@ -28,9 +26,7 @@ class PrototypeModel extends AbstractModel
         $this->validate($request);
 
         $this->name = $request->name;
-
-        $this->prototype_id = $request->prototype_id;
-
+        
         $this->available = $request->available;
 
         $this->parameters = $request->parameters;

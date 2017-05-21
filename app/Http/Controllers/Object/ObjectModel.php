@@ -56,29 +56,32 @@ class ObjectModel extends AbstractModel
 
         $this->parameters_type = $parameters["types"];
 
-        
         //////////////
 
         if ($request->has("action") && $request->action == "edit") {
 
             $parameters_temp = $this->parameters;
 
-            foreach ($parameters_temp as $k => $array) {
+            foreach ($parameters_temp as $id => $array_key_value) {
 
-                $type = $this->parameters_type[$k];
+                $type = $this->parameters_type[$id];
 
-                if ($type == 3) {
+                foreach ($array_key_value as $name => $value) {
 
-                    $parameters_temp[$k] = $request->parameters[$k];
+                    /* If array */
 
-                } else {
+                    if ($type == 3) {
 
-                    foreach ($array as $d => $value) {
+                        $parameters_temp[$id][$request->parameters_array_name] = $request->parameters[$id];
 
-                        $parameters_temp[$k][$d] = $request->parameters[$k];
+                    } else {
 
+                        $parameters_temp[$id][$name] = $request->parameters[$id];
                     }
+
                 }
+
+
             }
 
             $this->parameters = $parameters_temp;

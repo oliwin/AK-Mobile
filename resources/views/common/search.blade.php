@@ -13,15 +13,13 @@
     @endif
     @if(isset($prototypes))
     <div class="col-md-3">
-      {{Form::select('prototype_id', $prototypes, null, array("class" => "form-control"))}}
+      {{Form::select('prototype_id', \App\Helpers\Helper::reformatArrayToList($prototypes), null, array("class" => "form-control"))}}
     </div>
     @endif
     <div class="col-md-2">
       {{Form::select('available', ["0" => "Status", "1" => "Available", "2" => "Not available"], null, array("class" => "form-control"))}}
     </div>
-    <!--<div class="col-md-2" style="width: 100px !important;">
-      {{Form::select('limit', array('10' => '10', '25' => '25', '50' => '50', '100' => '100'), null, array("class" => "form-control"))}}
-    </div>-->
+
     <div class="col-md-1">
       <input type="submit" name="search" value="Go" class="btn btn-success">
     </div>

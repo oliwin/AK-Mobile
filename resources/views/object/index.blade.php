@@ -3,7 +3,7 @@
 @include('common.search')
 @include('common.action_buttons')
 <h4>Objects</h4>
-@if(count($objects))
+@if(count($objects) > 0)
 <table class="table">
    <thead>
       <tr>
@@ -21,7 +21,7 @@
          <td><strong>{{ $object['_id'] }}</strong></td>
          <td>{{ $object['name']}}</td>
          <td>{{\App\Helpers\Helper::inArray($object['category_id'], $categories)}}</td>
-         <td>{{\App\Helpers\Helper::inArray($object['prototype_id'], $prototypes)}}</td>
+         <td>{{\App\Helpers\Helper::inArray($object['prototype_id'], \App\Helpers\Helper::reformatArrayToList($prototypes))}}</td>
          <td>@if($object['available'] == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
          <td>
             <a class="label label-info" href="objects/{{$object['_id']}}/edit">Edit</a>

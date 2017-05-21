@@ -38,11 +38,6 @@ class PrototypeController extends Controller
         $this->fields = $this->parameterLibrary->document();
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
 
@@ -113,7 +108,7 @@ class PrototypeController extends Controller
     {
 
         $prototype = $this->prototypeLibrary->getOne(array("_id" => new \MongoId($id)));
-
+        
         return View::make('prototype.edit', [
             "prototype" => $prototype,
             "fields" => $this->fields

@@ -18,7 +18,6 @@ use App\Category;
 
 use App\Helpers;
 
-use Illuminate\Support\Collection;
 
 use Illuminate\Support\Facades\App;
 
@@ -1221,6 +1220,11 @@ class Helper
 
     }
 
+    private static function mongoIDString($id){
+
+        return (string) $id;
+    }
+
     public static function getTypeParameterName($type)
     {
 
@@ -1239,6 +1243,20 @@ class Helper
                 break;
         }
 
+    }
+
+    public static function reformatArrayToList($array){
+
+        $arr = [0 => "Prototype"];
+
+        foreach($array as $k => $v) {
+
+            $key = self::mongoIDString($v["_id"]);
+
+            $arr[$key] = $v["name"];
+        }
+
+        return $arr;
     }
 
     public static function inArray($value, $array)

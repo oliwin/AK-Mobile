@@ -105,7 +105,7 @@ class PrototypeFieldsController extends Controller
     public function edit($id)
     {
         $field = $this->parameterLibrary->getOne(array("_id" => new \MongoId($id)));
-
+        
         return View::make('field.edit', [
             "field" => $field,
             "parents" => []
@@ -179,7 +179,7 @@ class PrototypeFieldsController extends Controller
         $parameters = new Parameter();
 
         $parameters = $parameters->getValuesParametersByID($parameters_id);
-        
+
         return View::make('object.parameters', ["parameters" => $parameters["parameters_with_type"]]);
 
     }

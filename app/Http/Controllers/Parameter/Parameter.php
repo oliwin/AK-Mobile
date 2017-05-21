@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Parameter;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\MongoConnection;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,6 +33,12 @@ abstract class ParameterAbstract extends MongoConnection
     {
 
         return $this->document;
+    }
+
+    public function mongoDbID($id)
+    {
+
+        return Helper::getMongoIDString($id);
     }
 
     public function _insertedID()
@@ -73,11 +80,19 @@ abstract class ParameterAbstract extends MongoConnection
     {
         /* Delete from object that has this category */
 
-        $new = array('$pull' => array("parameters" => $id));
+        $this->changeCollection("objects");
+        $this->collection->update(
+            [],
+            ['$unset' => ['parameters.' . $id => null, "parameters_type." . $id => null]], ['multiple' => true]);
+
+
+        /* Delete from prototypes */
 
         $this->changeCollection("prototypes");
 
-        $this->collection->update(array("parameters" => $id), $new);
+        $this->collection->update(
+            [],
+            ['$unset' => ['parameters' => $id]], ['multiple' => true]);
 
     }
 
@@ -198,7 +213,7 @@ class Parameter extends ParameterAbstract
                     break;
 
                 case 3:
-                    $values[$id] = $v["value"];
+                    $values[$id] = $this->formatArray($v["value"], $v["name"]);
                     break;
             }
 
@@ -213,6 +228,20 @@ class Parameter extends ParameterAbstract
             "parameters" => $values
         );
 
+    }
+
+    private function formatArray($objects, $name)
+    {
+
+        $arr = [];
+
+        foreach ($objects as $k => $v) {
+
+            $arr[$name][] = $v;
+
+        }
+
+        return $arr;
     }
 
     private function formatObjects($objects)

@@ -42,7 +42,7 @@ class ObjectController extends Controller
         $results = new CombinerArray();
 
         $results->_formatOutput();
-
+        
         return $results->_return();
     }
 

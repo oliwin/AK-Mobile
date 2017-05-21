@@ -45,12 +45,16 @@
             <h4>Array</h4>
             @foreach($parameters[3] as $k => $v)
                 @foreach($v as $kp => $parameter)
+                        @foreach($parameter as $vk => $value)
                     <div class="row item">
                         <div class="col-md-6">
                             <input class="input form-control" name="parameters[{{$k}}][]" type="text"
-                                   value="{{$parameter}}"/>
+                                   value="{{$value}}"/>
+                            <input class="input form-control" name="parameters_array_name" type="hidden"
+                                   value="{{$kp}}"/>
                         </div>
                     </div>
+                        @endforeach
                 @endforeach
             @endforeach
                 </div>
