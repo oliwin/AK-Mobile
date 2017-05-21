@@ -23,7 +23,7 @@
 
     <!-- Scalar type OK -->
 
-        @if(isset($parameters[1]))}
+        @if(isset($parameters[1]))
             <div class="col-md-12">
                 <h4>Scalar</h4>
                 @foreach($parameters[1] as $k => $v)

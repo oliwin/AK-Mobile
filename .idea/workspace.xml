@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3d051b4-3cbd-4e3f-939e-d24eee0c8c18" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/AbstractModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/AbstractModel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Category/Category.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Category/Category.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Category/CategoryModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Category/CategoryModel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Object/Object.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Object/Object.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Object/ObjectModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Object/ObjectModel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/ObjectController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/ObjectController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Parameter/Parameter.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Parameter/Parameter.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Prototype/PrototypeModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Prototype/PrototypeModel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/PrototypeFieldsController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/PrototypeFieldsController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/object/parameters.blade.php" afterPath="$PROJECT_DIR$/resources/views/object/parameters.blade.php" />
     </list>
     <ignored path="htdocs.iws" />
@@ -71,11 +59,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="parameters.blade.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="parameters.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/object/parameters.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="49" selection-start-line="10" selection-start-column="49" selection-end-line="10" selection-end-column="49" />
+            <state relative-caret-position="93">
+              <caret line="25" column="34" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ParameterModel.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="595">
+              <caret line="99" column="28" selection-start-line="99" selection-start-column="28" selection-end-line="99" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -112,7 +110,6 @@
         <option value="$PROJECT_DIR$/resources/views/field/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/field/list-checkboxes.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/field/list.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/SearchController.php" />
         <option value="$PROJECT_DIR$/resources/views/prototype/edit.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
@@ -138,8 +135,9 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/ObjectController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Parameter/Parameter.php" />
-        <option value="$PROJECT_DIR$/resources/views/object/parameters.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PrototypeFieldsController.php" />
+        <option value="$PROJECT_DIR$/resources/views/object/parameters.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php" />
       </list>
     </option>
   </component>
@@ -609,19 +607,19 @@
       <workItem from="1495122451239" duration="24328000" />
       <workItem from="1495175105572" duration="27769000" />
       <workItem from="1495220602116" duration="18304000" />
-      <workItem from="1495290225091" duration="83702000" />
+      <workItem from="1495290225091" duration="84359000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="205696000" />
+    <option name="totallyTimeSpent" value="206353000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="46" y="21" width="1320" height="747" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22348484" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23030303" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3831361" sideWeight="0.5121212" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -942,14 +940,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-41">
-          <caret line="14" column="6" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Prototype/PrototypeModel.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -1071,8 +1061,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/object/parameters.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="49" selection-start-line="10" selection-start-column="49" selection-end-line="10" selection-end-column="49" />
+        <state relative-caret-position="93">
+          <caret line="25" column="34" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="99" column="28" selection-start-line="99" selection-start-column="28" selection-end-line="99" selection-end-column="28" />
           <folding />
         </state>
       </provider>

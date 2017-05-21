@@ -97,7 +97,7 @@ class ParameterModel extends AbstractModel
         }
 
         if ($this->default == $this->value) {
-            $this->type = 1;
+            $this->type = "1";
         }
 
     }
