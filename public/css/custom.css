@@ -990,18 +990,18 @@ button {
     margin-bottom: 40px;
 }
 
-.prototype-list .item {
-    padding: 10px;
-}
-
-.fields-list {
-
-}
-
 .fields-list .item {
     width: 100%;
     display: block;
     padding: 5px;
+}
+
+.prototype-list .item {
+    margin-bottom: 10px;
+}
+
+.prototype-list .item span {
+    font-weight: bold;
 }
 
 .multi_field {

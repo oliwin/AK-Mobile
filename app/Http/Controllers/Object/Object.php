@@ -13,13 +13,15 @@ use App\Http\Controllers\MongoConnection;
 abstract class ObjectAbstract extends MongoConnection
 {
 
+    public $model;
+
+    public $default_filter = array();
+
     private $sortBy = array("_id" => -1);
 
     protected $document = [];
 
     protected $inserted = [];
-
-    public $model;
 
 
     public function __construct()
@@ -36,7 +38,7 @@ abstract class ObjectAbstract extends MongoConnection
     public function all($return = false)
     {
 
-        $cursor = $this->collection->find()->sort($this->sortBy);
+        $cursor = $this->collection->find($this->default_filter)->sort($this->sortBy);
 
         foreach ($cursor as $id => $value) {
             array_push($this->document, $value);
@@ -172,19 +174,25 @@ class Object extends ObjectAbstract
 
     public function formatParametersWithTypes($object){
 
+        $format = [];
+
         $parameters = $object["parameters"];
 
         $types = $object["parameters_type"];
 
-        $format = [];
 
-        foreach($parameters as $id => $v){
+        /////////////
 
-            $type = $types[$id];
 
-            $format[$type][$id] = $v;
+        foreach($parameters as $k => $d){
+
+            foreach ($d as $id => $v) {
+
+                $type = $types[$id];
+                $format[$type][$id] = $v;
+            }
         }
-        
+
         return $format;
 
     }

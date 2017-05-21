@@ -1055,8 +1055,9 @@ class Helper
 
     public static function pluckObject($object, $key, $value, $placeholder = "Select", $replace = true)
     {
-        if ($replace) {
+        $arr = [];
 
+        if ($replace) {
             $arr = ["" => $placeholder];
         }
 

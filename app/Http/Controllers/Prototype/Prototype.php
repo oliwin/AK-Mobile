@@ -16,6 +16,8 @@ abstract class PrototypeAbstract extends MongoConnection
 
     private $sortBy = array("_id" => -1);
 
+    public $default_filter = array();
+
     public $model;
 
     protected $document = [];
@@ -41,7 +43,9 @@ abstract class PrototypeAbstract extends MongoConnection
     public function all($return = false)
     {
 
-        $cursor = $this->collection->find()->sort($this->sortBy);
+        /* Where available is active = 1 */
+
+        $cursor = $this->collection->find($this->default_filter)->sort($this->sortBy);
 
         foreach ($cursor as $id => $value) {
             array_push($this->document, $value);
@@ -71,9 +75,9 @@ abstract class PrototypeAbstract extends MongoConnection
     {
         /* Delete from object that has this prototype */
 
-        $new = array('$set' => array("prototype_id" => null));
-
         $this->changeCollection("objects");
+
+        $new = array('$set' => array("prototype_id" => null, "parameters" => [], "parameters_type" => null));
 
         $this->collection->update(array("prototype_id" => $id), $new);
 
@@ -87,7 +91,6 @@ abstract class PrototypeAbstract extends MongoConnection
         $this->collection->remove($selector);
 
         $this->deleteRelations($id);
-
 
     }
 
@@ -127,9 +130,16 @@ class Prototype extends PrototypeAbstract
     public function updateRelations($data = array(), $id)
     {
 
+
         $id = (string)$id["_id"];
 
         $this->getOne(array("_id" => Helper::getMongoIDString($id)));
+
+
+        if (!isset($this->document["parameters"])) {
+            $this->document["parameters"] = [];
+        }
+
 
         $collection = array_flip($this->document["parameters"]);
 
@@ -160,20 +170,22 @@ class Prototype extends PrototypeAbstract
 
         foreach ($newdata as $k => $v) {
 
-            foreach ($v as $key => $data) {
-
-                $this->collection->update(
-                    ["prototype_id" => $id],
-                    ['$set' => ["parameters." . $key => $data]],
-                    ["multiple" => true]);
-
-                $this->collection->update(
-                    ["prototype_id" => $id],
-                    ['$set' => ["parameters_type." . $key => $types[$key]]],
-                    ["multiple" => true]);
-            }
-
+            $this->collection->update(
+                ["prototype_id" => $id],
+                ['$push' => ["parameters" => $v]],
+                ["multiple" => true]);
         }
+
+        foreach( $newdata as $key => $v){
+
+            $key = key($v);
+
+            $this->collection->update(
+                ["prototype_id" => $id],
+                ['$set' => ["parameters_type." . $key => $types[$key]]],
+                ["multiple" => true]);
+        }
+
 
     }
 
@@ -213,6 +225,10 @@ class Prototype extends PrototypeAbstract
         $selector = array('_id' => new \MongoId($prototype_id));
 
         $prototype = $this->getOne($selector);
+
+        if (!isset($prototype["parameters"])) {
+            return $parameters_ids;
+        }
 
         foreach ($prototype["parameters"] as $k => $v) {
 

@@ -38,6 +38,8 @@
                     </div>
                 </div>
                 @endforeach
+                 @else
+                     <p class="no-rows">There are not prototypes</p>
                 @endif
           </div>
              </div>

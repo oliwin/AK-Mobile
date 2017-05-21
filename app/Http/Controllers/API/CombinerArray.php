@@ -37,6 +37,10 @@ class CombinerArray
         $this->prototypesClass = new Prototype();
         $this->parametersClass = new Parameter();
         $this->objectsClass = new Object();
+    
+        $this->prototypesClass->default_filter = array("available" => "1");
+        $this->parametersClass->default_filter = array("available" => "1");
+        $this->objectsClass->default_filter = array("available" => "1");
 
         $this->prototypes = $this->prototypesClass->all(true);
         $this->parameters = $this->parametersClass->all(true);
@@ -53,7 +57,7 @@ class CombinerArray
 
             $key = key($value);
 
-            if ($object["parameters_type"][$k] == 2) {
+            if ($object["parameters_type"][$key] == 2) {
 
                 foreach ($value[$key] as $d => $v) {
 
@@ -64,7 +68,7 @@ class CombinerArray
 
             } else {
 
-                $parameters[$key] = $value[$key];
+                $parameters[$k] = $value[$key];
             }
         }
 

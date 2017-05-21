@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Parameter;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\MongoConnection;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Created by Ponomarchuk Oleg
@@ -18,6 +17,8 @@ abstract class ParameterAbstract extends MongoConnection
     private $sortBy = array("_id" => -1);
 
     public $model;
+
+    public $default_filter = array();
 
     protected $document = [];
 
@@ -50,7 +51,7 @@ abstract class ParameterAbstract extends MongoConnection
     public function all($return = false)
     {
 
-        $cursor = $this->collection->find()->sort($this->sortBy);
+        $cursor = $this->collection->find($this->default_filter)->sort($this->sortBy);
 
         foreach ($cursor as $id => $value) {
             array_push($this->document, $value);
@@ -81,10 +82,12 @@ abstract class ParameterAbstract extends MongoConnection
         /* Delete from object that has this category */
 
         $this->changeCollection("objects");
+
         $this->collection->update(
             [],
             ['$unset' => ['parameters.' . $id => null, "parameters_type." . $id => null]], ['multiple' => true]);
 
+        $this->collection->update([],['$pop' => ['parameters' => $id]], ['multiple' => true]);
 
         /* Delete from prototypes */
 
@@ -92,7 +95,7 @@ abstract class ParameterAbstract extends MongoConnection
 
         $this->collection->update(
             [],
-            ['$unset' => ['parameters' => $id]], ['multiple' => true]);
+            ['$pull' => ['parameters' => $id]], ['multiple' => true]);
 
     }
 
@@ -149,10 +152,36 @@ class Parameter extends ParameterAbstract
 
     }
 
+    private function updateRelatons($data, $where){
+
+        // Get previous
+
+        $this->getOne(array("_id", $where["_id"]));
+
+        $prev = array($this->document["name"] => $this->document["value"]);
+
+        ///
+
+        $id = $this->extractStringID($where);
+
+        $this->changeCollection("objects");
+
+        $old_key = key($prev);
+
+        $new_key = $data["name"];
+
+        $v = $prev[$old_key];
+
+        $prev[$new_key] = $v;
+        
+    }
+
     public function update($where, $data)
     {
 
         $this->collection->update($where, $data);
+
+        $this->updateRelatons($data, $where);
     }
 
     public function search($parameters)

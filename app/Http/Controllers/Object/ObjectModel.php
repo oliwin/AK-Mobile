@@ -26,6 +26,10 @@ class ObjectModel extends AbstractModel
 
     protected $parameters_type = [];
 
+    private $temp = [];
+
+    private $parameters_array_key;
+
 
     public function fill(Request $request)
     {
@@ -36,6 +40,8 @@ class ObjectModel extends AbstractModel
         $this->category_id = $request->category_id;
 
         $this->prototype_id = $request->prototype_id;
+
+        $this->parameters_array_key = $request->parameters_array_key;
 
         $this->setParameters($request);
 
@@ -52,40 +58,70 @@ class ObjectModel extends AbstractModel
 
         $parameters = $parametersClass->getValuesParametersByID($fields_id);
 
-        $this->parameters = $parameters["parameters"];
+        $this->parameters[] = $parameters["parameters"];
 
         $this->parameters_type = $parameters["types"];
+
+        dd($this->parameters);
 
         //////////////
 
         if ($request->has("action") && $request->action == "edit") {
 
-            $parameters_temp = $this->parameters;
+            $this->edit($request);
 
-            foreach ($parameters_temp as $id => $array_key_value) {
+            $this->parameters = $this->temp;
 
-                $type = $this->parameters_type[$id];
+        }
+    }
 
-                foreach ($array_key_value as $name => $value) {
+    private function edit($request)
+    {
 
-                    /* If array */
+        foreach ($request->parameters as $type => $v) {
 
-                    if ($type == 3) {
+            switch ($type) {
 
-                        $parameters_temp[$id][$request->parameters_array_name] = $request->parameters[$id];
+                case "scalar":
+                    $this->_scalar($v);
+                    break;
 
-                    } else {
+                case "object":
+                    $this->_object($v);
+                    break;
 
-                        $parameters_temp[$id][$name] = $request->parameters[$id];
-                    }
-
-                }
-
+                case "array":
+                    $this->_array($v);
+                    break;
 
             }
-
-            $this->parameters = $parameters_temp;
         }
+    }
+
+    private function _key($v){
+
+        return key($v);
+    }
+
+    private function _object($v)
+    {
+
+        $this->temp[] = $v;
+    }
+
+    private function _array($v)
+    {
+
+        $key = $this->_key($v);
+
+        $this->temp[][$key][$this->parameters_array_key] = $v[$key];
+
+    }
+
+    private function _scalar($v)
+    {
+
+        $this->temp[] = $v;
     }
 
 

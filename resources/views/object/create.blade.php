@@ -39,6 +39,8 @@
                   </div>
                </div>
                @endforeach
+                  @else
+                  <p class="no-rows">There are not prototypes</p>
                @endif
             <div id="FieldsInPrototype">
                <div class="list">

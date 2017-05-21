@@ -146,6 +146,7 @@ class PrototypeFieldsController extends Controller
 
         $this->parameterLibrary->prepare($parametersModel->data());
         $data = $this->parameterLibrary->document();
+        
         $this->parameterLibrary->update(array("_id" => new \MongoId($id)), $data);
 
         return redirect("fields")->with('success', "Prototype field was updated!");
@@ -154,12 +155,14 @@ class PrototypeFieldsController extends Controller
     public function fields($type)
     {
 
-        $this->parameterLibrary->get();
-
         switch ($type) {
 
             case "2":
+                $selector = array("type" => array('$nin' => array("2", "3")));
+                $this->parameterLibrary->get($selector);
+
                 return view('field.list', ['fields' => $this->parameterLibrary->document()]);
+
                 break;
 
             case "3":
