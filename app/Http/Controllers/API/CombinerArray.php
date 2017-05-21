@@ -53,9 +53,21 @@ class CombinerArray
 
             $key = key($value);
 
-            $parameters[$key] = $value[$key];
+            if ($object["parameters_type"][$k] == 2) {
+
+                foreach ($value[$key] as $d => $v) {
+
+                    $arr[$v['name']] = $v["value"];
+                }
+
+                $parameters[$key] = $arr;
+
+            } else {
+
+                $parameters[$key] = $value[$key];
+            }
         }
-        
+
         return $parameters;
     }
 

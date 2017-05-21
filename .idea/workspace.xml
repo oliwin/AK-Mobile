@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3d051b4-3cbd-4e3f-939e-d24eee0c8c18" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/AbstractModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/AbstractModel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Prototype/PrototypeModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Prototype/PrototypeModel.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php" />
     </list>
     <ignored path="htdocs.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,7 +24,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Prototype.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Prototype.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="319">
@@ -35,6 +32,16 @@
               <folding>
                 <element signature="e#50#73#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CombinerArray.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="499">
+              <caret line="53" column="31" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="31" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -103,7 +110,6 @@
         <option value="$PROJECT_DIR$/public/js/custom.js" />
         <option value="$PROJECT_DIR$/resources/views/object/create.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/object/edit.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/API/ObjectController.php" />
         <option value="$PROJECT_DIR$/resources/views/common/search.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/object/parameters.blade.php" />
@@ -118,6 +124,7 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/AbstractModel.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Prototype/PrototypeModel.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php" />
       </list>
     </option>
   </component>
@@ -523,12 +530,12 @@
       <workItem from="1495122451239" duration="24328000" />
       <workItem from="1495175105572" duration="27769000" />
       <workItem from="1495220602116" duration="18304000" />
-      <workItem from="1495290225091" duration="42660000" />
+      <workItem from="1495290225091" duration="43188000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="164654000" />
+    <option name="totallyTimeSpent" value="165182000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="46" y="21" width="1320" height="747" extended-state="6" />
@@ -964,14 +971,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="51" column="57" selection-start-line="51" selection-start-column="57" selection-end-line="51" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
@@ -1003,6 +1002,14 @@
           <folding>
             <element signature="e#50#73#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="53" column="31" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>
