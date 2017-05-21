@@ -61,7 +61,7 @@ abstract class PrototypeAbstract extends MongoConnection
     public function getOne($selector)
     {
 
-        return $this->collection->findOne($selector);
+        return $this->document = $this->collection->findOne($selector);
 
     }
 
@@ -127,9 +127,24 @@ class Prototype extends PrototypeAbstract
     public function updateRelations($data = array(), $id)
     {
 
+        $id = (string)$id["_id"];
+
+        $this->getOne(array("_id" => Helper::getMongoIDString($id)));
+
+        $collection = array_flip($this->document["parameters"]);
+
+        $selected = array_flip($data["parameters"]);
+
+        $diff = array_diff_key($selected, $collection);
+
+        //////////////////
+
         $this->changeCollection("parameters");
 
-        foreach ($data["parameters"] as $k => $id_parameter) {
+        $newdata = [];
+
+
+        foreach ($diff as $id_parameter => $v) {
 
             $parameter = $this->getParametersDetails($id_parameter);
 
@@ -141,29 +156,22 @@ class Prototype extends PrototypeAbstract
 
         ///////////////////
 
-        $id = (string)$id["_id"];
-
         $this->changeCollection("objects");
-
-
-        // Get only selected prototypes
-
-        // Get values of object and set them below
 
         foreach ($newdata as $k => $v) {
 
-            foreach ($v as $gg => $data) {
+            foreach ($v as $key => $data) {
 
                 $this->collection->update(
                     ["prototype_id" => $id],
-                    ['$set' => ["parameters.".$gg => $data]],
+                    ['$set' => ["parameters." . $key => $data]],
                     ["multiple" => true]);
 
                 $this->collection->update(
                     ["prototype_id" => $id],
-                    ['$set' => ["parameters_type.".$gg => $types[$gg]]],
+                    ['$set' => ["parameters_type." . $key => $types[$key]]],
                     ["multiple" => true]);
-        }
+            }
 
         }
 
@@ -180,10 +188,12 @@ class Prototype extends PrototypeAbstract
 
     public function update($where, $data)
     {
+        $this->updateRelations($data, $where);
+
+        $this->changeCollection("prototypes");
 
         $this->collection->update($where, $data);
 
-        $this->updateRelations($data, $where);
 
     }
 

@@ -33,7 +33,7 @@ class AbstractModel
 
         $exists = get_object_vars($this);
 
-        return $this->except(["_id"], $exists);
+        return $this->except(["_id", "selected"], $exists);
         
     }
 

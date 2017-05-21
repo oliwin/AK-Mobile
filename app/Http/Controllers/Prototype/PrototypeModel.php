@@ -26,10 +26,9 @@ class PrototypeModel extends AbstractModel
         $this->validate($request);
 
         $this->name = $request->name;
-        
-        $this->available = $request->available;
 
-        $this->parameters = $request->parameters;
+        $this->parameters = (is_null($request->parameters)) ? [] : $request->parameters;
+        
 
     }
 
