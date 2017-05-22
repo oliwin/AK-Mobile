@@ -51,7 +51,14 @@ class ObjectModel extends AbstractModel
     {
 
         if (is_array($request->parameters)) {
-            $this->parameters = array_keys($request->parameters);
+
+            foreach ($request->parameters as $k => $v){
+                foreach ($v as $key => $v){
+                    $param_key[] = $key;
+                }
+            }
+
+            $this->parameters = $param_key;
         }
     }
 

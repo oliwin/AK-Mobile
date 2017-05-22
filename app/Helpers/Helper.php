@@ -18,7 +18,6 @@ use App\Category;
 
 use App\Helpers;
 
-
 use Illuminate\Support\Facades\App;
 
 use Illuminate\Support\Facades\Config;

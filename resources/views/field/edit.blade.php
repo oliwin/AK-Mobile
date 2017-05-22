@@ -44,49 +44,11 @@
                 </div>
 
                 <div class="form-group">
-                   <div class="col-md-12 content-fields-multi row">
-                   </div>
+                    <div class="col-md-12 content-fields-multi row">
+                    </div>
                 </div>
 
-                @if($field["type"] == "2")
-                    <div class="form-group content-fields fields-object">
-                        @if(count($field["value"]) > 0)
-                            <label class="col-md-12 control-label">Select fields inside</label>
-                            <div class="col-md-12">
-                                <div class="fields-list row">
-                                    @foreach($field["value"] as $k => $v)
-                                        <div class="col-md-4">{{$v['name']}}</div>
-                                        <div class="col-md-8">
-                                            {{Form::checkbox('field_object['.\App\Helpers\Helper::getMongoIDString($v['_id']).']', $v["default"], array("class" => "form-control"))}}
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                @endif
-
-                @if($field["type"] == "3")
-                    <div class="form-group content-fields fields-array">
-                        <label class="col-md-12 control-label">Array parameters</label>
-
-                        <div class="input-append">
-
-                            @foreach($field["value"] as $k => $v)
-
-                                <div class="item-row">
-                                    <div class="col-md-6">
-                                        {{Form::text('field_array[]', $v, array("class" => "form-control"))}}
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button id="b1" class="btn add-more" type="button">+</button>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-
-                    </div>
-                @endif
+                @include("field.list-parameters")
 
                 <div class="form-group">
                     <div class="col-lg-12">

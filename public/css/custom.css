@@ -160,7 +160,7 @@ section.about {
 .profile-block ul {
     list-style: none;
     padding: 0px;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .profile-block ul li {
@@ -996,6 +996,10 @@ button {
     padding: 5px;
 }
 
+.prototype-list .body {
+    padding-top: 20px;
+}
+
 .prototype-list .item {
     margin-bottom: 10px;
 }
@@ -1023,13 +1027,12 @@ button {
 }
 
 * {
-.border-radius(0) !important;
+. border-radius(0) !important;
 }
 
 #field {
-    margin-bottom:20px;
+    margin-bottom: 20px;
 }
-
 
 .content-fields .item-row {
     min-height: 55px;

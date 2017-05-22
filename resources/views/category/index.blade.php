@@ -3,7 +3,7 @@
     <h4>Categories</h4>
 
     <div id="actions-block">
-        <a class="btn btn-success" href="{{url("categories/create")}}">Create new</a>
+        <a class="btn btn-success" href="{{url("categories/create")}}">Create +</a>
     </div>
 
     @if(count($categories))

@@ -27,6 +27,7 @@ class ParameterModel extends AbstractModel
 
     protected $value;
 
+    public $parameters_nested = [];
 
     public function fill(Request $request)
     {
@@ -34,7 +35,7 @@ class ParameterModel extends AbstractModel
         $this->validate($request);
 
         $this->name = $request->name;
-        
+
         $this->default = $request->default;
 
         $this->visibility = $request->visibility;
@@ -43,39 +44,12 @@ class ParameterModel extends AbstractModel
 
         $this->type = $request->type;
 
+        $this->parameters_nested = $request->parameters;
+
         /////////////////////////////////////////////
 
         $this->setValue($request);
 
-    }
-
-    private function valueAsObjectFields($request)
-    {
-
-
-        if (is_null($request->field_object)) {
-            return $this->default;
-        }
-
-        $arr = array();
-
-        $controller = new Parameter();
-
-        foreach ($request->field_object as $k => $v) {
-
-            $keys[] = new \MongoID($k);
-        }
-
-
-        $selector = array('_id' => array('$in' => $keys));
-
-        $controller->get($selector);
-
-        foreach ($controller->document() as $value) {
-            $arr[] = $value;
-        }
-
-        return $arr;
     }
 
     private function setValue($request)
@@ -88,7 +62,7 @@ class ParameterModel extends AbstractModel
                 break;
 
             case 2:
-                $this->value = $this->valueAsObjectFields($request);
+                $this->value = array_keys($this->parameters_nested);
                 break;
 
             case 3:
@@ -98,6 +72,10 @@ class ParameterModel extends AbstractModel
 
         if ($this->default == $this->value) {
             $this->type = "1";
+        }
+
+        if (is_null($this->value)) {
+            $this->value = $this->default;
         }
 
     }

@@ -58,11 +58,6 @@ class PrototypeFieldsController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
 
@@ -104,11 +99,24 @@ class PrototypeFieldsController extends Controller
 
     public function edit($id)
     {
-        $field = $this->parameterLibrary->getOne(array("_id" => new \MongoId($id)));
-        
+        $parameter = $this->parameterLibrary->getOne(array("_id" => new \MongoId($id)));
+        $all_fields = $this->parameterLibrary->all(true);
+        $types = [];
+        $r = [];
+
+        foreach ($all_fields as $k => $v) {
+            $arr[(string)$v["_id"]] = $v;
+            $types[(string)$v["_id"]] = $v["type"];
+        }
+
+        foreach ($arr as $key => $v){
+            $type = $types[$key];
+            $r[$type][$key] = $v;
+        }
+
         return View::make('field.edit', [
-            "field" => $field,
-            "parents" => []
+            "field" => $parameter,
+            "parameters" => $r
         ]);
     }
 
@@ -152,7 +160,6 @@ class PrototypeFieldsController extends Controller
     public function fields($type)
     {
 
-
         switch ($type) {
 
             case "2":
@@ -160,7 +167,6 @@ class PrototypeFieldsController extends Controller
                 $this->parameterLibrary->get($selector);
 
                 return view('field.list', ['fields' => $this->parameterLibrary->document()]);
-
                 break;
 
             case "3":
@@ -173,7 +179,7 @@ class PrototypeFieldsController extends Controller
     public function fieldsBYID($id)
     {
 
-        /* Get list of parameters in prototype */
+        /* Get list of ID parameters in prototype */
 
         $prototype = new Prototype();
 
@@ -185,7 +191,9 @@ class PrototypeFieldsController extends Controller
 
         $parameters = $parameters->getValuesParametersByID($parameters_id);
 
-        return View::make('object.parameters', ["parameters" => $parameters["parameters_with_type"]]);
+        $parameters = $parameters["parameters_with_type"];
+        
+        return View::make('object.parameters', ["parameters" => $parameters]);
 
     }
 

@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Prototype\Prototype;
 
 use App\Http\Controllers\Object\Object;
@@ -37,7 +38,7 @@ class CombinerArray
         $this->prototypesClass = new Prototype();
         $this->parametersClass = new Parameter();
         $this->objectsClass = new Object();
-    
+
         $this->prototypesClass->default_filter = array("available" => "1");
         $this->parametersClass->default_filter = array("available" => "1");
         $this->objectsClass->default_filter = array("available" => "1");
@@ -48,31 +49,63 @@ class CombinerArray
 
     }
 
+    private function getNestedObjects($array = array())
+    {
+
+        $nested = [];
+
+        $ids = [];
+
+        $parameters = new Parameter();
+
+        foreach ($array as $k => $id) {
+
+            $ids[] = Helper::getMongoIDString($id);
+
+        }
+
+        $C = $parameters->getValuesParametersByID($ids);
+
+        foreach ($C['parameters'] as $item => $data) {
+            $nested[] = $data;
+        }
+
+        return $nested;
+    }
+
     private function objectParameters($object)
     {
 
-        $parameters = [];
 
-        foreach ($object["parameters"] as $k => $value) {
+        $params = [];
 
-            $key = key($value);
+        $id = (string)$object["_id"];
 
-            if ($object["parameters_type"][$key] == 2) {
+        $parameters = $this->parametersClass->getParametersObject($id);
 
-                foreach ($value[$key] as $d => $v) {
+        foreach ($parameters as $k => $v) {
 
-                    $arr[$v['name']] = $v["value"];
-                }
+            $data = $this->parametersClass->getType($v["parameter_id"]);
 
-                $parameters[$key] = $arr;
+            $name = $data["name"];
+
+            $value = $v["value"];
+
+            $type = $data["type"];
+
+            /* If it is object */
+
+            if ($type == 2) {
+
+                $params[$name] = $this->getNestedObjects($value);
 
             } else {
 
-                $parameters[$k] = $value[$key];
+                $params[$name] = $value;
             }
         }
 
-        return $parameters;
+        return $params;
     }
 
     private function objectsByPrototype($prototype_id)

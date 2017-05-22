@@ -21,15 +21,17 @@
          <div class="form-group">
             <div class="col-md-12 prototype-list">
                @if(count($fields) > 0)
-               <h4>Parameters<span class="help-block">fields with visibility = 1</span></h4>
-               @foreach($fields as $k => $v)
-               <div class="row item">
-                  <div class="col-md-11">
-                     <span>{{$v["name"]}}</span>
+               <h4>Parameters <!--<span class="help-block">fields with visibility = 1</span>--></h4>
+               <div class="body">
+                  @foreach($fields as $k => $v)
+                  <div class="row item">
+                     <div class="col-md-11">
+                        <span>{{$v["name"]}}</span>
+                     </div>
+                     <div class="col-md-1">{{Form::checkbox('parameters[]', App\Helpers\Helper::getMongoIDString($v["_id"]))}}</div>
                   </div>
-                  <div class="col-md-1">{{Form::checkbox('parameters[]', App\Helpers\Helper::getMongoIDString($v["_id"]))}}</div>
+                  @endforeach
                </div>
-               @endforeach
                @endif
             </div>
          </div>

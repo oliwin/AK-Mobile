@@ -92,6 +92,10 @@ abstract class ObjectAbstract extends MongoConnection
 
         $this->collection->remove($selector);
 
+        $this->changeCollection("object_parameters");
+
+        $this->collection->remove(["object_id" => $id]);
+
     }
 
     public function cloning($id)
@@ -160,9 +164,9 @@ class Object extends ObjectAbstract
 
         $object_id = $this->_insertedID();
 
-        foreach ($this->document["values"] as $_id => $arr) {
+        foreach ($this->document["values"] as $type => $arr) {
 
-            foreach ($arr as $type => $v) {
+            foreach ($arr as $_id => $v) {
 
                 $data = [
                     "object_id" => $object_id,
@@ -215,13 +219,12 @@ class Object extends ObjectAbstract
 
         $this->collection->remove(array('object_id' => $id));
 
-
         ///////////
 
 
-        foreach ($objectModel->values() as $_id => $arr) {
+        foreach ($objectModel->values() as $type => $arr) {
 
-            foreach ($arr as $type => $v) {
+            foreach ($arr as $_id => $v) {
 
                 $data = [
                     "object_id" => $id,
