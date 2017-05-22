@@ -105,8 +105,10 @@ class PrototypeFieldsController extends Controller
         $r = [];
 
         foreach ($all_fields as $k => $v) {
-            $arr[(string)$v["_id"]] = $v;
-            $types[(string)$v["_id"]] = $v["type"];
+            
+            $id = (string)$v["_id"];
+            $arr[$id] = $v;
+            $types[$id] = $v["type"];
         }
 
         foreach ($arr as $key => $v){

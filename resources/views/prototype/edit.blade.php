@@ -27,6 +27,7 @@
                      <div class="row item">
                         <div class="col-md-11">
                            <span>{{$v["name"]}}</span>
+                           <p style="font-size: 11px; color: #666">@if($v["type"] == "2") Object @elseif($v["type"] == 3) Array @else Scalar @endif</p>
                         </div>
                         <div class="col-md-1">{{Form::checkbox('parameters[]', App\Helpers\Helper::getMongoIDString($v["_id"]))}}</div>
                      </div>

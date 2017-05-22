@@ -86,14 +86,6 @@ abstract class ParameterAbstract extends MongoConnection
         $this->collection->update(
             [],
             ['$pull' => ['parameters' => $id]], ['multiple' => true]);
-
-
-        /* Delete from prototypes */
-
-        $this->changeCollection("prototypes");
-
-        $this->collection->update([], ['$pop' => ['parameters' => $id]], ['multiple' => true]);
-
     }
 
     public function delete($id)
@@ -125,15 +117,22 @@ class Parameter extends ParameterAbstract
         $this->model = new ParameterModel();
     }
 
-    public function getType($id){
+    public function parameterDetails($id)
+    {
+
+        return $this->getType($id);
+    }
+
+    public function getType($id)
+    {
 
         $this->changeCollection("parameters");
 
         $id = new \MongoId($id);
 
         $result = $this->getOne(array("_id" => $id));
-        
-        return  $result;
+
+        return $result;
 
     }
 
@@ -146,40 +145,6 @@ class Parameter extends ParameterAbstract
 
         return $this->document;
     }
-
-    /*
-     *
-     *
-     */
-
-    public function reformatWithTypes($data)
-    {
-
-        $output = [];
-        $all = $this->all(true);
-
-        foreach ($all as $k => $v) {
-
-            $key = (string)$v["_id"];
-            $a[$key] = $v["type"];
-        }
-
-        foreach ($data as $k => $v) {
-
-            $key = $v["parameter_id"];
-            $type = $a[$key];
-            $output[$type][$key] = $v;
-
-        }
-
-        return $output;
-    }
-
-    /*
-     *
-     *
-     *
-     */
 
     public function extractStringID($id)
     {
@@ -218,7 +183,6 @@ class Parameter extends ParameterAbstract
         $data_excepted = $parameterModel->except(["_id", "parameters_nested"], $this->document);
 
         $this->collection->update($where, $data_excepted);
-
 
 
         /* Update nested parameters */
@@ -262,67 +226,6 @@ class Parameter extends ParameterAbstract
     }
 
     /* $parameters_ids should contain _MongoID type */
-
-
-    private function getValue($filled, $id)
-    {
-
-        foreach ($filled as $k => $v) {
-
-            if ($v["parameter_id"] == $id) {
-
-                return $v["value"];
-            }
-        }
-    }
-
-    public function getValuesFilled($parameters_ids = array(), $filled = array())
-    {
-
-        $array_with_types = [];
-
-        $array_types = [];
-
-        $values = [];
-
-        $selector = array('_id' => array('$in' => $parameters_ids));
-
-        $this->get($selector);
-
-
-        foreach ($this->document() as $k => $v) {
-
-            $id = $this->extractStringID($v);
-
-            $value = $this->getValue($filled, $k);
-
-            switch ((int)$v["type"]) {
-
-                case 1:
-                    $values[$id] = array($v["name"] => $value);
-                    break;
-
-                case 2:
-                    $values[$id] = $this->formatObjects($value);
-                    break;
-
-                case 3:
-                    $values[$id] = $this->formatArray($value, $v["name"]);
-                    break;
-            }
-
-            $array_types[$id] = (int)$v["type"];
-            $array_with_types[$v["type"]][$id] = $values[$id];
-
-        }
-
-        return array(
-            "types" => $array_types,
-            "parameters_with_type" => $array_with_types,
-            "parameters" => $values
-        );
-
-    }
 
     public function getValuesParametersByID($parameters_ids = array())
     {

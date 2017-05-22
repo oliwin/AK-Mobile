@@ -138,6 +138,8 @@ class ObjectController extends Controller
 
         $this->prototypes = Helper::pluckObject($this->prototypes, "_id", "name", "Prototype", false);
 
+        /* PARAMETERS */
+
         $parameters = $this->objectLibrary->parameters($object);
 
         $parameters_with_type = [];
@@ -151,6 +153,17 @@ class ObjectController extends Controller
             $data = $parametersClass->getType($v["parameter_id"]);
 
             $v["name"] = $data["name"];
+
+            $v["type"] = $data["type"];
+
+            if($data["type"] == 2){
+
+                $id_nested_object = array_first($data["value"]);
+
+                $data_nested_object = $parametersClass->parameterDetails($id_nested_object);
+
+                $v["value"] = [$data_nested_object["name"] => $data_nested_object["value"]];
+            }
 
             $parameters_with_type[$data["type"]][] = $v;
         }

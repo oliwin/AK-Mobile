@@ -5,26 +5,22 @@
         <!-- Object type -->
         @if(isset($parameters[2]))
             <div class="col-md-12">
-                <h4>Object</h4>
+                <h5>Object</h5>
 
                 <?php $a = 0; ?>
 
                 @foreach($parameters[2] as $k => $v)
-                    @foreach($v as $ky => $name)
-                        @foreach($name as $v => $b)
 
-                            @if($a == 0)
-                                <label>{{$v}}</label>
-                            @endif
+                    <label>{{$v["name"]}} (Parent)</label>
 
-                            <?php $a++; ?>
+                    @foreach($v["value"] as $name => $value)
 
-                            <div class="col-md-12">
-                                <label>{{$b["name"]}}</label>
-                                <input class="input form-control" name="parameters[2][{{$ky}}]" type="text"
-                                       value="{{$b["value"]}}"/>
-                            </div>
-                        @endforeach
+                        <div class="col-md-12">
+                            <label>{{$name}}</label>
+                            <input class="input form-control" name="parameters[2][{{$v["parameter_id"]}}]" type="text"
+                                   value="{{$value}}"/>
+                        </div>
+
                     @endforeach
                 @endforeach
             </div>
@@ -35,12 +31,13 @@
 
         @if (isset($parameters[1]))
             <div class="col-md-12">
-                <h4>Scalar</h4>
+                <h5>Scalar</h5>
                 @foreach($parameters[1] as $k => $parameter)
                     <div class="row item">
                         <div class="col-md-6">
                             <label>{{$parameter["name"]}}</label>
-                            <input class="input form-control" name="parameters[1][{{$parameter["parameter_id"]}}]" type="text"
+                            <input class="input form-control" name="parameters[1][{{$parameter["parameter_id"]}}]"
+                                   type="text"
                                    value="{{$parameter["value"]}}"/>
                         </div>
                     </div>
@@ -53,7 +50,7 @@
         @if (isset($parameters[3]))
 
             <div class="col-md-12">
-                <h4>Array</h4>
+                <h5>Array</h5>
                 @foreach($parameters[3] as $k => $v)
                     @foreach($v["value"] as $kv => $vv)
 

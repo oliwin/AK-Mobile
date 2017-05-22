@@ -8,6 +8,8 @@
 
                 <?php $a = 0; ?>
 
+                <!-- Common key for all inputs -->
+
                 @foreach($parameters[2] as $k => $v)
                     @foreach($v as $ky => $name)
                         @foreach($name as $v => $b)
@@ -20,7 +22,7 @@
 
                             <div class="col-md-12">
                                 <label>{{$b["name"]}}</label>
-                                <input class="input form-control" name="parameters[2][{{$ky}}]" type="text"
+                                <input class="input form-control" name="parameters[2][{{$k}}]" type="text"
                                        value="{{$b["value"]}}"/>
                             </div>
                         @endforeach

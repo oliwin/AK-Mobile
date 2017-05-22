@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Object;
 
 use App\Http\Controllers\MongoConnection;
+use App\Http\Controllers\Parameter\Parameter;
 
 /**
  * Created by Ponomarchuk Oleg
@@ -157,12 +158,25 @@ class Object extends ObjectAbstract
         $this->model = new ObjectModel();
     }
 
+    private function nestedObjectValue($value, $parameter_id, $type){
+
+        if($type == 2){
+
+            $value = $parameter_id;
+        }
+
+        return $value;
+
+    }
+
     private function addValues()
     {
 
         $this->changeCollection("object_parameters");
 
         $object_id = $this->_insertedID();
+        
+        ///////////////
 
         foreach ($this->document["values"] as $type => $arr) {
 
@@ -171,8 +185,10 @@ class Object extends ObjectAbstract
                 $data = [
                     "object_id" => $object_id,
                     "parameter_id" => $_id,
-                    "value" => $v
+                    "value" => $this->nestedObjectValue($v, $_id, $type)
                 ];
+
+                $d[] = $data;
 
                 $this->collection->insert($data);
             }
@@ -184,7 +200,7 @@ class Object extends ObjectAbstract
 
         $this->document = $objectModel->data();
 
-        $data_excepted = $objectModel->except(["_id", "selected", "values"], $this->document); /* Contains unique _id for all types -1 */
+        $data_excepted = $objectModel->except(["_id", "selected", "values"], $this->document);
 
         $this->collection->insert($data_excepted);
 
@@ -263,9 +279,7 @@ class Object extends ObjectAbstract
 
         $object_id = $this->extractStringID($object);
 
-        $selector = ["object_id" => $object_id];
-
-        $this->get($selector);
+        $this->get(["object_id" => $object_id]);
 
         return $this->document;
 
