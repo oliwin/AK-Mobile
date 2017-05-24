@@ -28,7 +28,6 @@
          <div class="form-group prototype-list">
                @if(count($prototypes) > 0)
                <label class="col-md-12 control-label">Choose prototype <span class="required-field">*</span></label>
-               <div class="col-md-12"><p class="help-block">Will be dislayed prototypes with visibility = 1</p></div>
                @foreach($prototypes as $key => $name)
                <div class="item">
                   <div class="col-md-11">

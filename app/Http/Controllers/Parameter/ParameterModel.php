@@ -27,7 +27,10 @@ class ParameterModel extends AbstractModel
 
     protected $value;
 
-    public $parameters_nested = [];
+    protected $field_array;
+    
+    public $children = [];
+
 
     public function fill(Request $request)
     {
@@ -44,29 +47,38 @@ class ParameterModel extends AbstractModel
 
         $this->type = $request->type;
 
-        $this->parameters_nested = $request->parameters;
+        $this->children = $request->parameters;
+
+        $this->field_array = $request->field_array;
 
         /////////////////////////////////////////////
 
-        $this->setValue($request);
+        $this->setValue();
+
+        $this->setChildrenParameters();
 
     }
 
-    private function setValue($request)
+    private function setChildrenParameters(){
+
+        if(is_array($this->children)){
+
+            $this->children = array_keys($this->children);
+        }
+    }
+
+    private function setValue()
     {
 
-        switch ((int)$request->type) {
+        switch ((int)$this->type) {
 
             case 1:
+            case 2:
                 $this->value = $this->default;
                 break;
 
-            case 2:
-                $this->value = array_keys($this->parameters_nested);
-                break;
-
             case 3:
-                $this->value = $request->field_array;
+                $this->value = $this->field_array;
                 break;
         }
 

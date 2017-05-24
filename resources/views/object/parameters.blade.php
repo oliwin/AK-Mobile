@@ -1,76 +1,43 @@
 <div class="control-group">
-
     <div class="col-md-12">
-        <!-- Object type -->
-        @if(isset($parameters[2]))
-            <div class="col-md-12">
-                <h4>Object</h4>
+        @if (count($parameters) > 0)
+            <h4>Parameters</h4>
+            <ul class="parameters-list">
+                @foreach($parameters as $k => $parameter)
+                    <li>
+                        <!-- If array with some values -->
 
-                <?php $a = 0; ?>
+                        <label>{{$parameter["name"]}}</label><span class="help-block">(Scalar)</span>
 
-                <!-- Common key for all inputs -->
+                        @if($parameter["type"] == "3")
+                            <ul class="parameters-list-array">
+                                <p class="help-block">(Array)</p>
 
-                @foreach($parameters[2] as $k => $v)
-                    @foreach($v as $ky => $name)
-                        @foreach($name as $v => $b)
+                                @foreach($parameter["value"] as $ak => $v)
+                                    <li>
+                                        <input class="form-control" type="text" name="parameters_array[{{(string)$parameter["_id"]}}][]"
+                                               value="{{$v}}">
+                                    </li>
+                                @endforeach
+                            </ul>
 
-                            @if($a == 0)
-                                <label>{{$v}}</label>
-                            @endif
+                            <!-- If another -->
+                        @else
 
-                            <?php $a++; ?>
+                            <input class="form-control" type="hidden" name="parameters[]"
+                                   value="{{(string)$parameter["_id"]}}">
 
-                            <div class="col-md-12">
-                                <label>{{$b["name"]}}</label>
-                                <input class="input form-control" name="parameters[2][{{$k}}]" type="text"
-                                       value="{{$b["value"]}}"/>
-                            </div>
-                        @endforeach
-                    @endforeach
+                            <input class="form-control" type="hidden" name="children[]"
+                                   value="">
+
+                            <input type="text" class="form-control" name="values[]" value="{{$parameter["value"]}}">
+
+                            @include('field.parameter', $parameter)
+
+                        @endif
+                    </li>
                 @endforeach
-            </div>
-
-        @endif
-
-    <!-- Scalar type -->
-
-        @if (isset($parameters[1]))
-            <div class="col-md-12">
-                <h4>Scalar</h4>
-                @foreach($parameters[1] as $k => $v)
-                    @foreach($v as $kp => $parameter)
-                        <div class="row item">
-                            <div class="col-md-6">
-                                <label>{{$kp}}</label>
-                                <input class="input form-control" name="parameters[1][{{$k}}]" type="text"
-                                       value="{{$parameter}}"/>
-                            </div>
-                        </div>
-                    @endforeach
-                @endforeach
-            </div>
-        @endif
-
-    <!-- Array type -->
-
-        @if (isset($parameters[3]))
-
-            <div class="col-md-12">
-                <h4>Array</h4>
-                @foreach($parameters[3] as $k => $v)
-                    @foreach($v as $kp => $parameter)
-                        @foreach($parameter as $vk => $value)
-                            <div class="row item">
-                                <div class="col-md-6">
-                                    <input class="input form-control" name="parameters[3][{{$k}}][]" type="text"
-                                           value="{{$value}}"/>
-                                </div>
-                            </div>
-                        @endforeach
-                    @endforeach
-                @endforeach
-            </div>
+            </ul>
         @endif
     </div>
-
 </div>

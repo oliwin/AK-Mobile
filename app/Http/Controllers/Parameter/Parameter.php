@@ -79,13 +79,15 @@ abstract class ParameterAbstract extends MongoConnection
 
     public function deleteRelations($id)
     {
-        /* Delete from object that has this category */
 
-        $this->changeCollection("objects");
+        $this->changeCollection("object_parameters");
+
+        $this->collection->remove(["parameter_id" => $id]);
 
         $this->collection->update(
-            [],
-            ['$pull' => ['parameters' => $id]], ['multiple' => true]);
+            ["children" => $id],
+            ['$set' => ['children' => null]], ['multiple' => true]);
+
     }
 
     public function delete($id)
@@ -94,6 +96,10 @@ abstract class ParameterAbstract extends MongoConnection
         $selector = array('_id' => new \MongoId($id));
 
         $this->collection->remove($selector);
+
+        $this->collection->update(
+            [],
+            ['$pull' => ['children' => $id]], ['multiple' => true]);
 
         $this->deleteRelations($id);
 
@@ -130,9 +136,18 @@ class Parameter extends ParameterAbstract
 
         $id = new \MongoId($id);
 
-        $result = $this->getOne(array("_id" => $id));
+        return $this->getOne(array("_id" => $id));
 
-        return $result;
+    }
+
+    public function children($parameter)
+    {
+
+        $id = $parameter["_id"];
+
+        $children = $this->get(["parent_id" => $id]);
+
+        return $children;
 
     }
 
@@ -155,12 +170,34 @@ class Parameter extends ParameterAbstract
     public function add(ParameterModel $parameterModel)
     {
 
-        $this->document = $parameterModel->data();
+        $data = $parameterModel->data();
 
-        $data_excepted = $parameterModel->except(["_id", "parameters_nested"], $this->document);
+        $data_excepted = $parameterModel->except(["_id", "parameters_nested", "field_array", "parameters_parents"], $data);
 
         $this->collection->insert($data_excepted);
 
+    }
+
+    protected function insertChildrenParameters($data = array(), $data_excepted)
+    {
+
+        if (!is_null($data["parameters_parents"])) {
+
+            foreach ($data["parameters_parents"] as $k => $id) {
+
+                $data_excepted["parent_id"] = $this->mongoDbID($id);
+
+                $this->collection->insert($data_excepted);
+
+                unset($data_excepted["_id"]);
+
+
+            }
+
+        } else {
+
+            $this->collection->insert($data_excepted);
+        }
     }
 
     public function get($selector = array())
@@ -170,36 +207,18 @@ class Parameter extends ParameterAbstract
 
         $this->document = $this->cursor;
 
-        $this->document = iterator_to_array($this->document);
+        return $this->document = iterator_to_array($this->document);
 
     }
 
     public function update($where, ParameterModel $parameterModel)
     {
+        
+        $data = $parameterModel->data();
 
-
-        $this->document = $parameterModel->data();
-
-        $data_excepted = $parameterModel->except(["_id", "parameters_nested"], $this->document);
+        $data_excepted = $parameterModel->except(["_id", "parameters_nested", "field_array", "parameters_parents"], $data);
 
         $this->collection->update($where, $data_excepted);
-
-
-        /* Update nested parameters */
-
-        if (!is_null($parameterModel->parameters_nested)) {
-
-            foreach ($parameterModel->parameters_nested as $k => $v) {
-
-                $where = array('_id' => new \MongoId($k));
-
-                $value = array_first($v);
-
-                $this->collection->update(
-                    $where,
-                    ['$set' => ["value" => $value]]);
-            }
-        }
 
     }
 
@@ -230,91 +249,49 @@ class Parameter extends ParameterAbstract
     public function getValuesParametersByID($parameters_ids = array())
     {
 
-        $array_with_types = [];
+        $selector = ['_id' => array('$in' => $parameters_ids)];
 
-        $array_types = [];
+        $data = $this->get($selector);
 
-        $values = [];
+        foreach ($data as $k => $item) {
+            $data[$k]["children"] = $this->getChildren($data, $item);
+        }
 
-        $with_name = [];
+        return $data;
 
-        $selector = array('_id' => array('$in' => $parameters_ids));
+    }
 
-        $this->get($selector);
+    public function iterateChildren($parameters = array())
+    {
 
+        foreach ($parameters as $k => $item) {
 
-        foreach ($this->document() as $k => $v) {
+            $par[$item["parameter_id"]][] = "4";
+        }
 
-            $id = $this->extractStringID($v);
+        // FIX IT TO EDIT
 
-            ///////////
-            ////
+        dd($par);
 
-            switch ((int)$v["type"]) {
+        return $parameters;
+    }
 
-                case 1:
-                    $values[$id] = array($v["name"] => $v["default"]);
-                    break;
+    private function getChildren($list, $item)
+    {
+        $children = [];
 
-                case 2:
-                    $values[$id] = $this->formatObjects($v["value"], $v["name"]);
-                    break;
-
-                case 3:
-                    $values[$id] = $this->formatArray($v["value"], $v["name"]);
-                    break;
+        if (is_array($item["children"])) {
+            foreach ($item["children"] as $k => $id) {
+                $children[] = $list[$id];
             }
 
-            $array_types[$id] = (int)$v["type"];
-            $array_with_types[$v["type"]][$id] = $values[$id];
+        } else {
 
+            if(isset($list[$item["children"]])) {
+                $children[] = $list[$item["children"]];
+            }
         }
 
-        return array(
-            "types" => $array_types,
-            "parameters_with_type" => $array_with_types,
-            "parameters" => $values,
-            "with_name" => $with_name
-        );
-
-    }
-
-    private function formatArray($objects, $name)
-    {
-
-        $arr = [];
-
-        foreach ($objects as $k => $v) {
-
-            $arr[$name][] = $v;
-
-        }
-
-        return $arr;
-    }
-
-    private function formatObjects($objects, $name)
-    {
-
-        $arr = [];
-        $a = [];
-        $all = $this->all(true);
-
-        foreach ($all as $k => $v) {
-            $arr[(string)$v["_id"]] = $v;
-        }
-
-        foreach ($objects as $k => $id) {
-
-            $key = (string)$arr[$id]["_id"];
-
-            $a[$key][$name] = array(
-                "name" => $arr[$id]["name"],
-                "value" => $arr[$id]["value"]
-            );
-
-        }
-
-        return $a;
+        return $children;
     }
 }

@@ -1004,6 +1004,10 @@ button {
     margin-bottom: 10px;
 }
 
+.prototype-list .child {
+    padding-left: 20px;
+}
+
 .prototype-list .item span {
     font-weight: bold;
 }
@@ -1046,4 +1050,22 @@ button {
 
 .content-fields-multi {
     padding-bottom: 30px;
+}
+
+.parameters-list, .parameters-list-array, .parameters-list-objects {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.parameters-list li {
+    padding: 15px;
+}
+
+.parameters-list-array li {
+    padding: 15px;
+}
+
+.parameters-list-objects li {
+    padding: 15px;
 }

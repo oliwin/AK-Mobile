@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Parameter\Parameter;
+use App\Http\Controllers\Parameter\ParameterObject;
+
 use Illuminate\Http\Request;
 
 use View;
@@ -17,8 +20,6 @@ use App\Http\Controllers\Category\Category as CategoryLibrary;
 use App\Http\Controllers\Prototype\Prototype as PrototypeLibrary;
 
 use App\Http\Controllers\Object\ObjectModel;
-
-use App\Http\Controllers\Parameter\Parameter;
 
 
 class ObjectController extends Controller
@@ -119,7 +120,10 @@ class ObjectController extends Controller
             $objectModel = new ObjectModel();
             $objectModel->fill($request);
 
-            $this->objectLibrary->add($objectModel);
+            $parameterModel = new ParameterObject();
+            $parameterModel->fill($request);
+
+            $this->objectLibrary->add($objectModel, $parameterModel);
 
         } catch (\Exception $e) {
 
@@ -142,35 +146,13 @@ class ObjectController extends Controller
 
         $parameters = $this->objectLibrary->parameters($object);
 
-        $parameters_with_type = [];
-
         $parametersClass = new Parameter();
 
-        ////////////////////////////////
-
-        foreach ($parameters as $k => $v) {
-
-            $data = $parametersClass->getType($v["parameter_id"]);
-
-            $v["name"] = $data["name"];
-
-            $v["type"] = $data["type"];
-
-            if($data["type"] == 2){
-
-                $id_nested_object = array_first($data["value"]);
-
-                $data_nested_object = $parametersClass->parameterDetails($id_nested_object);
-
-                $v["value"] = [$data_nested_object["name"] => $data_nested_object["value"]];
-            }
-
-            $parameters_with_type[$data["type"]][] = $v;
-        }
-
+        $parameters = $parametersClass->iterateChildren($parameters);
+        
         return View::make('object.edit', [
             "object" => $object,
-            "parameters" => $parameters_with_type,
+            "parameters" => $parameters,
             "prototypes" => $this->prototypes,
             "categories" => $this->categories
         ]);

@@ -49,28 +49,20 @@ class CombinerArray
 
     }
 
-    private function getNestedObjects($array = array())
+    private function returnParameterName($parameter_id)
     {
 
-        $nested = [];
+        $parameter_id = (string)$parameter_id;
 
-        $ids = [];
+        foreach ($this->parameters as $k => $item) {
 
-        $parameters = new Parameter();
+            $id = (string)$item["_id"];
 
-        foreach ($array as $k => $id) {
-
-            $ids[] = Helper::getMongoIDString($id);
-
+            if ($parameter_id === $id) {
+                return $item["name"];
+            }
         }
 
-        $C = $parameters->getValuesParametersByID($ids);
-
-        foreach ($C['parameters'] as $item => $data) {
-            $nested[] = $data;
-        }
-
-        return $nested;
     }
 
     private function objectParameters($object)
@@ -83,26 +75,30 @@ class CombinerArray
 
         $parameters = $this->parametersClass->getParametersObject($id);
 
-        foreach ($parameters as $k => $v) {
 
-            $data = $this->parametersClass->getType($v["parameter_id"]);
+        foreach ($parameters as $k => $item) {
+            
+            /* Get parameter details */
 
-            $name = $data["name"];
+            $details = $this->parametersClass->parameterDetails($item["parameter_id"]);
 
-            $value = $v["value"];
+            if (!is_null($details["parent_id"])) {
 
-            $type = $data["type"];
+                $parent_name = $this->returnParameterName($details["parent_id"]);
 
-            /* If it is object */
-
-            if ($type == 2) {
-
-                $params[$name] = $this->getNestedObjects($value);
+                $params[$parent_name] = array($details["name"] => $item["value"]);
 
             } else {
 
+                $data = $this->parametersClass->getType($item["parameter_id"]);
+
+                $name = $data["name"];
+
+                $value = $item["value"];
+
                 $params[$name] = $value;
             }
+
         }
 
         return $params;

@@ -43,11 +43,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="col-md-12 content-fields-multi row">
-                    </div>
-                </div>
-
                 @include("field.list-parameters")
 
                 <div class="form-group">

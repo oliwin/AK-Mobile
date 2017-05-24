@@ -30,12 +30,10 @@ class PrototypeController extends Controller
     public function __construct()
     {
         $this->prototypeLibrary = new PrototypeLibrary();
-        $this->prototypeLibrary->all();
-        $this->prototypes = $this->prototypeLibrary->document();
+        $this->prototypes = $this->prototypeLibrary->all(true);
 
         $this->parameterLibrary = new ParameterLibrary();
-        $this->parameterLibrary->all();
-        $this->fields = $this->parameterLibrary->document();
+        $this->fields = $this->parameterLibrary->get();
     }
 
     public function index()

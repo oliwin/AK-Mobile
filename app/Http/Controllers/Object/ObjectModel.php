@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Object;
 
 use App\Http\Controllers\AbstractModel;
-use App\Http\Controllers\Parameter\Parameter;
-use App\Http\Controllers\Prototype\Prototype;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -21,10 +19,7 @@ class ObjectModel extends AbstractModel
     protected $category_id;
 
     protected $prototype_id;
-
-    protected $parameters = [];
-
-    protected $values = [];
+    
 
     public function fill(Request $request)
     {
@@ -36,30 +31,6 @@ class ObjectModel extends AbstractModel
 
         $this->prototype_id = $request->prototype_id;
 
-        $this->values = $request->parameters;
-
-        $this->setParameters($request);
 
     }
-
-    public function values(){
-
-        return is_null($this->values) ? [] : $this->values;
-    }
-
-    private function setParameters($request)
-    {
-
-        if (is_array($request->parameters)) {
-
-            foreach ($request->parameters as $k => $v){
-                foreach ($v as $key => $r){
-                    $param_key[] = $key;
-                }
-            }
-
-            $this->parameters = $param_key;
-        }
-    }
-
 }

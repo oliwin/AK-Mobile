@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Object;
 
 use App\Http\Controllers\MongoConnection;
 use App\Http\Controllers\Parameter\Parameter;
+use App\Http\Controllers\Parameter\ParameterObject;
 
 /**
  * Created by Ponomarchuk Oleg
@@ -118,15 +119,14 @@ abstract class ObjectAbstract extends MongoConnection
 
         $this->changeCollection("object_parameters");
 
-        $this->document = $this->collection->find(array("object_id" =>  $id));
+        $this->document = $this->collection->find(array("object_id" => $id));
 
         $this->document = iterator_to_array($this->document);
-
 
         $id = (string)$this->inserted["_id"];
 
 
-        foreach ($this->document as $k => $v){
+        foreach ($this->document as $k => $v) {
 
             $v["object_id"] = $id;
 
@@ -138,7 +138,7 @@ abstract class ObjectAbstract extends MongoConnection
     }
 
 
-    public abstract function add(ObjectModel $data);
+    public abstract function add(ObjectModel $data, ParameterObject $data);
 
     public abstract function search($parameters);
 
@@ -158,55 +158,61 @@ class Object extends ObjectAbstract
         $this->model = new ObjectModel();
     }
 
-    private function nestedObjectValue($value, $parameter_id, $type){
-
-        if($type == 2){
-
-            $value = $parameter_id;
-        }
-
-        return $value;
-
-    }
-
-    private function addValues()
+    private function addValues(ParameterObject $parameters)
     {
 
         $this->changeCollection("object_parameters");
 
         $object_id = $this->_insertedID();
-        
-        ///////////////
 
-        foreach ($this->document["values"] as $type => $arr) {
+        $parameters = $parameters->data();
 
-            foreach ($arr as $_id => $v) {
+        //////////////////////////////
 
-                $data = [
+        foreach ($parameters["parameters"] as $k => $id) {
+
+            $value = $parameters["value"][$k];
+            $children = $parameters["children"][$k];
+
+            $data = [
+                "object_id" => $object_id,
+                "parameter_id" => $id,
+                "value" => $value,
+                "parent" => $children
+            ];
+
+            $this->collection->insert($data);
+
+        }
+
+        if (count($parameters["parameters_array"]) > 0) {
+
+            foreach ($parameters["parameters_array"] as $id => $value) {
+
+                $data_array = [
                     "object_id" => $object_id,
-                    "parameter_id" => $_id,
-                    "value" => $this->nestedObjectValue($v, $_id, $type)
+                    "parameter_id" => $id,
+                    "value" => $value,
+                    "children" => $id // Can not be child
                 ];
 
-                $d[] = $data;
-
-                $this->collection->insert($data);
+                $this->collection->insert($data_array);
             }
         }
     }
 
-    public function add(ObjectModel $objectModel)
+    public function add(ObjectModel $objectModel, ParameterObject $parameterModel)
     {
 
-        $this->document = $objectModel->data();
+        $data = $objectModel->data();
 
-        $data_excepted = $objectModel->except(["_id", "selected", "values"], $this->document);
+        $data_excepted = $objectModel->except(["_id"], $data);
 
         $this->collection->insert($data_excepted);
 
         $this->inserted = $data_excepted;
 
-        $this->addValues();
+        $this->addValues($parameterModel);
 
 
     }
@@ -218,14 +224,14 @@ class Object extends ObjectAbstract
 
         $this->document = $this->cursor;
 
-        $this->document = iterator_to_array($this->document);
+        return $this->document = iterator_to_array($this->document);
 
     }
 
     public function update($where, ObjectModel $objectModel)
     {
 
-        $excepted_data = $objectModel->except(["_id", "values"], $objectModel->data());
+        $excepted_data = $objectModel->except(["_id", "values", "types"], $objectModel->data());
 
         $this->collection->update($where, $excepted_data);
 
@@ -233,33 +239,30 @@ class Object extends ObjectAbstract
 
         $this->changeCollection("object_parameters");
 
+        ////
+
         $this->collection->remove(array('object_id' => $id));
 
         ///////////
 
+        foreach ($objectModel->values() as $_id => $v) {
 
-        foreach ($objectModel->values() as $type => $arr) {
+            $data = [
+                "object_id" => $id,
+                "parameter_id" => $_id,
+                "value" => $v,
+                "type" => (string)key($objectModel->types[$_id])
+            ];
 
-            foreach ($arr as $_id => $v) {
+            $this->collection->insert($data);
 
-                $data = [
-                    "object_id" => $id,
-                    "parameter_id" => $_id,
-                    "value" => $v
-                ];
-
-                $this->collection->insert($data);
-            }
         }
-
     }
 
     public function search($parameters)
     {
 
-        $this->get($parameters);
-
-        return $this->document;
+        return $this->get($parameters);
     }
 
     public function objectsByPrototype($prototype_id)
@@ -267,10 +270,107 @@ class Object extends ObjectAbstract
 
         $selector = array('prototype_id' => $prototype_id);
 
-        $this->get($selector);
+        return $this->get($selector);
 
-        return $this->document;
     }
+
+    /*
+     *
+     *
+     *
+     *
+     *
+     * */
+
+    private function getChildren($object)
+    {
+
+        $id = $object["_id"];
+
+        return $this->get(["parent_id" => $id]);
+    }
+
+    private function formatArrayKeysMongo($array)
+    {
+
+        $mongoKeys = [];
+
+        if (is_array($array)) {
+            foreach (array_keys($array) as $k => $id) {
+                $mongoKeys[] = new \MongoId($id);
+            }
+        }
+
+        return $mongoKeys;
+    }
+
+    /* NEW FUNCTION */
+
+
+    public function getDetails($data)
+    {
+
+        $parameters = new Parameter();
+
+        foreach ($data as $k => $id) {
+
+            $id = (string)$id;
+
+            $details[$id] = $parameters->parameterDetails($id);
+        }
+
+        return $details;
+
+    }
+
+    public function parametersWithChildren($parameters)
+    {
+
+
+        $array_with_types = [];
+
+        $types = [];
+
+        $values = [];
+
+        $keys = $this->formatArrayKeysMongo($parameters);
+
+        $selector = ['_id' => array('$in' => $keys)];
+
+        $data = $this->get($selector);
+
+
+        if (!empty($parameters)) {
+
+            foreach ($parameters as $k => $v) {
+
+                $keys_parent[] = $v["parameter_id"];
+            }
+
+            $details = $this->getDetails($keys_parent);
+        }
+
+
+        foreach ($data as $k => $v) {
+
+            $id = $this->extractStringID($v);
+
+            $v["children"] = $this->getChildren($v);
+            $v["name"] = $details[$v["parameter_id"]]["name"];
+
+            $types[$id] = (int)$v["type"];
+            $array_with_types[$v["type"]][$id] = $v;
+
+        }
+
+        return array(
+            "types" => $types,
+            "parameters_with_type" => $array_with_types,
+            "parameters" => $values
+        );
+
+    }
+
 
     public function parameters($object)
     {
@@ -279,9 +379,7 @@ class Object extends ObjectAbstract
 
         $object_id = $this->extractStringID($object);
 
-        $this->get(["object_id" => $object_id]);
-
-        return $this->document;
+        return $this->get(["object_id" => $object_id]);
 
     }
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Parameter\Parameter;
+
 use App\Http\Controllers\Prototype\Prototype;
+
 use Illuminate\Http\Request;
 
 use View;
@@ -41,9 +43,7 @@ class PrototypeFieldsController extends Controller
     public function index()
     {
 
-        $this->parameterLibrary->all();
-
-        $this->fields = $this->parameterLibrary->document();
+        $this->fields = $this->parameterLibrary->get(array("parent_id" => null));
 
         return $this->view();
     }
@@ -100,25 +100,14 @@ class PrototypeFieldsController extends Controller
     public function edit($id)
     {
         $parameter = $this->parameterLibrary->getOne(array("_id" => new \MongoId($id)));
-        $all_fields = $this->parameterLibrary->all(true);
-        $types = [];
-        $r = [];
 
-        foreach ($all_fields as $k => $v) {
-            
-            $id = (string)$v["_id"];
-            $arr[$id] = $v;
-            $types[$id] = $v["type"];
-        }
+        $parameter["children"] = $this->parameterLibrary->children($parameter);
 
-        foreach ($arr as $key => $v){
-            $type = $types[$key];
-            $r[$type][$key] = $v;
-        }
+        $parameters_all = $this->parameterLibrary->get(["type" => "1", "_id" => array('$ne' => new \MongoId($id))]);
 
         return View::make('field.edit', [
             "field" => $parameter,
-            "parameters" => $r
+            "all" => $parameters_all
         ]);
     }
 
@@ -152,6 +141,7 @@ class PrototypeFieldsController extends Controller
         }
 
         $parametersModel = new ParameterModel();
+
         $parametersModel->fill($request);
 
         $this->parameterLibrary->update(array("_id" => new \MongoId($id)), $parametersModel);
@@ -165,10 +155,7 @@ class PrototypeFieldsController extends Controller
         switch ($type) {
 
             case "2":
-                $selector = array("type" => array('$nin' => array("2", "3")));
-                $this->parameterLibrary->get($selector);
-
-                return view('field.list', ['fields' => $this->parameterLibrary->document()]);
+                return view('field.list', ['fields' => $this->parameterLibrary->get()]);
                 break;
 
             case "3":
@@ -181,8 +168,6 @@ class PrototypeFieldsController extends Controller
     public function fieldsBYID($id)
     {
 
-        /* Get list of ID parameters in prototype */
-
         $prototype = new Prototype();
 
         $parameters_id = $prototype->getFieldsPrototype($id);
@@ -192,8 +177,6 @@ class PrototypeFieldsController extends Controller
         $parameters = new Parameter();
 
         $parameters = $parameters->getValuesParametersByID($parameters_id);
-
-        $parameters = $parameters["parameters_with_type"];
         
         return View::make('object.parameters', ["parameters" => $parameters]);
 

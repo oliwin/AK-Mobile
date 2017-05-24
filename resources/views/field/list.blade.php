@@ -1,4 +1,4 @@
-<label class="col-md-12 control-label">Select fields inside</label>
+<label class="col-md-12 control-label">Select children</label>
 <div class="fields-list">
     @foreach($fields as $k => $v)
         <div class="item">

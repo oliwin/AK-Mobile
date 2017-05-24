@@ -44,7 +44,7 @@
           </div>
              </div>
          <div class="form-group fields-list" id="FieldsInPrototype">
-           <div class="row list">@include('object.parameters_edit')</div>
+           <div class="row list">@include('object.parameters')</div>
          </div>
          <div class="form-group">
             <div class="col-lg-12">
