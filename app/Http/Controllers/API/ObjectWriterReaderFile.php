@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use File;
 
+use Carbon\Carbon;
+
 /**
  * Created by PhpStorm.
  * User: oleg
@@ -14,9 +16,15 @@ use File;
 class ObjectWriterReaderFile
 {
 
-    private $file = "config.json";
+    public $file = "config.json";
 
     private $content;
+
+    public function __construct()
+    {
+        $this->file = Carbon::now()->format('d-m').'-'.$this->file;
+    }
+
 
     public function write($object)
     {

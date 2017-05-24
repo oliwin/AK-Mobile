@@ -61,6 +61,9 @@ $(function () {
 
         if(type == "4"){
             $("#default_value").val("True");
+            
+        } else {
+            $("#default_value").val("");
         }
 
         $.get(

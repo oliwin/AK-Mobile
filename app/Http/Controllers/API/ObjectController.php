@@ -64,14 +64,7 @@ class ObjectController extends Controller
 
     private function checkToken($request)
     {
-
-        if ($request->has("token") && $request->token === $this->token_access) {
-
-            return true;
-        }
-
-        false;
-
+        return ($request->has("token") && $request->token === $this->token_access);
     }
 
     public function update(Request $request)
@@ -85,7 +78,7 @@ class ObjectController extends Controller
 
         $this->writerReaderFile->write($array);
 
-        echo "Information was updated in file: config.json <br> Call <strong>/config/json</strong>strong> or <strong>/config/db</strong> to display data";
+        echo "Information was updated in file: ".$this->writerReaderFile->file." <br> Call <strong>/config/json</strong>strong> or <strong>/config/db</strong> to display data";
 
     }
 

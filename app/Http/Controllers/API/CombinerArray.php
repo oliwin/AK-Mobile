@@ -112,7 +112,7 @@ class CombinerArray
 
         foreach ($objects as $k => $object) {
 
-            $object_m[$object["name"]] = $this->objectParameters($object);
+            $object_m[$object["name"]] = []; //$this->objectParameters($object);
         }
 
         return $object_m;
