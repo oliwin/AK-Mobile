@@ -161,6 +161,14 @@ class PrototypeFieldsController extends Controller
             case "3":
                 return view('field.list_array');
                 break;
+
+            case "4":
+                return view('field.list_boolean');
+                break;
+
+            case "5":
+                return view('field.list_vector');
+                break;
         }
     }
 
@@ -177,7 +185,9 @@ class PrototypeFieldsController extends Controller
         $parameters = new Parameter();
 
         $parameters = $parameters->getValuesParametersByID($parameters_id);
-        
+
+        //dd($parameters);
+
         return View::make('object.parameters', ["parameters" => $parameters]);
 
     }

@@ -1266,5 +1266,10 @@ class Helper
 
     }
 
+    public static function parameterTypes(){
+
+        return [1 => "Scalar", 2 => "Object", 3 => "Array", 4 => "Boolean", 5=> "Vector"];
+    }
+
 
 }

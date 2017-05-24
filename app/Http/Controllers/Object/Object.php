@@ -144,7 +144,7 @@ abstract class ObjectAbstract extends MongoConnection
 
     public abstract function get($selector);
 
-    public abstract function update($selector, ObjectModel $data);
+    public abstract function update($selector, ObjectModel $data, ParameterObject $data);
 
 }
 
@@ -158,12 +158,10 @@ class Object extends ObjectAbstract
         $this->model = new ObjectModel();
     }
 
-    private function addValues(ParameterObject $parameters)
+    private function addValues(ParameterObject $parameters, $object_id = null)
     {
 
         $this->changeCollection("object_parameters");
-
-        $object_id = $this->_insertedID();
 
         $parameters = $parameters->data();
 
@@ -193,7 +191,7 @@ class Object extends ObjectAbstract
                     "object_id" => $object_id,
                     "parameter_id" => $id,
                     "value" => $value,
-                    "children" => $id // Can not be child
+                    "parent" => null
                 ];
 
                 $this->collection->insert($data_array);
@@ -212,7 +210,9 @@ class Object extends ObjectAbstract
 
         $this->inserted = $data_excepted;
 
-        $this->addValues($parameterModel);
+        $object_id = $this->_insertedID();
+
+        $this->addValues($parameterModel, $object_id);
 
 
     }
@@ -228,7 +228,7 @@ class Object extends ObjectAbstract
 
     }
 
-    public function update($where, ObjectModel $objectModel)
+    public function update($where, ObjectModel $objectModel, ParameterObject $parameterObject)
     {
 
         $excepted_data = $objectModel->except(["_id", "values", "types"], $objectModel->data());
@@ -237,26 +237,13 @@ class Object extends ObjectAbstract
 
         $id = $this->extractStringID($where);
 
-        $this->changeCollection("object_parameters");
+        ////////
 
-        ////
+        $this->changeCollection("object_parameters");
 
         $this->collection->remove(array('object_id' => $id));
 
-        ///////////
-
-        foreach ($objectModel->values() as $_id => $v) {
-
-            $data = [
-                "object_id" => $id,
-                "parameter_id" => $_id,
-                "value" => $v,
-                "type" => (string)key($objectModel->types[$_id])
-            ];
-
-            $this->collection->insert($data);
-
-        }
+        $this->addValues($parameterObject, $id);
     }
 
     public function search($parameters)
@@ -309,6 +296,7 @@ class Object extends ObjectAbstract
 
     public function getDetails($data)
     {
+        $details = [];
 
         $parameters = new Parameter();
 

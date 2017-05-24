@@ -176,9 +176,13 @@ class ObjectController extends Controller
 
         $objectModel = new ObjectModel();
 
+        $parameterObject = new ParameterObject();
+
+        $parameterObject->fill($request);
+
         $objectModel->fill($request);
 
-        $this->objectLibrary->update(array("_id" => new \MongoId($id)), $objectModel);
+        $this->objectLibrary->update(array("_id" => new \MongoId($id)), $objectModel, $parameterObject);
 
         return redirect("objects")->with('success', "Object was updated!");
     }

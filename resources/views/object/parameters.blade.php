@@ -32,7 +32,7 @@
 
                             <input type="text" class="form-control" name="values[]" value="{{$parameter["value"]}}">
 
-                            @include('field.parameter', $parameter)
+                            @include('field.parameter', ["parameter" => $parameter])
 
                         @endif
                     </li>

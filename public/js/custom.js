@@ -59,6 +59,10 @@ $(function () {
             $('.fields-array').show();
         }
 
+        if(type == "4"){
+            $("#default_value").val("True");
+        }
+
         $.get(
             config['path'] + config['routes']['fields_multi'] + type,
             function (data) {

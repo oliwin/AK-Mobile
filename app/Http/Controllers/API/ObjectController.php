@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 
+use Illuminate\Http\Request;
+
 
 /*
  *
@@ -17,6 +19,8 @@ class ObjectController extends Controller
     private $writerReaderFile;
 
     private $writerReaderDb;
+
+    private $token_access = "b924d4121e4f59582e3ef38532c01ea6";
 
 
     public function __construct()
@@ -42,7 +46,7 @@ class ObjectController extends Controller
         $results = new CombinerArray();
 
         $results->_formatOutput();
-        
+
         return $results->_return();
     }
 
@@ -58,8 +62,25 @@ class ObjectController extends Controller
 
     }
 
-    public function update()
+    private function checkToken($request)
     {
+
+        if ($request->has("token") && $request->token === $this->token_access) {
+
+            return true;
+        }
+
+        false;
+
+    }
+
+    public function update(Request $request)
+    {
+        if(!$this->checkToken($request)){
+
+            return response()->json("Access forbidden!", 403);
+        }
+
         $array = $this->execute();
 
         $this->writerReaderFile->write($array);

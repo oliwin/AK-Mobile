@@ -213,7 +213,7 @@ class Parameter extends ParameterAbstract
 
     public function update($where, ParameterModel $parameterModel)
     {
-        
+
         $data = $parameterModel->data();
 
         $data_excepted = $parameterModel->except(["_id", "parameters_nested", "field_array", "parameters_parents"], $data);
@@ -263,17 +263,46 @@ class Parameter extends ParameterAbstract
 
     public function iterateChildren($parameters = array())
     {
+        $par = [];
+
+        $children = [];
+
+        $parameterClass = new Parameter();
 
         foreach ($parameters as $k => $item) {
 
-            $par[$item["parameter_id"]][] = "4";
+            $details = $parameterClass->getType($item["parameter_id"]);
+
+            $item["_id"] = $item["parameter_id"];
+            $item["name"] = $details["name"];
+            $item["type"] = $details["type"];
+            $item["children"] = [];
+
+            if (is_null($item["parent"])) {;
+
+                $par[(string)$item["_id"]] = $item;
+
+            } else {
+
+                $children[(string)$item["_id"]] = $item;
+            }
         }
 
-        // FIX IT TO EDIT
+        /* Join children to parents */
 
-        dd($par);
+        foreach ($par as $k => $parent) {
 
-        return $parameters;
+            foreach ($children as $key => $child) {
+
+                if ($parent["parameter_id"] == $child["parent"]) {
+
+                    $id = (string) $child["_id"];
+                    $par[$k]['children'][$id] = $child;
+                }
+            }
+        }
+
+        return $par;
     }
 
     private function getChildren($list, $item)
@@ -287,7 +316,7 @@ class Parameter extends ParameterAbstract
 
         } else {
 
-            if(isset($list[$item["children"]])) {
+            if (isset($list[$item["children"]])) {
                 $children[] = $list[$item["children"]];
             }
         }

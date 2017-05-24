@@ -15,7 +15,7 @@
                 <div class="form-group">
                     <label class="col-md-12 control-label">Default value <span class="required-field">*</span></label>
                     <div class="col-md-3">
-                        {!! Form::text('default', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Default Value"]) !!}
+                        {!! Form::text('default', null, ['class' => 'form-control', 'required' => 'required', 'id' => "default_value", 'placeholder' => "Default Value"]) !!}
                     </div>
                 </div>
                 <div class="form-group">
@@ -24,12 +24,12 @@
                         <?=Form::checkbox('available', 1, ($field["available"] == "1"));?>
                     </div>
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label class="col-md-12 control-label">Visibility</label>
                     <div class="col-md-3">
                         <?=Form::selectRange('visibility', 0, 20)?>
                     </div>
-                </div>
+                </div>-->
                 <div class="form-group">
                     <label class="col-md-12 control-label">Only numbers</label>
                     <div class="col-md-3">
@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label class="col-md-12 control-label">Type <span class="required-field">*</span></label>
                     <div class="col-md-3 select-parameter-type">
-                        {{Form::select('type', array(1 => "Scalar", 2 => "Object", 3 => "Array"), $field["type"], array("class" => "form-control"))}}
+                        {{Form::select('type', \App\Helpers\Helper::parameterTypes(), $field["type"], array("class" => "form-control"))}}
                     </div>
                 </div>
 
