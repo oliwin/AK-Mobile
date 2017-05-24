@@ -19,6 +19,8 @@ abstract class CategoryAbstract extends MongoConnection
 
     protected $document = [];
 
+    
+
     public function __construct()
     {
         parent::__construct("object_categories");

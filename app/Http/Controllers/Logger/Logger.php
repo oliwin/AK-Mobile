@@ -8,5 +8,6 @@
  */
 class Logger
 {
+    // TODO
 
 }

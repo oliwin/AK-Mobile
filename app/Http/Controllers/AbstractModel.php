@@ -39,10 +39,8 @@ class AbstractModel
     {
         $except = array_flip($except);
 
-        $except = array_diff_key($data, $except);
-
-        return $except;
-
+        return array_diff_key($data, $except);
+        
     }
 
 

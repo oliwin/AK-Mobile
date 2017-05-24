@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Prototype;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\MongoConnection;
 
 /**

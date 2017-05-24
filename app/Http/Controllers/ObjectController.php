@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Parameter\Parameter;
+
 use App\Http\Controllers\Parameter\ParameterObject;
 
 use Illuminate\Http\Request;
@@ -107,7 +108,6 @@ class ObjectController extends Controller
             "name" => "required|string|min:3",
             "available" => "integer|nullable",
             "prototype_id" => "required|string",
-            "visibility" => "integer",
             "category_id" => "required|string"
         ]);
 
@@ -166,7 +166,6 @@ class ObjectController extends Controller
             "name" => "required|string|min:3",
             "available" => "integer|nullable",
             "prototype_id" => "required|string",
-            "visibility" => "integer",
             "category_id" => "required|string"
         ]);
 

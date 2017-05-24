@@ -4,8 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\FieldRelation;
 
-use App\PrototypeName;
-
 /**
  * Created by PhpStorm.
  * User: oleg
@@ -30,7 +28,7 @@ class ObjectParameters extends AbstractObjectParameters
 
         foreach ($this->parameters as $k => $i){
 
-            foreach ($i as $k => $item) {
+            foreach ($i as $j => $item) {
                 if ($item->name->type == 2) {
                     $this->fillParametersObject($item, $this->value($item));
                 }

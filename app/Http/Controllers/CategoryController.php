@@ -47,7 +47,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        
+
         return View::make('category.create');
     }
 
@@ -74,9 +74,10 @@ class CategoryController extends Controller
 
             $this->categoryLibrary->add($categoryModel);
 
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
 
-            echo 'Выброшено исключение: ',  $e->getMessage(), "\n"; dd();
+            echo 'Выброшено исключение: ', $e->getMessage(), "\n";
+            dd();
         }
 
         return redirect("categories")->with('success', "Category was created!");
