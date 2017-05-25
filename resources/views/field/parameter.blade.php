@@ -1,6 +1,3 @@
-
-
-
 @if (count($parameter['children']) > 0)
 
     <? $parent_id = (string) $parameter["_id"]; ?>

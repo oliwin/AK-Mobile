@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('objects', "API\ObjectController@index");
-
 ## Get JSON by ways ##
 Route::get('config/db', "API\ObjectController@db");
 Route::get('config/json', "API\ObjectController@json");

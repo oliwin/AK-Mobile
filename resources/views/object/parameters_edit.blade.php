@@ -1,6 +1,4 @@
 <div class="control-group">
-
-
     <div class="col-md-12">
         <!-- Object type -->
         @if(isset($parameters[2]))
@@ -66,8 +64,5 @@
                 @endforeach
             </div>
         @endif
-
-
     </div>
-
 </div>

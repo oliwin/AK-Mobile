@@ -44,10 +44,10 @@
           </div>
              </div>
          <div class="form-group fields-list" id="FieldsInPrototype">
-           <div class="row list">@include('object.parameters')</div>
+           <div class="list">@include('object.parameters')</div>
          </div>
          <div class="form-group">
-            <div class="col-lg-12">
+            <div class="col-md-12">
                <input type="hidden" name="action" value="edit"/>
                <button type="submit" class="btn btn-primary">Update</button>
             </div>

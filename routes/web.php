@@ -15,8 +15,7 @@ Auth::routes();
 Route::get("/", "HomeController@index");
 
 Route::group(['middleware' => ['auth:web']], function () {
-
-
+  
   ## SEARCH ##
   Route::get("objects/search", "ObjectController@search");
   Route::get("prototypes/search", "PrototypeController@search");
@@ -34,7 +33,5 @@ Route::group(['middleware' => ['auth:web']], function () {
   Route::resource('prototypes', 'PrototypeController');
   Route::resource('fields', 'PrototypeFieldsController');
   Route::resource('categories', 'CategoryController');
-
-
 
 });

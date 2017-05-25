@@ -52,7 +52,6 @@
                 </div>
                 {!! Form::close() !!}
             </div>
-
         </fieldset>
     </div>
 @endsection
