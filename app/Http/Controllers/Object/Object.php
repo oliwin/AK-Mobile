@@ -261,14 +261,6 @@ class Object extends ObjectAbstract
 
     }
 
-    /*
-     *
-     *
-     *
-     *
-     *
-     * */
-
     private function getChildren($object)
     {
 
@@ -314,6 +306,9 @@ class Object extends ObjectAbstract
     public function parametersWithChildren($parameters)
     {
 
+        $details = [];
+
+        $keys_parent = [];
 
         $array_with_types = [];
 
@@ -327,6 +322,7 @@ class Object extends ObjectAbstract
 
         $data = $this->get($selector);
 
+        ////////////////////////////
 
         if (!empty($parameters)) {
 
@@ -337,7 +333,6 @@ class Object extends ObjectAbstract
 
             $details = $this->getDetails($keys_parent);
         }
-
 
         foreach ($data as $k => $v) {
 

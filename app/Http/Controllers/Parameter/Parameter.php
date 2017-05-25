@@ -145,20 +145,8 @@ class Parameter extends ParameterAbstract
 
         $id = $parameter["_id"];
 
-        $children = $this->get(["parent_id" => $id]);
+        return $this->get(["parent_id" => $id]);
 
-        return $children;
-
-    }
-
-    public function getParametersObject($id)
-    {
-
-        $this->changeCollection("object_parameters");
-
-        $this->get(array("object_id" => $id));
-
-        return $this->document;
     }
 
     public function extractStringID($id)
@@ -173,31 +161,9 @@ class Parameter extends ParameterAbstract
         $data = $parameterModel->data();
 
         $data_excepted = $parameterModel->except(["_id", "parameters_nested", "field_array", "parameters_parents"], $data);
-
+        
         $this->collection->insert($data_excepted);
 
-    }
-
-    protected function insertChildrenParameters($data = array(), $data_excepted)
-    {
-
-        if (!is_null($data["parameters_parents"])) {
-
-            foreach ($data["parameters_parents"] as $k => $id) {
-
-                $data_excepted["parent_id"] = $this->mongoDbID($id);
-
-                $this->collection->insert($data_excepted);
-
-                unset($data_excepted["_id"]);
-
-
-            }
-
-        } else {
-
-            $this->collection->insert($data_excepted);
-        }
     }
 
     public function get($selector = array())
@@ -224,10 +190,7 @@ class Parameter extends ParameterAbstract
 
     public function search($parameters)
     {
-
-        $this->get($parameters);
-
-        return $this->document;
+        return $this->get($parameters);
 
     }
 
@@ -248,17 +211,52 @@ class Parameter extends ParameterAbstract
 
     public function getValuesParametersByID($parameters_ids = array())
     {
+        $a = [];
 
         $selector = ['_id' => array('$in' => $parameters_ids)];
 
         $data = $this->get($selector);
 
+        $this->document = []; // Required
+
+        $all = $this->all(true);
+
+        /// Iterate all ///
+
+        foreach ($all as $k => $v){
+            $id = (string)$v["_id"];
+            $a[$id] = $v;
+        }
+
+        $all = $a;
+
+        ////////////
+
         foreach ($data as $k => $item) {
-            $data[$k]["children"] = $this->getChildren($data, $item);
+            $data[$k]["children"] = $this->getChildren($all, $item);
         }
 
         return $data;
 
+    }
+
+    private function getChildren($list, $item)
+    {
+        $children = [];
+
+        if (is_array($item["children"])) {
+            foreach ($item["children"] as $k => $id) {
+                $children[] = $list[$id];
+            }
+
+        } else {
+
+            if (isset($list[$item["children"]])) {
+                $children[] = $list[$item["children"]];
+            }
+        }
+
+        return $children;
     }
 
     public function iterateChildren($parameters = array())
@@ -303,24 +301,5 @@ class Parameter extends ParameterAbstract
         }
 
         return $par;
-    }
-
-    private function getChildren($list, $item)
-    {
-        $children = [];
-
-        if (is_array($item["children"])) {
-            foreach ($item["children"] as $k => $id) {
-                $children[] = $list[$id];
-            }
-
-        } else {
-
-            if (isset($list[$item["children"]])) {
-                $children[] = $list[$item["children"]];
-            }
-        }
-
-        return $children;
     }
 }

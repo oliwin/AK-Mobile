@@ -22,7 +22,7 @@
          <div class="form-group prototype-list">
             <div class="col-md-12">
                @if(count($fields) > 0)
-                  <h4>Parameters<span class="help-block">fields with visibility = 1</span></h4>
+                  <h4>Parameters</h4>
                   @foreach($fields as $k => $v)
                      <div class="row item">
                         <div class="col-md-11">

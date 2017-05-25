@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 16, 2017 at 11:36 PM
+-- Generation Time: May 25, 2017 at 01:38 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -41,6 +41,15 @@ CREATE TABLE `fields` (
   `type` int(11) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='utf8mb4_unicode_ci';
 
+--
+-- Dumping data for table `fields`
+--
+
+INSERT INTO `fields` (`id`, `name`, `prefix`, `only_numbers`, `available`, `updated_at`, `created_at`, `visibility`, `default`, `type`) VALUES
+(114, 'Speed', 'speed', 1, 1, '2017-05-16 17:43:22', '2017-05-16 17:43:22', 1, '10', 2),
+(115, 'Acceleration', 'acceleration', 1, 1, '2017-05-16 17:43:35', '2017-05-16 17:43:35', 1, '2', 2),
+(116, 'Weight', 'weight', 1, 1, '2017-05-16 17:44:08', '2017-05-16 17:44:08', 1, '400', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -52,6 +61,15 @@ CREATE TABLE `fields_prototype` (
   `field_id` int(10) UNSIGNED NOT NULL,
   `prototype_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `fields_prototype`
+--
+
+INSERT INTO `fields_prototype` (`id`, `field_id`, `prototype_id`) VALUES
+(141, 114, 47),
+(142, 115, 47),
+(143, 116, 47);
 
 -- --------------------------------------------------------
 
@@ -73,7 +91,10 @@ INSERT INTO `field_categories` (`id`, `name`, `available`) VALUES
 (1, 'Transport', 1),
 (4, 'Objects', 1),
 (5, 'Planets', 1),
-(7, 'Weapons', 1);
+(7, 'Weapons', 1),
+(8, 'Transport', 1),
+(9, 'Transport', 1),
+(10, 'Transport', 1);
 
 -- --------------------------------------------------------
 
@@ -132,6 +153,15 @@ CREATE TABLE `objects` (
   `prefix` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='utf8mb4_unicode_ci';
 
+--
+-- Dumping data for table `objects`
+--
+
+INSERT INTO `objects` (`id`, `name`, `available`, `updated_at`, `created_at`, `visibility`, `category_id`, `prototype_id`, `prefix`) VALUES
+(145, 'Bmw', 1, '2017-05-16 17:47:40', '2017-05-16 17:44:35', NULL, 1, 47, 'bmw'),
+(146, 'Opel', 1, '2017-05-16 17:47:15', '2017-05-16 17:45:07', NULL, 1, 47, 'opel'),
+(147, 'KIA', 1, '2017-05-16 18:01:20', '2017-05-16 17:59:51', NULL, 1, 47, 'KIA');
+
 -- --------------------------------------------------------
 
 --
@@ -145,6 +175,21 @@ CREATE TABLE `object_prototype_fields` (
   `value` varchar(100) DEFAULT '',
   `type` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='utf8_general_ci';
+
+--
+-- Dumping data for table `object_prototype_fields`
+--
+
+INSERT INTO `object_prototype_fields` (`prototype_id`, `object_id`, `field_id`, `value`, `type`) VALUES
+(47, 146, 114, '10', 0),
+(47, 146, 115, '2', 0),
+(47, 146, 116, '400', 0),
+(47, 145, 114, '20', 0),
+(47, 145, 115, '4', 0),
+(47, 145, 116, '800', 0),
+(47, 147, 114, '1', 0),
+(47, 147, 115, '2', 0),
+(47, 147, 116, '3', 0);
 
 -- --------------------------------------------------------
 
@@ -175,6 +220,13 @@ CREATE TABLE `prototypes` (
   `visibility` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='utf8mb4_unicode_ci';
 
+--
+-- Dumping data for table `prototypes`
+--
+
+INSERT INTO `prototypes` (`id`, `name`, `prefix`, `available`, `type`, `created_at`, `updated_at`, `visibility`) VALUES
+(47, 'Cars', 'cars', 1, 1, '2017-05-16 17:44:21', '2017-05-16 17:44:21', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -196,7 +248,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Oleg', 'ponomarchukov@gmail.com', '$2y$10$omX3vHgM4hGDsflIpysYGeu1wBJEQZQNwQg6xBCQKvOEvuCZ/cOZu', 'Yshc5MY4cLxWu5oO8fFgDGRB6zxLHQhYjCCuzc29DybZeHxcNThy7DiWoY3X', '2017-05-02 08:09:28', '2017-05-02 08:09:28');
+(1, 'Oleg', 'akgame@gmail.com', '$2y$10$omX3vHgM4hGDsflIpysYGeu1wBJEQZQNwQg6xBCQKvOEvuCZ/cOZu', 'JREqjQkV03nz5NqKnjefgoWEtKKPwmcD23y13EJyxcthF3WbDizxiyM7l7u7', '2017-05-02 08:09:28', '2017-05-02 08:09:28');
 
 --
 -- Indexes for dumped tables
@@ -269,22 +321,22 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `fields`
 --
 ALTER TABLE `fields`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 --
 -- AUTO_INCREMENT for table `fields_prototype`
 --
 ALTER TABLE `fields_prototype`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 --
 -- AUTO_INCREMENT for table `field_categories`
 --
 ALTER TABLE `field_categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `field_relation`
 --
 ALTER TABLE `field_relation`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
@@ -294,12 +346,12 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `objects`
 --
 ALTER TABLE `objects`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
 --
 -- AUTO_INCREMENT for table `prototypes`
 --
 ALTER TABLE `prototypes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT for table `users`
 --

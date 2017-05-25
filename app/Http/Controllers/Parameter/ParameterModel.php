@@ -28,7 +28,7 @@ class ParameterModel extends AbstractModel
     protected $value;
 
     protected $field_array;
-    
+
     public $children = [];
 
 
@@ -59,12 +59,11 @@ class ParameterModel extends AbstractModel
 
     }
 
-    private function setChildrenParameters(){
+    private function setChildrenParameters()
+    {
 
-        if(is_array($this->children)){
+        $this->children = (is_array($this->children)) ? array_keys($this->children) : [];
 
-            $this->children = array_keys($this->children);
-        }
     }
 
     private function setValue()
@@ -72,12 +71,13 @@ class ParameterModel extends AbstractModel
 
         switch ((int)$this->type) {
 
-            case 1:
-            case 2:
+            case 1;
+            case 2;
                 $this->value = $this->default;
                 break;
 
-            case 3:
+            case 3;
+            case 5;
                 $this->value = $this->field_array;
                 break;
         }

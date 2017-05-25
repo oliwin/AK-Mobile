@@ -78,7 +78,7 @@ class ObjectController extends Controller
 
         $this->writerReaderFile->write($array);
 
-        echo "Information was updated in file: ".$this->writerReaderFile->file." <br> Call <strong>/config/json</strong>strong> or <strong>/config/db</strong> to display data";
+        echo "Information was updated in file! <br> Call <strong>".$this->writerReaderFile->file."</strong> or <strong>/config/db</strong> to display data";
 
     }
 

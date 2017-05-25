@@ -66,7 +66,6 @@ class ObjectParameters extends AbstractObjectParameters
 
         $id_object = $parameter->object_id;
         $prefix = $parameter->name->prefix;
-
         $this->parameters_object[$id_object][$prefix] = $value;
 
     }

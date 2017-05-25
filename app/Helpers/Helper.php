@@ -1241,6 +1241,14 @@ class Helper
             case 3:
                 return "Array";
                 break;
+
+            case 4:
+                return "Boolean";
+                break;
+
+            case 5:
+                return "Vector";
+                break;
         }
 
     }

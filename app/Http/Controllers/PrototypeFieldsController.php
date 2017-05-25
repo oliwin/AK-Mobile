@@ -185,7 +185,7 @@ class PrototypeFieldsController extends Controller
         $parameters = new Parameter();
 
         $parameters = $parameters->getValuesParametersByID($parameters_id);
-    
+        
         return View::make('object.parameters', ["parameters" => $parameters]);
 
     }

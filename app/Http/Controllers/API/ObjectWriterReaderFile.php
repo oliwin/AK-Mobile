@@ -12,22 +12,70 @@ use Carbon\Carbon;
  * Date: 5/13/17
  * Time: 9:12 PM
  */
-
 class ObjectWriterReaderFile
 {
 
     public $file = "config.json";
 
+    public $path = "/data/";
+
+    private $limit = 5;
+
     private $content;
+
 
     public function __construct()
     {
-        $this->file = Carbon::now()->format('d-m').'-'.$this->file;
+        $this->path = public_path() . $this->path;
+
+        $this->file = $this->path . Carbon::now()->format('d-m') . '-' . $this->file;
+
+        $this->countDirectoryFiles();
+
     }
 
+    private function countDirectoryFiles()
+    {
+
+        $files = scandir($this->path);
+
+        return count($files) - 2;
+
+    }
+
+    private function sortFilesByModifyTime()
+    {
+        $timeModify = [];
+
+        $files = array_diff(scandir($this->path), array(".", ".."));
+
+        foreach ($files as $fileInfo) {
+            
+            $timeModify[filectime($fileInfo)][] = $fileInfo;
+        }
+
+        return $timeModify;
+
+    }
+
+    private function deleteOlderFile()
+    {
+
+        $files = $this->sortFilesByModifyTime();
+
+        $files = array_first($files);
+
+        $file = current($files);
+
+        File::delete($this->path . $file);
+    }
 
     public function write($object)
     {
+        if ($this->limit < $this->countDirectoryFiles()) {
+            $this->deleteOlderFile();
+        }
+
         $json = json_encode($object);
 
         File::put($this->file, $json);

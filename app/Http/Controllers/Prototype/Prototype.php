@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Prototype;
 
 use App\Http\Controllers\MongoConnection;
+use App\Http\Controllers\Parameter\Parameter;
 
 /**
  * Created by Ponomarchuk Oleg
@@ -125,7 +126,7 @@ class Prototype extends PrototypeAbstract
     {
         $this->cursor = $this->collection->find($selector);
 
-        $this->document = $this->cursor;
+        return $this->document = $this->cursor;
     }
 
     public function update($where, PrototypeModel $prototypeModel)
@@ -133,42 +134,74 @@ class Prototype extends PrototypeAbstract
 
         $data_excepted = $prototypeModel->except(["_id"], $prototypeModel->data());
 
-        $this->collection->update($where, $data_excepted);
-
         $this->updateRelation($data_excepted, $where);
 
+        $this->changeCollection("prototypes");
+
+        $this->collection->update($where, $data_excepted);
 
     }
 
     private function updateRelation($data, $where)
     {
 
+        $parameters = [];
 
-        $id = (string)$where["_id"];
+        $prototype_id = (string)$where["_id"];
 
-        $this->changeCollection("objects");
+        $prototype = $this->getOne($where);
 
-        $new = array('$set' => array("parameters" => []));
-
-        $this->collection->update(array("prototype_id" => $id), $new);
+        $new_values = array_diff($data["parameters"], $prototype["parameters"]);
 
 
-        /// Insert
+        //// Parameters ///
 
-        $data = (!isset($data["parameters"]) || is_null($data["parameters"])) ? [] : $data["parameters"];
-        
-        $insert = array('$set' => array("parameters" => $data));
+        if (count($new_values) > 0) {
 
-        $this->collection->update(array("prototype_id" => $id), $insert);
+            $parameter = new Parameter();
 
+            foreach ($new_values as $k => $parameter_id) {
+
+                $details = $parameter->getType($parameter_id);
+
+                $parameters[] = [
+                    "object_id" => null,
+                    "parameter_id" => $parameter_id,
+                    "value" => $details["default"],
+                    "parent" => null
+                ];
+            }
+
+            /// Objects ///
+
+            $this->changeCollection("objects");
+
+            $objects = $this->get(["prototype_id" => $prototype_id]);
+
+            $objects = iterator_to_array($objects);
+
+            //////////////
+
+            foreach ($parameters as $k => $v) {
+
+                foreach ($objects as $o => $vo) {
+
+                    $parameters[$k]["object_id"] = (string)$vo["_id"];
+                }
+            }
+
+            /// Object parameters ///
+
+            $this->changeCollection("object_parameters");
+
+            $this->collection->batchInsert($parameters);
+        }
     }
 
     public function search($parameters)
     {
 
-        $this->get($parameters);
-
-        return $this->document;
+        return $this->get($parameters);
     }
 
     public function getFieldsPrototype($prototype_id)
