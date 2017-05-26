@@ -18,4 +18,9 @@
             </li>
         @endforeach
     </ul>
+
+    @else
+
+    <p class="no-rows">There are not parameters in prototype</p>
+
 @endif

@@ -29,9 +29,9 @@
                <label class="col-md-12 control-label">Value parameter <span class="required-field">*</span></label>
                {{Form::select('type', \App\Helpers\Helper::parameterTypes(), 0, array("class" => "form-control"))}}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 parameters-type-value">
                <label class="col-md-12 control-label">Type values parameter <span class="required-field">*</span></label>
-               {{Form::select('type_value', \App\Helpers\Helper::parameterTypesValue(), 0, array("class" => "form-control"))}}
+               {{Form::select('type_value', \App\Helpers\Helper::parameterTypesValue(), 0, array("id" => "parameters-type-value", "class" => "form-control"))}}
             </div>
          </div>
           <div class="form-group">

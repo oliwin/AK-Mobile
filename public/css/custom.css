@@ -9,6 +9,10 @@ body {
     height: 350px;
 }
 
+.remove-more {
+    display: none;
+}
+
 #login-page {
     margin-top: 100px;
 }
@@ -1064,6 +1068,9 @@ button {
 
 .parameters-list-array li {
     padding: 15px;
+    display: block;
+    width: 100%;
+    height: 55px;
 }
 
 .parameters-list-objects li {

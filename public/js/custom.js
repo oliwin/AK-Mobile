@@ -18,6 +18,14 @@ $(document).on('click', '.add-more', function () {
     num++;
 });
 
+/* Add element of array in objects/create */
+
+$(document).on('click', '.add-more-element-array', function () {
+    $(".parameters-list-array li:first").clone().prependTo(".parameters-list-array");
+    $(".parameters-list-array li:first").find("input:last").val('');
+    num++;
+});
+
 $(function () {
 
     $('.prototype-list input:radio').click(function () {
@@ -41,6 +49,10 @@ $(function () {
         var parent_id = 0;
         var type = $(this).val();
 
+        $('.parameters-type-value').hide();
+        $('#parameters-type-value option[value="boolean"]').show();
+
+
         if ($('#parent_id').length) {
             parent_id = $("#parent_id").val();
         }
@@ -48,10 +60,19 @@ $(function () {
         if (type == "1") {
             $('.fields-object').hide();
             $('.fields-array').hide();
+            $('.parameters-type-value').show();
+
+            $('#parameters-type-value option[value="boolean"]').hide();
+            $('#parameters-type-value option[value="vector2"]').hide();
+            $('#parameters-type-value option[value="vector3"]').hide();
         }
 
         if (type == "3") {
             $('.fields-object').hide();
+            $('.parameters-type-value').show();
+
+            $('#parameters-type-value option[value="vector2"]').hide();
+            $('#parameters-type-value option[value="vector3"]').hide();
         }
 
         if (type == "2") {
@@ -59,8 +80,8 @@ $(function () {
             $('.fields-array').show();
         }
 
-        if(type == "4"){
-            $("#default_value").val("True");
+        if (type == "5") {
+            $('.parameters-type-value').show();
         }
 
         $.get(

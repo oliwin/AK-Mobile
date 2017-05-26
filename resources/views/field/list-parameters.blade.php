@@ -3,7 +3,7 @@
     @if($field["type"] == "3" || $field["type"] == "5")
         @foreach($field["value"] as $id => $value)
             <div class="col-md-12" style="margin-bottom: 15px">
-                <input type="text" name="field_array[]" class="form-control" value="{{$value}}">
+                <input placeholder="Enter default value (not required)" type="text" name="field_array[]" class="form-control" value="{{$value}}">
             </div>
         @endforeach
 

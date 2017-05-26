@@ -1,5 +1,4 @@
 <div class="fields-list row">
-    {{dd($v)}}
     @foreach($field["value"] as $k => $v)
         <div class="col-md-4">{{$v['name']}}</div>
         <div class="col-md-8">

@@ -55,6 +55,8 @@ class ParameterModel extends AbstractModel
 
         $this->setValue();
 
+        $this->validateTypeValue();
+
         $this->setChildrenParameters();
 
     }
@@ -64,6 +66,19 @@ class ParameterModel extends AbstractModel
 
         $this->children = (is_array($this->children)) ? array_keys($this->children) : [];
 
+    }
+
+    private function validateTypeValue()
+    {
+
+        if ($this->type == "4") {
+            $this->type_value = "boolean";
+            $this->value = "true";
+        }
+
+        if ($this->type == "5") {
+            $this->type_value = "float";
+        }
     }
 
     private function setValue()
@@ -81,7 +96,7 @@ class ParameterModel extends AbstractModel
                 $this->value = $this->field_array;
                 break;
         }
-        
+
         if (is_null($this->value)) {
             $this->value = $this->default;
         }
