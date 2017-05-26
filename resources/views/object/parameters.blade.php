@@ -15,7 +15,7 @@
 
                                 @foreach($parameter["value"] as $ak => $v)
                                     <li>
-                                        <input class="form-control" type="text" name="parameters_array[{{(string)$parameter["_id"]}}][]"
+                                        <input placeholder="{{$parameter["type_value"]}}" class="form-control" type="text" name="parameters_array[{{(string)$parameter["_id"]}}][]"
                                                value="{{$v}}">
                                     </li>
                                 @endforeach
@@ -30,7 +30,7 @@
                             <input class="form-control" type="hidden" name="children[]"
                                    value="">
 
-                            <input type="text" class="form-control" name="values[]" value="{{$parameter["value"]}}">
+                            <input placeholder="{{$parameter["type_value"]}}" type="text" class="form-control" name="values[]" value="{{$parameter["value"]}}">
 
                             @include('field.parameter', ["parameter" => $parameter])
 

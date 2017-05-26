@@ -1220,9 +1220,10 @@ class Helper
 
     }
 
-    private static function mongoIDString($id){
+    private static function mongoIDString($id)
+    {
 
-        return (string) $id;
+        return (string)$id;
     }
 
     public static function getTypeParameterName($type)
@@ -1253,11 +1254,12 @@ class Helper
 
     }
 
-    public static function reformatArrayToList($array){
+    public static function reformatArrayToList($array)
+    {
 
         $arr = [0 => "Prototype"];
 
-        foreach($array as $k => $v) {
+        foreach ($array as $k => $v) {
 
             $key = self::mongoIDString($v["_id"]);
 
@@ -1274,9 +1276,24 @@ class Helper
 
     }
 
-    public static function parameterTypes(){
+    public static function parameterTypes()
+    {
 
-        return [1 => "Scalar", 2 => "Object", 3 => "Array", 4 => "Boolean", 5=> "Vector"];
+        return ["" => "Select type", 1 => "Scalar", 2 => "Object", 3 => "Array", 4 => "Boolean", 5 => "Vector"];
+    }
+
+    public static function parameterTypesValue($key = null)
+    {
+
+        $arr = ["" => "Select parameter type", "integer" => "Integer", "string" => "String", "float" => "Float", "boolean" => "Boolean", "vector2" => "Vector 2", "vector3" => "Vector 3"];
+
+
+        if(is_null($key)){
+
+            return $arr;
+        }
+
+        return $arr[$key];
     }
 
 

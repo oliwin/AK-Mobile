@@ -26,6 +26,7 @@ class ParameterObject extends AbstractModel
 
     protected $parameters = [];
 
+    public $errors = [];
 
 
     public function fill(Request $request)
@@ -40,6 +41,60 @@ class ParameterObject extends AbstractModel
 
         $this->parameters = $request->parameters;
 
+    }
+
+    private function checkParameterType($var, $type)
+    {
+
+        switch ($type){
+
+            case "integer":
+                return (is_numeric($var));
+                break;
+
+            case "string":
+                return (is_string($var));
+                break;
+
+            case "boolean":
+                return (is_bool($var));
+                break;
+
+            case "float":
+                return (is_float($var));
+                break;
+
+            case "vector2":
+                return (count($this->parameters_array) == 2);
+                break;
+
+            case "vector3":
+                return (count($this->parameters_array) == 3);
+                break;
+        }
+
+
+    }
+
+    public function validateValues()
+    {
+
+        $parametersClass = new Parameter();
+
+        $data = $parametersClass->getValuesParametersByID($parametersClass->convertIdStringToMongoID($this->parameters));
+        
+        foreach ($this->parameters as $v => $k) {
+
+            $type = $data[$k];
+
+            $value = $this->value[$v];
+
+            if(!$this->checkParameterType($value, $type["type_value"])){
+                $this->errors[$value] = "The field ".$v.' should be: '. $type["type_value"];
+            }
+        }
+
+        return (count($this->errors) > 0) ? false : true;
     }
 
 }

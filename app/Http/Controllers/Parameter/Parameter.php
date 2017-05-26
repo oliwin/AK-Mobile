@@ -160,7 +160,7 @@ class Parameter extends ParameterAbstract
 
         $data = $parameterModel->data();
 
-        $data_excepted = $parameterModel->except(["_id", "parameters_nested", "field_array", "parameters_parents"], $data);
+        $data_excepted = $parameterModel->except(["_id", "parameters_nested", "errors", "field_array", "parameters_parents"], $data);
         
         $this->collection->insert($data_excepted);
 
@@ -182,7 +182,7 @@ class Parameter extends ParameterAbstract
 
         $data = $parameterModel->data();
 
-        $data_excepted = $parameterModel->except(["_id", "parameters_nested", "field_array", "parameters_parents"], $data);
+        $data_excepted = $parameterModel->except(["_id", "parameters_nested", "errors", "field_array", "parameters_parents"], $data);
 
         $this->collection->update($where, $data_excepted);
 

@@ -73,7 +73,8 @@ class PrototypeFieldsController extends Controller
             "default" => "string|required_without:type",
             "only_numbers" => "integer|nullable",
             "available" => "integer|nullable",
-            "type" => "required|integer"
+            "type" => "required|integer",
+            "type_value" => "required|string"
         ]);
 
         if ($validator->fails()) {

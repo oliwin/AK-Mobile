@@ -23,11 +23,11 @@ class ParameterModel extends AbstractModel
 
     protected $type;
 
-    protected $only_numbers;
-
     protected $value;
 
     protected $field_array;
+
+    protected $type_value;
 
     public $children = [];
 
@@ -43,13 +43,13 @@ class ParameterModel extends AbstractModel
 
         $this->visibility = $request->visibility;
 
-        $this->only_numbers = $request->only_numbers;
-
         $this->type = $request->type;
 
         $this->children = $request->parameters;
 
         $this->field_array = $request->field_array;
+
+        $this->type_value = $request->type_value;
 
         /////////////////////////////////////////////
 

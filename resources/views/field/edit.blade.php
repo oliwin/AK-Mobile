@@ -24,22 +24,14 @@
                         <?=Form::checkbox('available', 1, ($field["available"] == "1"));?>
                     </div>
                 </div>
-                <!--<div class="form-group">
-                    <label class="col-md-12 control-label">Visibility</label>
-                    <div class="col-md-3">
-                        <?=Form::selectRange('visibility', 0, 20)?>
-                    </div>
-                </div>-->
                 <div class="form-group">
-                    <label class="col-md-12 control-label">Only numbers</label>
-                    <div class="col-md-3">
-                        <?=Form::checkbox('only_numbers');?>
+                    <div class="col-md-4 select-parameter-type">
+                        <label class="col-md-12 control-label">Value parameter <span class="required-field">*</span></label>
+                        {{Form::select('type', \App\Helpers\Helper::parameterTypes(), 0, array("class" => "form-control"))}}
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-12 control-label">Type <span class="required-field">*</span></label>
-                    <div class="col-md-3 select-parameter-type">
-                        {{Form::select('type', \App\Helpers\Helper::parameterTypes(), $field["type"], array("class" => "form-control"))}}
+                    <div class="col-md-4">
+                        <label class="col-md-12 control-label">Type values parameter <span class="required-field">*</span></label>
+                        {{Form::select('type_value', \App\Helpers\Helper::parameterTypesValue(), 0, array("class" => "form-control"))}}
                     </div>
                 </div>
 

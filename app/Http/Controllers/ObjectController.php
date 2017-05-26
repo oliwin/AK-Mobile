@@ -23,6 +23,7 @@ use App\Http\Controllers\Prototype\Prototype as PrototypeLibrary;
 use App\Http\Controllers\Object\ObjectModel;
 
 
+
 class ObjectController extends Controller
 {
 
@@ -54,9 +55,7 @@ class ObjectController extends Controller
     public function index()
     {
 
-        $this->objectLibrary->all();
-
-        $this->objects = $this->objectLibrary->document();
+        $this->objects = $this->objectLibrary->all(true);
 
         return $this->view();
     }
@@ -103,25 +102,31 @@ class ObjectController extends Controller
 
     public function store(Request $request)
     {
+        $objectModel = new ObjectModel();
+        $parameterModel = new ParameterObject();
+
+        $parameterModel->fill($request);
+        $objectModel->fill($request);
+
         $validator = Validator::make($request->all(), [
 
             "name" => "required|string|min:3",
             "available" => "integer|nullable",
             "prototype_id" => "required|string",
-            "category_id" => "required|string"
+            "category_id" => "required|string",
+            "type" => "required|string|min:3",
+            "type_value" => "required|string|min:3"
         ]);
+
+        if(! $parameterModel->validateValues()){
+            return redirect()->back()->withErrors($parameterModel->errors);
+        }
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors());
         }
 
         try {
-
-            $objectModel = new ObjectModel();
-            $objectModel->fill($request);
-
-            $parameterModel = new ParameterObject();
-            $parameterModel->fill($request);
 
             $this->objectLibrary->add($objectModel, $parameterModel);
 
@@ -166,7 +171,9 @@ class ObjectController extends Controller
             "name" => "required|string|min:3",
             "available" => "integer|nullable",
             "prototype_id" => "required|string",
-            "category_id" => "required|string"
+            "category_id" => "required|string",
+            "type" => "required|string|min:3",
+            "type_value" => "required|string|min:3"
         ]);
 
         if ($validator->fails()) {

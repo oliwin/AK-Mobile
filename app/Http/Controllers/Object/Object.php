@@ -160,7 +160,7 @@ class Object extends ObjectAbstract
 
     private function addValues(ParameterObject $parameters, $object_id = null)
     {
-
+        
         $this->changeCollection("object_parameters");
 
         $parameters = $parameters->data();
