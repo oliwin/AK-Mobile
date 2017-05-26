@@ -9,7 +9,7 @@
 
                         <label>{{$parameter["name"]}}</label><span class="help-block">(Scalar)</span>
 
-                        @if($parameter["type"] == "3")
+                        @if($parameter["type"] == "3" || $parameter["type"] == "5")
                             <ul class="parameters-list-array">
                                 <p class="help-block">(Array)</p>
 

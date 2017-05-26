@@ -167,7 +167,7 @@ class Prototype extends PrototypeAbstract
                 $parameters[] = [
                     "object_id" => null,
                     "parameter_id" => $parameter_id,
-                    "value" => $details["default"],
+                    "value" => $details["value"], // or default
                     "parent" => null
                 ];
             }

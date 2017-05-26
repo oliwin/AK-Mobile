@@ -100,9 +100,7 @@ class PrototypeFieldsController extends Controller
     public function edit($id)
     {
         $parameter = $this->parameterLibrary->getOne(array("_id" => new \MongoId($id)));
-
-        $parameter["children"] = $this->parameterLibrary->children($parameter);
-
+        
         $parameters_all = $this->parameterLibrary->get(["type" => "1", "_id" => array('$ne' => new \MongoId($id))]);
 
         return View::make('field.edit', [

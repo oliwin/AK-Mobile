@@ -1,7 +1,8 @@
 <div class="control-group content-fields-multi">
-    @if($field["type"] == "3")
+
+    @if($field["type"] == "3" || $field["type"] == "5")
         @foreach($field["value"] as $id => $value)
-            <div class="col-md-12">
+            <div class="col-md-12" style="margin-bottom: 15px">
                 <input type="text" name="field_array[]" class="form-control" value="{{$value}}">
             </div>
         @endforeach
@@ -15,7 +16,7 @@
                     <div class="col-md-4">{{$p['name']}}</div>
                     <div class="col-md-8">
                         <input
-                                @if(key_exists((string)$p["_id"], $field["children"])) checked @endif
+                                @if(in_array((string)$p["_id"], $field["children"])) checked @endif
                         type="checkbox"
                                 name="parameters[{{(string)$p['_id']}}]"></div>
                 </div>

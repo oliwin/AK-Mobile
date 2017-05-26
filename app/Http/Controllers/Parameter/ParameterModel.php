@@ -81,11 +81,7 @@ class ParameterModel extends AbstractModel
                 $this->value = $this->field_array;
                 break;
         }
-
-        if ($this->default == $this->value) {
-            $this->type = "1";
-        }
-
+        
         if (is_null($this->value)) {
             $this->value = $this->default;
         }
