@@ -40,7 +40,7 @@
 
                             <input class="form-control" type="hidden" name="children[]"
                                    value="">
-                            <input @if($parameter["type"] == "2") readonly="true" @endif placeholder="{{$parameter["type"]}}" type="text" class="form-control"
+                            <input @if($parameter["type"] == "2" || $parameter["type"] == "6") readonly="true" @endif placeholder="{{$parameter["type"]}}" type="text" class="form-control"
                                    name="values[]" value="{{$parameter["value"]}}">
 
                             

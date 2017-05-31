@@ -2,38 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3d051b4-3cbd-4e3f-939e-d24eee0c8c18" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/field/parameter_edit.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/htdocs.iml" afterPath="$PROJECT_DIR$/.idea/htdocs.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Helpers/Helper.php" afterPath="$PROJECT_DIR$/app/Helpers/Helper.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/CombinerArray.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/API/ObjectWriterReaderFile.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/ObjectWriterReaderFile.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Object/ObjectModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Object/ObjectModel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/ObjectController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/ObjectController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Parameter/Parameter.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Parameter/Parameter.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterModel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterObject.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Parameter/ParameterObject.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Prototype/PrototypeModel.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Prototype/PrototypeModel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/PrototypeFieldsController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/PrototypeFieldsController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/SearchController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/SearchController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/env." afterPath="$PROJECT_DIR$/env." />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/css/custom.css" afterPath="$PROJECT_DIR$/public/css/custom.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/custom.js" afterPath="$PROJECT_DIR$/public/js/custom.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/common/search.blade.php" afterPath="$PROJECT_DIR$/resources/views/common/search.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/field/create.blade.php" afterPath="$PROJECT_DIR$/resources/views/field/create.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/field/edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/field/edit.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/field/index.blade.php" afterPath="$PROJECT_DIR$/resources/views/field/index.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/field/list-parameters.blade.php" afterPath="$PROJECT_DIR$/resources/views/field/list-parameters.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/field/list_vector.blade.php" afterPath="$PROJECT_DIR$/resources/views/field/list_vector.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/field/parameter.blade.php" afterPath="$PROJECT_DIR$/resources/views/field/parameter.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/object/create.blade.php" afterPath="$PROJECT_DIR$/resources/views/object/create.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/object/edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/object/edit.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/object/parameters.blade.php" afterPath="$PROJECT_DIR$/resources/views/object/parameters.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/object/parameters_edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/object/parameters_edit.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/prototype/create.blade.php" afterPath="$PROJECT_DIR$/resources/views/prototype/create.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/prototype/edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/prototype/edit.blade.php" />
     </list>
     <ignored path="htdocs.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,88 +24,7 @@
     <favorites_list name="htdocs" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="PrototypeFieldsController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PrototypeFieldsController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="159" column="87" selection-start-line="159" selection-start-column="87" selection-end-line="159" selection-end-column="87" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edit.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/object/edit.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
-              <caret line="54" column="46" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="61" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="parameters_edit.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/object/parameters_edit.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="150" selection-start-line="20" selection-start-column="150" selection-end-line="20" selection-end-column="150" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="env." pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/env.">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Helper.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Helpers/Helper.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="107" column="5" selection-start-line="107" selection-start-column="5" selection-end-line="107" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="custom.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/js/custom.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="386">
-              <caret line="59" column="34" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="create.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/object/create.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="create.blade.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/field/create.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="26" column="42" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -143,7 +32,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/resources/views/prototype/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/field/list-checkboxes.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/SearchController.php" />
         <option value="$PROJECT_DIR$/resources/views/common/search.blade.php" />
@@ -180,7 +68,6 @@
         <option value="$PROJECT_DIR$/resources/views/field/list_vector.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/field/edit.blade.php" />
         <option value="$PROJECT_DIR$/public/css/custom.css" />
-        <option value="$PROJECT_DIR$/resources/views/object/parameters.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/object/edit.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/prototype/edit.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Object/Object.php" />
@@ -194,6 +81,8 @@
         <option value="$PROJECT_DIR$/app/Helpers/Helper.php" />
         <option value="$PROJECT_DIR$/public/js/custom.js" />
         <option value="$PROJECT_DIR$/resources/views/field/create.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/object/parameter.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/object/parameters.blade.php" />
       </list>
     </option>
   </component>
@@ -623,19 +512,19 @@
       <workItem from="1495868564803" duration="21000" />
       <workItem from="1496040181920" duration="882000" />
       <workItem from="1496166393804" duration="11447000" />
-      <workItem from="1496212772777" duration="2026000" />
+      <workItem from="1496212772777" duration="2545000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="343828000" />
+    <option name="totallyTimeSpent" value="344347000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="21" width="1313" height="747" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23533891" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23533891" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3831361" sideWeight="0.5121212" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -700,13 +589,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/views/prototype/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-95">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/home.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -876,13 +758,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/object/parameters.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="59" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Prototype/Prototype.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2520">
@@ -925,13 +800,6 @@
         <state relative-caret-position="180">
           <caret line="12" column="113" selection-start-line="12" selection-start-column="113" selection-end-line="12" selection-end-column="113" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/field/parameter.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="61" selection-start-line="19" selection-start-column="61" selection-end-line="19" selection-end-column="61" />
         </state>
       </provider>
     </entry>
@@ -1014,34 +882,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/object/edit.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/object/create.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="54" column="46" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="61" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/object/parameters_edit.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/object/parameters.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="150" selection-start-line="20" selection-start-column="150" selection-end-line="20" selection-end-column="150" />
+        <state relative-caret-position="280">
+          <caret line="42" column="92" selection-start-line="42" selection-start-column="92" selection-end-line="42" selection-end-column="92" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/env.">
+    <entry file="file://$PROJECT_DIR$/resources/views/object/parameter.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
+        <state relative-caret-position="105">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Helpers/Helper.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/field/parameter.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="107" column="5" selection-start-line="107" selection-start-column="5" selection-end-line="107" selection-end-column="5" />
+        <state relative-caret-position="285">
+          <caret line="19" column="61" selection-start-line="19" selection-start-column="61" selection-end-line="19" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/field/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="26" column="42" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
           <folding />
         </state>
       </provider>
@@ -1054,18 +930,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/object/create.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Helpers/Helper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="231">
+          <caret line="107" column="5" selection-start-line="107" selection-start-column="5" selection-end-line="107" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/field/create.blade.php">
+    <entry file="file://$PROJECT_DIR$/env.">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="26" column="42" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
+        <state relative-caret-position="30">
+          <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/object/parameters_edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="150" selection-start-line="20" selection-start-column="150" selection-end-line="20" selection-end-column="150" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/object/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="54" column="46" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="61" />
           <folding />
         </state>
       </provider>
