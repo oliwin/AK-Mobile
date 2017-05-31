@@ -12,6 +12,14 @@
                         {!! Form::text('name', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Name"]) !!}
                     </div>
                 </div>
+
+                  <div class="form-group">
+            <label class="col-md-12 control-label">Prefix <span class="required-field">*</span></label>
+            <div class="col-md-12">
+               {!! Form::text('prefix', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Prefix"]) !!}
+            </div>
+         </div>
+
                 <div class="form-group">
                     <label class="col-md-12 control-label">Default value <span class="required-field">*</span></label>
                     <div class="col-md-3">

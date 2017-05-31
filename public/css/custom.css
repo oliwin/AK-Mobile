@@ -1060,6 +1060,7 @@ button {
     padding: 0;
     margin: 0;
     list-style: none;
+    padding-left: 30px;
 }
 
 .parameters-list li {
@@ -1074,5 +1075,9 @@ button {
 }
 
 .parameters-list-objects li {
-    padding: 15px;
+    padding-left:50px;
+}
+
+#vector_1, #vector_2, #vector_3 {
+    display: none;
 }

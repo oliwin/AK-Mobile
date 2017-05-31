@@ -168,7 +168,7 @@ class Prototype extends PrototypeAbstract
                     "object_id" => null,
                     "parameter_id" => $parameter_id,
                     "value" => $details["value"], // or default
-                    "parent" => null
+                    "children" => $details["children"]
                 ];
             }
 
@@ -189,6 +189,7 @@ class Prototype extends PrototypeAbstract
                     $parameters[$k]["object_id"] = (string)$vo["_id"];
                 }
             }
+
 
             /// Object parameters ///
 

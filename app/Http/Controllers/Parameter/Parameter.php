@@ -213,9 +213,7 @@ class Parameter extends ParameterAbstract
     {
         $a = [];
 
-        $selector = ['_id' => array('$in' => $parameters_ids)];
-
-        $data = $this->get($selector);
+        $data = $this->get(['_id' => ['$in' => $parameters_ids]]);
 
         $this->document = []; // Required
 
@@ -223,41 +221,63 @@ class Parameter extends ParameterAbstract
 
         /// Iterate all ///
 
-        foreach ($all as $k => $v){
-            $id = (string)$v["_id"];
-            $a[$id] = $v;
+        foreach ($all as $k => $parameter){
+            $id = (string)$parameter["_id"];
+            $a[$id] = $parameter;
         }
 
         $all = $a;
+    
+        //////////////////////////////////////////////////////
 
-        ////////////
+        foreach ($data as $k => $value) {
 
-        foreach ($data as $k => $item) {
-            $data[$k]["children"] = $this->getChildren($all, $item);
+            if (is_array($value['children']) && count($value['children']) > 0) {
+
+                $list[$k] = $value;
+                $list[$k]["children"] = $this->getChildren($all, $value['children']);
+
+            } else {
+
+                $list[$k] = $value;
+            }
         }
 
-        return $data;
+        //dd($list);
 
+       return $list;               
     }
 
-    private function getChildren($list, $item)
+
+    private function getChildren($data, $childs)
     {
-        $children = [];
 
-        if (is_array($item["children"])) {
-            foreach ($item["children"] as $k => $id) {
-                $children[] = $list[$id];
+        $list = [];
+
+        foreach ($childs as $k => $child) {
+
+            // $child - is $id
+
+            if (is_array($data[$child]['children'])) {
+
+                $tmpArray = $data[$child];
+                $tmpArray['children'] = $this->getChildren($data, $data[$child]['children']);
+
+            } else {
+
+                $tmpArray = $data[$child];
+    
             }
 
-        } else {
-
-            if (isset($list[$item["children"]])) {
-                $children[] = $list[$item["children"]];
-            }
+            $list[] = $tmpArray;
+            $tmpArray = [];
         }
 
-        return $children;
+        return $list;
+    
     }
+
+    ///////////////////////////
 
     public function iterateChildren($parameters = array())
     {
@@ -274,9 +294,10 @@ class Parameter extends ParameterAbstract
             $item["_id"] = $item["parameter_id"];
             $item["name"] = $details["name"];
             $item["type"] = $details["type"];
+            $item["prefix"] = $details["prefix"];
             $item["children"] = [];
 
-            if (is_null($item["parent"])) {;
+            if (is_null($item["parent"])) {
 
                 $par[(string)$item["_id"]] = $item;
 

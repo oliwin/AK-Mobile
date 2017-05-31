@@ -15,7 +15,7 @@
                                 @foreach($parameter["value"] as $ak => $v)
                                     <li>
                                         <div class="col-md-6">
-                                            <input placeholder="Enter default value ({{$parameter["type_value"]}})"
+                                            <input placeholder="Enter default value ({{$parameter["type"]}})"
                                                    class="form-control" type="text"
                                                    name="parameters_array[{{(string)$parameter["_id"]}}][]"
                                                    value="{{$v}}">
@@ -31,20 +31,24 @@
                             <!-- If another -->
                         @else
 
-                            <label>{{$parameter["name"]}}</label><span class="help-block">(Scalar)</span>
+                        
+
+                            <label>{{$parameter["name"]}}</label><span class="help-block">({{\App\Helpers\Helper::getTypeParameterName($parameter["type"])}})</span>
 
                             <input class="form-control" type="hidden" name="parameters[]"
                                    value="{{(string)$parameter["_id"]}}">
 
                             <input class="form-control" type="hidden" name="children[]"
                                    value="">
-
-                            <input placeholder="{{$parameter["type_value"]}}" type="text" class="form-control"
+                            <input @if($parameter["type"] == "2") readonly="true" @endif placeholder="{{$parameter["type"]}}" type="text" class="form-control"
                                    name="values[]" value="{{$parameter["value"]}}">
 
-                            @include('field.parameter', ["parameter" => $parameter])
+                            
 
                         @endif
+
+                        @include('field.parameter', ["parameter" => $parameter])
+
                     </li>
                 @endforeach
             </ul>

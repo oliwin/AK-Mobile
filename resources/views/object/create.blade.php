@@ -5,17 +5,26 @@
       <legend>Create object <a class="back-link" href="{{URL::previous()}}">Back</a>
       </legend>
       <div class="row">
+
          <?=Form::open(array('route' => 'objects.store', 'novalidate' => "novalidate", 'method' => 'POST', 'files' => true))?>
          <div class="form-group">
             <label class="col-md-12 control-label">Name <span class="required-field">*</span></label>
             <div class="col-md-12">
-               {!! Form::text('name', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Name"]) !!}
+               {!! Form::text('name', old("name"), ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Name"]) !!}
             </div>
          </div>
+
+          <div class="form-group">
+            <label class="col-md-12 control-label">Prefix <span class="required-field">*</span></label>
+            <div class="col-md-12">
+               {!! Form::text('prefix', old("prefix"), ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Prefix"]) !!}
+            </div>
+         </div>
+
          <div class="form-group">
             <label class="col-md-12 control-label">Category <span class="required-field">*</span></label>
             <div class="col-md-12">
-               {!! Form::select("category_id", $categories, null, array("class" => "form-control")) !!}
+               {!! Form::select("category_id", $categories, old("category_id"), array("class" => "form-control")) !!}
             </div>
          </div>
          <div class="form-group">

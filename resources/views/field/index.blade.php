@@ -10,7 +10,7 @@
          <th>Id</th>
          <th>Name</th>
          <th>Type</th>
-         <th>Parent</th>
+         <th>Prefix</th>
          <th>Status</th>
          <th>Action</th>
       </tr>
@@ -24,7 +24,7 @@
             <div class="multi_field">{{\App\Helpers\Helper::getTypeParameterName($field['type'])}}</div>
          </td>
          <td>
-            @if(!is_null($field['children'])) Child @else Parent @endif
+           {{$field['prefix']}}
          </td>
          <td>@if($field['available'] == "1") <span class="active">Available</span> @else <span class="completed">Not Available</span> @endif</td>
          <td>

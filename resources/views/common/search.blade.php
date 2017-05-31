@@ -16,6 +16,13 @@
       {{Form::select('prototype_id', \App\Helpers\Helper::reformatArrayToList($prototypes), null, array("class" => "form-control"))}}
     </div>
     @endif
+
+     @if(isset($types))
+    <div class="col-md-3">
+      {{Form::select('type', \App\Helpers\Helper::parameterTypes(), null, array("class" => "form-control"))}}
+    </div>
+    @endif
+
     <div class="col-md-2">
       {{Form::select('available', ["0" => "Status", "1" => "Available", "2" => "Not available"], null, array("class" => "form-control"))}}
     </div>

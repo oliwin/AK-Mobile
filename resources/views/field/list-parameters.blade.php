@@ -7,7 +7,7 @@
             </div>
         @endforeach
 
-    @elseif($field["type"] == "2")
+    @elseif($field["type"] == "2" || $field["type"] == "6")
 
         <div class="fields-list">
             <label class="col-md-12 control-label">Children</label>

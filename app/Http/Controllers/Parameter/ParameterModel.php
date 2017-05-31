@@ -25,6 +25,8 @@ class ParameterModel extends AbstractModel
 
     protected $value;
 
+    protected $prefix;
+
     protected $field_array;
 
     protected $type_value;
@@ -42,6 +44,8 @@ class ParameterModel extends AbstractModel
         $this->default = $request->default;
 
         $this->visibility = $request->visibility;
+
+        $this->prefix = $request->prefix;
 
         $this->type = $request->type;
 
@@ -78,6 +82,14 @@ class ParameterModel extends AbstractModel
 
         if ($this->type == "5") {
             $this->type_value = "float";
+        }
+
+        if ($this->type == "2") {
+            $this->type_value = "object";
+        }
+
+        if ($this->type == "6") {
+            $this->type_value = "array_objects";
         }
     }
 

@@ -19,6 +19,8 @@ class ObjectModel extends AbstractModel
     protected $category_id;
 
     protected $prototype_id;
+
+    protected $prefix;
     
 
     public function fill(Request $request)
@@ -26,6 +28,8 @@ class ObjectModel extends AbstractModel
         $this->validate($request);
 
         $this->name = $request->name;
+
+        $this->prefix = $request->prefix;
 
         $this->category_id = $request->category_id;
 

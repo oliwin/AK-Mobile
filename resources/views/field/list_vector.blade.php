@@ -1,14 +1,25 @@
 <div class="control-group" id="fields">
-    <label class="control-label col-md-12" for="field1">Vector values by default</label>
     <div class="controls" id="profs">
         <div class="input-append">
             <div class="item-row">
-                <div class="col-md-6">
-                    <input autocomplete="off" class="input form-control" id="field1" name="field_array[]" type="text"
-                           placeholder="Enter default value (not required)" data-items="8"/>
+                <div class="col-md-6" id="vector_1">
+                <label>X</label>
+                    <input autocomplete="off" class="input form-control" name="field_array[]" type="text"
+                           placeholder="Enter default value (not required)" value="0"/>
                 </div>
-                <div class="col-md-6">
-                    <button id="b1" class="btn add-more" type="button">+</button>
+            </div>
+             <div class="item-row">
+                <div class="col-md-6" id="vector_2">
+                <label>Y</label>
+                    <input autocomplete="off" class="input form-control" name="field_array[]" type="text"
+                           placeholder="Enter default value (not required)" value="0" />
+                </div>
+            </div>
+             <div class="item-row">
+                <div class="col-md-6" id="vector_3">
+                <label>Z</label>
+                    <input autocomplete="off" class="input form-control" name="field_array[]" type="text"
+                           placeholder="Enter default value (not required)" value="0"/>
                 </div>
             </div>
         </div>

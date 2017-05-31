@@ -71,6 +71,11 @@ class ParameterObject extends AbstractModel
             case "vector3":
                 return (count($this->parameters_array) == 3);
                 break;
+
+            case "object":
+            case "array_objects":
+                return true;
+                break;  
         }
 
 
@@ -79,14 +84,18 @@ class ParameterObject extends AbstractModel
     public function validateValues()
     {
 
+        $this->parameters = (is_null($this->parameters)) ? [] : $this->parameters;
+
         $parametersClass = new Parameter();
 
         $data = $parametersClass->getValuesParametersByID($parametersClass->convertIdStringToMongoID($this->parameters));
-        
+
+
+        ////////////////////
+   
         foreach ($this->parameters as $v => $k) {
 
             $type = $data[$k];
-
             $value = $this->value[$v];
 
             if(!$this->checkParameterType($value, $type["type_value"])){
@@ -94,7 +103,7 @@ class ParameterObject extends AbstractModel
             }
         }
 
-        return (count($this->errors) > 0) ? false : true;
+        return true; // (count($this->errors) > 0) ? false : true;
     }
 
 }

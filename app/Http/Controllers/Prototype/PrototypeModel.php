@@ -20,12 +20,16 @@ class PrototypeModel extends AbstractModel
 
     protected $parameters = [];
 
+    protected $prefix;
+
     public function fill(Request $request)
     {
 
         $this->validate($request);
 
         $this->name = $request->name;
+
+        $this->prefix = $request->prefix;
 
         $this->parameters = (is_null($request->parameters)) ? [] : $request->parameters;
         

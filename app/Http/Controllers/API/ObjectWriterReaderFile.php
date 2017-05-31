@@ -28,7 +28,7 @@ class ObjectWriterReaderFile
     {
         $this->path = public_path() . $this->path;
 
-        $this->file = $this->path . Carbon::now()->format('d-m') . '-' . $this->file;
+        $this->file = $this->path . time() . '-' . $this->file;
 
         $this->countDirectoryFiles();
 
@@ -50,8 +50,8 @@ class ObjectWriterReaderFile
         $files = array_diff(scandir($this->path), array(".", ".."));
 
         foreach ($files as $fileInfo) {
-            
-            $timeModify[filectime($fileInfo)][] = $fileInfo;
+
+            $timeModify[filectime($this->path.$fileInfo)][] = $fileInfo;
         }
 
         return $timeModify;
@@ -83,7 +83,13 @@ class ObjectWriterReaderFile
 
     public function read()
     {
-        $this->content = File::get($this->file);
+      $files = $this->sortFilesByModifyTime();
+
+      $files = array_first($files);
+
+      $this->file = current($files);
+
+      $this->content = File::get($this->path.$this->file);
 
     }
 

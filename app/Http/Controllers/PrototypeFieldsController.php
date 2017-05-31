@@ -54,7 +54,8 @@ class PrototypeFieldsController extends Controller
         return View::make('field.index', [
             "fields" => $this->fields,
             "path" => action("PrototypeFieldsController@create"),
-            "search_path" => "/fields/search"
+            "search_path" => "/fields/search",
+            "types" => true
         ]);
     }
 
@@ -74,7 +75,8 @@ class PrototypeFieldsController extends Controller
             "only_numbers" => "integer|nullable",
             "available" => "integer|nullable",
             "type" => "required|integer",
-            "type_value" => "required|string"
+            "prefix" => "required|string",
+            "type_value" => "string|nullable"
         ]);
 
         if ($validator->fails()) {
@@ -102,7 +104,7 @@ class PrototypeFieldsController extends Controller
     {
         $parameter = $this->parameterLibrary->getOne(array("_id" => new \MongoId($id)));
         
-        $parameters_all = $this->parameterLibrary->get(["type" => "1", "_id" => array('$ne' => new \MongoId($id))]);
+        $parameters_all = $this->parameterLibrary->get();
 
         return View::make('field.edit', [
             "field" => $parameter,
@@ -131,6 +133,7 @@ class PrototypeFieldsController extends Controller
             "available" => "integer|nullable",
             "prototype_id.*" => "nullable",
             "default" => "required|string",
+            "prefix" => "required|string",
             "type" => "required|integer",
             "field_array.*" => "string"
         ]);
@@ -155,6 +158,10 @@ class PrototypeFieldsController extends Controller
 
             case "2":
                 return view('field.list', ['fields' => $this->parameterLibrary->get()]);
+                break;
+
+            case "6":
+                return view('field.list', ['fields' => $this->parameterLibrary->get(["type_value" => "object"])]);
                 break;
 
             case "3":

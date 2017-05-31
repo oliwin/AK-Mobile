@@ -1,0 +1,17 @@
+@media print  {
+    #form-print { border: 1px solid #ccc; padding: 20px; border-radius: 5px; text-align: center; margin: 0 auto; width: 300px; height: 200px }
+    #form-print .unique_code {
+        padding-top: 30px;
+    }
+
+    input[type="checkbox"] {
+        display: none;
+    }
+}
+
+@media all  {
+    #form-print { border: 1px solid #ccc; padding: 20px; border-radius: 5px; text-align: center; margin: 0 auto; width: 300px; height: 200px }
+    #form-print .unique_code {
+        padding-top: 30px;
+    }
+}

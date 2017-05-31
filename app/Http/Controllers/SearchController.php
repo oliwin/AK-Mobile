@@ -36,6 +36,8 @@ class SearchController
 
         $this->condition($condition);
 
+        /////////////////
+
         foreach ($request->all() as $parameter => $value) {
 
             if (property_exists($object->model, $parameter) && !empty($value)) {

@@ -77,7 +77,8 @@ class PrototypeController extends Controller
         $validator = Validator::make($request->all(), [
 
             "name" => "required|string|min:3",
-            "available" => "integer|nullable"
+            "available" => "integer|nullable",
+            "prefix" => "required|string|min:1"
         ]);
 
         if ($validator->fails()) {
@@ -117,7 +118,8 @@ class PrototypeController extends Controller
 
             "name" => "required|string|min:3",
             "available" => "integer|nullable",
-            "field_id.*" => "integer|nullable"
+            "field_id.*" => "integer|nullable",
+            "prefix" => "required|string|min:1"
         ]);
 
         if ($validator->fails()) {

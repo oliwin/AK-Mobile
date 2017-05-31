@@ -1,26 +1,28 @@
+
 @if (count($parameter['children']) > 0)
 
-    <? $parent_id = (string) $parameter["_id"]; ?>
+    @php
+        $parent_id = (string) $parameter["_id"];
+    @endphp
 
     <ul class="parameters-list-objects">
 
         @foreach($parameter['children'] as $parameter)
 
-            @include('field.parameter', $parameter)
+        
             <li>
-                <label>{{ $parameter['name']}}</label>
+                <label>{{ $parameter['name']}} <span class="help-block">({{\App\Helpers\Helper::getTypeParameterName($parameter["type"])}})</span></label>
                 <input class="form-control" type="hidden" name="children[]"
                    value="<?=$parent_id?>">
-                <input type="text" class="form-control" name="values[]" value="{{$parameter["value"]}}">
+                <input @if($parameter["type"] == "2" || $parameter["type"] == "6") readonly="true" @endif type="text" class="form-control" name="values[]" value="{{$parameter["value"]}}">
 
                 <input class="form-control" type="hidden" name="parameters[]"
                        value="{{(string)$parameter["_id"]}}">
             </li>
+
+            @include('field.parameter', $parameter)
+
         @endforeach
     </ul>
-
-    @else
-
-    <p class="no-rows">There are not parameters in prototype</p>
 
 @endif

@@ -12,6 +12,14 @@
                {!! Form::text('name', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Name"]) !!}
             </div>
          </div>
+
+          <div class="form-group">
+            <label class="col-md-12 control-label">Prefix <span class="required-field">*</span></label>
+            <div class="col-md-12">
+               {!! Form::text('prefix', null, ['class' => 'form-control', 'required' => 'required', 'placeholder' => "Prefix"]) !!}
+            </div>
+         </div>
+
          <div class="form-group">
             <label class="col-md-12 control-label">Available</label>
             <div class="col-md-3">
@@ -27,7 +35,7 @@
                      <div class="row item">
                         <div class="col-md-11">
                            <span>{{$v["name"]}}</span>
-                           <p style="font-size: 11px; color: #666">@if($v["type"] == "2") Object @elseif($v["type"] == 3) Array @else Scalar @endif</p>
+                           <p style="font-size: 11px; color: #666">{{\App\Helpers\Helper::getTypeParameterName($v["type"])}}</p>
                         </div>
                         <div class="col-md-1">{{Form::checkbox('parameters[]', App\Helpers\Helper::getMongoIDString($v["_id"]))}}</div>
                      </div>

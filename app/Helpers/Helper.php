@@ -66,6 +66,10 @@ class Helper
             case 5:
                 return "Vector";
                 break;
+
+            case 6:
+                return "Array of objects";
+                break;
         }
 
     }
@@ -92,10 +96,44 @@ class Helper
 
     }
 
+    public static function getFieldValueArray($fields, $id, $index)
+    {
+        foreach ($fields as $k => $v) {
+
+            if ($v["parameter_id"] == $id) {
+
+                return (isset($v["value"][$index])) ? $v["value"][$index] : null;
+            }
+        }
+    }
+
+    public static function getFieldValue($fields, $id, $parameter)
+    {
+
+        foreach ($fields as $k => $v)
+
+            if(!is_null($parameter)){
+
+
+                if ($v["parameter_id"] == $id && $v["parent"] == $parameter) {
+
+                    return $v["value"];
+                }
+
+
+            } else {
+
+                if ($v["parameter_id"] == $id) {
+
+                    return $v["value"];
+                }
+            }
+    }
+
     public static function parameterTypes()
     {
 
-        return ["" => "Select type", 1 => "Scalar", 2 => "Array objects", 3 => "Array", 4 => "Boolean", 5 => "Vector"];
+        return ["" => "Select type", 1 => "Scalar", 2 => "Object", 3 => "Array", 4 => "Boolean", 5 => "Vector", 6 => "Array of objects",];
     }
 
     public static function parameterTypesValue($key = null)

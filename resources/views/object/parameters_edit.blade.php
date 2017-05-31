@@ -1,68 +1,65 @@
 <div class="control-group">
     <div class="col-md-12">
-        <!-- Object type -->
-        @if(isset($parameters[2]))
-            <div class="col-md-12">
-                <h5>Object</h5>
+        @if (count($parameters) > 0)
+            <h4>Parameters</h4>
+            <ul class="parameters-list">
+                @foreach($parameters as $k => $parameter)
+                    <li>
+                        <!-- If array with some values -->
 
-                <?php $a = 0; ?>
+                        @if($parameter["type"] == "3" || $parameter["type"] == "5")
 
-                @foreach($parameters[2] as $k => $v)
+                            <label>{{$parameter["name"]}}</label><span class="help-block">(Array)</span>
 
-                    <label>{{$v["name"]}} (Parent)</label>
+                            <ul class="parameters-list-array">
+                                @foreach($parameter["value"] as $ak => $v)
+                                    <li>
+                                        <div class="col-md-6">
+                                            <input placeholder="Enter default value ({{$parameter["type"]}})"
+                                                   class="form-control" type="text"
+                                                   name="parameters_array[{{(string)$parameter["_id"]}}][]"
+                                                   value="{{\App\Helpers\Helper::getFieldValueArray($parameters_object, (string)$parameter["_id"], $ak)}}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button class="btn remove-more" type="button">-</button>
+                                            <button id="b1" class="btn add-more-element-array" type="button">+</button>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
 
-                    @foreach($v["value"] as $name => $value)
+                            <!-- If another -->
+                        @else
 
-                        <div class="col-md-12">
-                            <label>{{$name}}</label>
-                            <input class="input form-control" name="parameters[2][{{$v["parameter_id"]}}]" type="text"
-                                   value="{{$value}}"/>
-                        </div>
 
-                    @endforeach
+
+                            <label>{{$parameter["name"]}}</label><span
+                                    class="help-block">({{\App\Helpers\Helper::getTypeParameterName($parameter["type"])}})</span>
+
+                            <input class="form-control" type="hidden" name="parameters[]"
+                                   value="{{(string)$parameter["_id"]}}">
+
+                            <input class="form-control" type="hidden" name="children[]"
+                                   value="">
+
+
+                            <input @if($parameter["type"] == "2") readonly="true"
+                                   @endif placeholder="{{$parameter["type"]}}" type="text" class="form-control"
+                                   name="values[]"
+                                   value="{{\App\Helpers\Helper::getFieldValue($parameters_object, (string)$parameter["_id"], null)}}">
+
+
+
+                        @endif
+
+                        @include('field.parameter_edit', ["parameter" => $parameter])
+
+                    </li>
                 @endforeach
-            </div>
+            </ul>
 
-        @endif
-
-    <!-- Scalar type -->
-
-        @if (isset($parameters[1]))
-            <div class="col-md-12">
-                <h5>Scalar</h5>
-                @foreach($parameters[1] as $k => $parameter)
-                    <div class="row item">
-                        <div class="col-md-6">
-                            <label>{{$parameter["name"]}}</label>
-                            <input class="input form-control" name="parameters[1][{{$parameter["parameter_id"]}}]"
-                                   type="text"
-                                   value="{{$parameter["value"]}}"/>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-
-    <!-- Array type -->
-
-        @if (isset($parameters[3]))
-
-            <div class="col-md-12">
-                <h5>Array</h5>
-                @foreach($parameters[3] as $k => $v)
-                    @foreach($v["value"] as $kv => $vv)
-
-                        <div class="row item">
-                            <div class="col-md-6">
-                                <input class="input form-control" name="parameters[3][{{$v["parameter_id"]}}][]"
-                                       type="text"
-                                       value="{{$vv}}"/>
-                            </div>
-                        </div>
-
-                    @endforeach
-                @endforeach
-            </div>
+        @else
+            <p class="no-rows">There are not parameters in prototype</p>
         @endif
     </div>
 </div>
