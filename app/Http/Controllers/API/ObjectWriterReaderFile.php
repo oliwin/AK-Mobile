@@ -85,9 +85,9 @@ class ObjectWriterReaderFile
     {
       $files = $this->sortFilesByModifyTime();
 
-      $files = array_first($files);
+      $file = end($files);
 
-      $this->file = current($files);
+      $this->file = current($file);
 
       $this->content = File::get($this->path.$this->file);
 

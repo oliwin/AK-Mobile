@@ -31,6 +31,8 @@ class CombinerArray
 
     private $objectsClass;
 
+    private $founded = [];
+
     public function __construct()
     {
 
@@ -48,8 +50,10 @@ class CombinerArray
 
     }
 
-    private function recursiveChildrenParameters($parameters, $data = array())
+    private function recursiveChildrenParameters($parameters = array(), $parameter_object = array())
     {
+
+        $data = [];
 
 
         foreach ($parameters as $k => $parameter) {
@@ -57,42 +61,71 @@ class CombinerArray
 
             if (is_array($parameter["children"]) && count($parameter["children"]) > 0) {
 
-                if($parameter["type"] == "2"){
+                if ($parameter["type"] == "2") {
 
                     /* Objects */
 
-                    $data[$parameter["prefix"]] = $this->recursiveChildrenParameters($parameter["children"]);
+                    $data[$parameter["prefix"]] = $this->recursiveChildrenParameters($parameter["children"], $parameter_object);
 
-                } else if ($parameter["type"] == "6"){
+
+                } else if ($parameter["type"] == "6") {
 
                     /* Array of objects */
 
-                    $data[$parameter["prefix"]][] = $this->recursiveChildrenParameters($parameter["children"]);
+                    $data[$parameter["prefix"]][] = $this->recursiveChildrenParameters($parameter["children"], $parameter_object);
                 }
 
             } else {
 
                 /* Scalar */
 
-                $data[$parameter["prefix"]] = $parameter["value"];
+                $data[$parameter["prefix"]] =  $this->getValue($parameter, $parameter_object);
             }
         }
 
         return $data;
     }
 
+    /*
+
+    $parameters_in_object - all parameters in object with parameter_id, parent
+
+    */
+
+    private function getValue($parameter, $parameters_in_object)
+    {
+
+        //dd($parameters_in_object);
+
+        $id = (string)$parameter["_id"];
+
+        foreach ($parameters_in_object as $k => $p) {
+
+            //////////////
+
+            if ($p["parameter_id"] == $id && !in_array($k, $this->founded)) {
+
+                $this->founded[] = $k;
+
+                return $p["value"];
+            }
+        }
+
+
+    }
+
     private function objectParameters($object)
     {
 
-        $parameters = $this->objectsClass->parameters($object);
+        /* Works */
 
-        $parametersClass = new Parameter();
+        $parameters_in_object = $this->objectsClass->parameters($object);
 
-        $parameters = $parametersClass->iterateChildren($parameters);
+        $parameters_ids = $this->prototypesClass->getFieldsPrototype($object["prototype_id"]);
 
-        ///////////////////////////////////
+        $parameters = $this->parametersClass->getValuesParametersByID($parameters_ids);
 
-        return $this->recursiveChildrenParameters($parameters);
+        return $this->recursiveChildrenParameters($parameters, $parameters_in_object);
     }
 
     private function objectsByPrototype($prototype_id)
@@ -102,9 +135,9 @@ class CombinerArray
 
         $objects = $this->objectsClass->objectsByPrototype($prototype_id);
 
-        foreach ($objects as $k => $object) {
+        foreach ($objects as $k => $object){
 
-            $object_m[$object["prefix"]] = $this->objectParameters($object);
+            $object_m[] = $this->objectParameters($object);
         }
 
         return $object_m;
@@ -124,5 +157,4 @@ class CombinerArray
 
         return $this->output;
     }
-
 }

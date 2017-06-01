@@ -47,14 +47,14 @@ $(function () {
     $('#parameters-type-value').on('change', function () {
         var type = $(this).val();
 
-        if(type == "vector2"){
+        if (type == "vector2") {
             $("#vector_3").hide();
             $("#vector_3 input").attr("disabled", true);
             $("#vector_1").show();
             $("#vector_2").show();
         }
 
-        if(type == "vector3"){
+        if (type == "vector3") {
 
             $("#vector_3 input").attr("disabled", false);
             $("#vector_1").show();
@@ -72,10 +72,10 @@ $(function () {
         $('.parameters-type-value').hide();
         $('.parameters-type-value option[value="boolean"]').show();
         $('.parameters-type-value option[value="integer"]').show();
-            $('.parameters-type-value option[value="string"]').show();
-            $('.parameters-type-value option[value="float"]').show();
-            $('.parameters-type-value option[value="vector2"]').show();
-            $('.parameters-type-value option[value="vector3"]').show();
+        $('.parameters-type-value option[value="string"]').show();
+        $('.parameters-type-value option[value="float"]').show();
+        $('.parameters-type-value option[value="vector2"]').show();
+        $('.parameters-type-value option[value="vector3"]').show();
 
 
         if ($('#parent_id').length) {

@@ -161,7 +161,7 @@ class Parameter extends ParameterAbstract
         $data = $parameterModel->data();
 
         $data_excepted = $parameterModel->except(["_id", "parameters_nested", "errors", "field_array", "parameters_parents"], $data);
-        
+
         $this->collection->insert($data_excepted);
 
     }
@@ -213,6 +213,8 @@ class Parameter extends ParameterAbstract
     {
         $a = [];
 
+        $list = [];
+
         $data = $this->get(['_id' => ['$in' => $parameters_ids]]);
 
         $this->document = []; // Required
@@ -221,13 +223,13 @@ class Parameter extends ParameterAbstract
 
         /// Iterate all ///
 
-        foreach ($all as $k => $parameter){
+        foreach ($all as $k => $parameter) {
             $id = (string)$parameter["_id"];
             $a[$id] = $parameter;
         }
 
         $all = $a;
-    
+
         //////////////////////////////////////////////////////
 
         foreach ($data as $k => $value) {
@@ -245,7 +247,7 @@ class Parameter extends ParameterAbstract
 
         //dd($list);
 
-       return $list;               
+        return $list;
     }
 
 
@@ -266,18 +268,17 @@ class Parameter extends ParameterAbstract
             } else {
 
                 $tmpArray = $data[$child];
-    
             }
 
             $list[] = $tmpArray;
-            $tmpArray = [];
         }
 
         return $list;
-    
+
     }
 
     ///////////////////////////
+
 
     public function iterateChildren($parameters = array())
     {
@@ -287,40 +288,94 @@ class Parameter extends ParameterAbstract
 
         $parameterClass = new Parameter();
 
+        /* Iterate parameters ids */
+
+
+        $tmpResult = null;
+        $tmpObjects = [];
+        $tmpParams = [];
+
+
         foreach ($parameters as $k => $item) {
+
 
             $details = $parameterClass->getType($item["parameter_id"]);
 
-            $item["_id"] = $item["parameter_id"];
-            $item["name"] = $details["name"];
-            $item["type"] = $details["type"];
-            $item["prefix"] = $details["prefix"];
-            $item["children"] = [];
+            $tmp = $item;
+            $tmp['children'] = $details['children'];
 
-            if (is_null($item["parent"])) {
-
-                $par[(string)$item["_id"]] = $item;
-
+            if ($details["type"] == 2) {
+                $tmpObjects[] = $tmp;
             } else {
-
-                $children[(string)$item["_id"]] = $item;
+                $tmpParams[] = $tmp;
             }
+
         }
 
-        /* Join children to parents */
+        $tmpFreeParams = [];
 
-        foreach ($par as $k => $parent) {
+        foreach ($tmpObjects as $object) {
 
-            foreach ($children as $key => $child) {
+            foreach ($object['children'] as $childrenId) {
 
-                if ($parent["parameter_id"] == $child["parent"]) {
+                $child = $this->GetChild($childrenId, $tmpParams);
 
-                    $id = (string) $child["_id"];
-                    $par[$k]['children'][$id] = $child;
+                if ($child != null) {
+                    $tmpResult[$object['parameter_id']][$childrenId] = $child;
+
+                }else{
+                    $total = count($tmpFreeParams);
+                    $tmpFreeParams[$total]['c'] = $childrenId;
+                    $tmpFreeParams[$total]['p'] = $object['parameter_id'];
                 }
             }
         }
 
-        return $par;
+
+        foreach ($tmpFreeParams as $freeParams){
+
+            $par = $this->GetChildI($freeParams['c'], $tmpResult);
+
+            if($par == null){
+                echo $childrenId;
+                dd($tmpFreeParams);
+
+            }else{
+                $tmpResult[$freeParams['p']][$freeParams['c']] =  $tmpResult[$freeParams['c']];
+                unset($tmpResult[$freeParams['c']]);
+            }
+
+
+        }
+
+        //dd($tmpResult);
+        return $tmpResult;
     }
+
+    function GetChild($id, $childs)
+    {
+        $result = null;
+        foreach ($childs as $child) {
+            if ($child['parameter_id'] == $id) {
+                $result = $child;
+                break;
+            }
+        }
+        return $result;
+    }
+
+    function GetChildI($id, $childs)
+    {
+        $result = null;
+        foreach ($childs as $k=>$v) {
+
+            if ($k== $id) {
+                $result = $v;
+                break;
+            }
+        }
+        return $result;
+    }
+
+
 }

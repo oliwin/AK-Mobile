@@ -220,8 +220,9 @@ class Object extends ObjectAbstract
     public function get($selector = array())
     {
 
-        $this->cursor = $this->collection->find($selector);
 
+        $this->cursor = $this->collection->find($selector);
+        
         $this->document = $this->cursor;
 
         return $this->document = iterator_to_array($this->document);
@@ -254,6 +255,7 @@ class Object extends ObjectAbstract
 
     public function objectsByPrototype($prototype_id)
     {
+        $this->changeCollection("objects");
 
         $selector = array('prototype_id' => $prototype_id);
 
