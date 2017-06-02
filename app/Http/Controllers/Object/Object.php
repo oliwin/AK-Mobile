@@ -169,13 +169,15 @@ class Object extends ObjectAbstract
 
         /* New parameters dinamycly */
 
+        $i = 0;
+
         foreach ($parameters["parameters_new"] as $k => $ids) {
 
             foreach ($ids as $key => $id) {
 
                 $value = $parameters["values_new"][$k][$key];
                 $children = $parameters["children_new"][$k][$key];
-                $array_object_id = $parameters["parent_array_object_id"][$key];
+                $array_object_id = $parameters["parent_array_object_id"][$i];
 
                 $data = [
                     "object_id" => $object_id,
@@ -185,13 +187,14 @@ class Object extends ObjectAbstract
                     "array_object" => $array_object_id
                 ];
 
+                $this->collection->insert($data);
             }
 
-            $this->collection->insert($data);
+            $i++;
 
         }
 
-        /* Standart parameters */
+        /* Standard parameters */
 
         foreach ($parameters["parameters"] as $k => $id) {
 
