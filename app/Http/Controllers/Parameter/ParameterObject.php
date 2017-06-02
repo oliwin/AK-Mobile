@@ -53,7 +53,7 @@ class ParameterObject extends AbstractModel
 
         /* New */
 
-        $this->parameters_new = $request->parameters_new;
+        $this->parameters_new = (!is_null($request->parameters_new)) ? $request->parameters_new : [];
 
         $this->values_new = $request->values_new;
 

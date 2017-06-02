@@ -170,7 +170,7 @@ class Object extends ObjectAbstract
         /* New parameters dinamycly */
 
         $i = 0;
-
+        
         foreach ($parameters["parameters_new"] as $k => $ids) {
 
             foreach ($ids as $key => $id) {
