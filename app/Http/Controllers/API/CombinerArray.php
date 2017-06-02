@@ -106,7 +106,7 @@ class CombinerArray
             if ($p["parameter_id"] == $id && !in_array($k, $this->founded)) {
 
                 $this->founded[] = $k;
-
+                
                 return $p["value"];
             }
         }

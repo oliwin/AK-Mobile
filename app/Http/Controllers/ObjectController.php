@@ -234,6 +234,26 @@ class ObjectController extends Controller
         return $this->view();
     }
 
+    public function addObjectArray($parameter_id){
+
+        $parameterObj = new Parameter();
+
+        $id = $parameterObj->mongoDbID($parameter_id);
+
+        $parameter = $parameterObj->get(["_id" => $id]);
+
+        $children = $parameter[$parameter_id]['children'];
+
+        ///////////
+
+        $values = $parameterObj->getValuesParametersByID($parameterObj->convertIdStringToMongoID($children));
+
+        return View::make('object.new_object_array', [
+            "parameter_id" => $parameter_id,
+            "parameters" => $values
+        ]);
+    }
+
     public function destroy($id)
     {
 

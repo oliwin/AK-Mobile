@@ -96,13 +96,16 @@ class Helper
 
     }
 
-    public static function getFieldValueArray($fields, $id, $index)
+    public static function getFieldValueArray($fields, $id)
     {
         foreach ($fields as $k => $v) {
 
             if ($v["parameter_id"] == $id) {
 
-                return (isset($v["value"][$index])) ? $v["value"][$index] : null;
+
+                return $v["value"];
+
+                //return (isset($v["value"][$index])) ? $v["value"][$index] : null;
             }
         }
     }

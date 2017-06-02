@@ -28,6 +28,16 @@ class ParameterObject extends AbstractModel
 
     public $errors = [];
 
+    /* New */
+
+    protected $parameters_new = [];
+
+    protected $values_new = [];
+
+    protected $children_new = [];
+
+    protected $parent_array_object_id = [];
+
 
     public function fill(Request $request)
     {
@@ -40,6 +50,16 @@ class ParameterObject extends AbstractModel
         $this->value = $request->values;
 
         $this->parameters = $request->parameters;
+
+        /* New */
+
+        $this->parameters_new = $request->parameters_new;
+
+        $this->values_new = $request->values_new;
+
+        $this->children_new = $request->children_new;
+
+        $this->parent_array_object_id = $request->parent_array_object_id;
 
     }
 

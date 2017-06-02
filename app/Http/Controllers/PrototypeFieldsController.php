@@ -161,7 +161,7 @@ class PrototypeFieldsController extends Controller
                 break;
 
             case "6":
-                return view('field.list', ['fields' => $this->parameterLibrary->get(["type_value" => "object"])]);
+                return view('field.array_objects', ['fields' => $this->parameterLibrary->get(["type_value" => "object"])]);
                 break;
 
             case "3":

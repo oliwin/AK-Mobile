@@ -1056,7 +1056,13 @@ button {
     padding-bottom: 30px;
 }
 
-.parameters-list, .parameters-list-array, .parameters-list-objects {
+.parameters-list-objects {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.parameters-list, .parameters-list-array{
     padding: 0;
     margin: 0;
     list-style: none;
@@ -1074,10 +1080,16 @@ button {
     height: 55px;
 }
 
-.parameters-list-objects li {
+.parameters-list-objects .row {
     padding-left:50px;
 }
 
 #vector_1, #vector_2, #vector_3 {
     display: none;
+}
+
+.new {
+    background: #fff7bc;
+    margin-top: 20px;
+    margin-bottom: 40px;
 }

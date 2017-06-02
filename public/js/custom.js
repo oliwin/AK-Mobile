@@ -18,6 +18,17 @@ $(document).on('click', '.add-more', function () {
     num++;
 });
 
+$(document).on('click', '.add-more-object-array', function () {
+
+    var parameter_id = $(this).attr("data-id");
+
+    $.get(config.path + "object/add/" + parameter_id, function (data) {
+        $("#block_" + parameter_id).prepend(data);
+    });
+});
+
+///add-more-object-array
+
 /* Add element of array in objects/create */
 
 $(document).on('click', '.add-more-element-array', function () {

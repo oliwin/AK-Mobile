@@ -12,13 +12,13 @@
                             <label>{{$parameter["name"]}}</label><span class="help-block">(Array)</span>
 
                             <ul class="parameters-list-array">
-                                @foreach($parameter["value"] as $ak => $v)
+                                @foreach(\App\Helpers\Helper::getFieldValueArray($parameters_object, (string)$parameter["_id"]) as $ak => $v)
                                     <li>
                                         <div class="col-md-6">
                                             <input placeholder="Enter default value ({{$parameter["type"]}})"
                                                    class="form-control" type="text"
                                                    name="parameters_array[{{(string)$parameter["_id"]}}][]"
-                                                   value="{{\App\Helpers\Helper::getFieldValueArray($parameters_object, (string)$parameter["_id"], $ak)}}">
+                                                   value="{{$v}}">
                                         </div>
                                         <div class="col-md-3">
                                             <button class="btn remove-more" type="button">-</button>

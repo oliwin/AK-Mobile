@@ -22,7 +22,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <button class="btn remove-more" type="button">-</button>
-                                            <button id="b1" class="btn add-more-element-array" type="button">+</button>
+                                            <button class="btn add-more-element-array" type="button">+</button>
                                         </div>
                                     </li>
                                 @endforeach
@@ -31,19 +31,48 @@
                             <!-- If another -->
                         @else
 
-                        
+                            <div class="row">
 
-                            <label>{{$parameter["name"]}}</label><span class="help-block">({{\App\Helpers\Helper::getTypeParameterName($parameter["type"])}})</span>
+                            <div class="col-md-2">
+                                <label>{{$parameter["name"]}}</label><span
+                                        class="help-block">({{\App\Helpers\Helper::getTypeParameterName($parameter["type"])}}
+                                    )</span>
+                            </div>
+
 
                             <input class="form-control" type="hidden" name="parameters[]"
                                    value="{{(string)$parameter["_id"]}}">
 
                             <input class="form-control" type="hidden" name="children[]"
                                    value="">
-                            <input @if($parameter["type"] == "2" || $parameter["type"] == "6") readonly="true" @endif placeholder="{{$parameter["type"]}}" type="text" class="form-control"
-                                   name="values[]" value="{{$parameter["value"]}}">
 
-                            
+
+                            @if($parameter["type"] == "6" || $parameter["type"] == "2")
+
+                                <div class="col-md-8">
+                                    <input readonly="readonly" placeholder="{{$parameter["type"]}}" type="text"
+                                           class="form-control"
+                                           name="values[]" value="{{$parameter["value"]}}">
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <button data-id="{{(string)$parameter["_id"]}}" class="btn btn-success add-more add-more-object-array" type="button">+</button>
+                                </div>
+
+                                @else
+
+
+                                <div class="col-md-10">
+                                    <input placeholder="{{$parameter["type"]}}" type="text"
+                                           class="form-control"
+                                           name="values[]" value="{{$parameter["value"]}}">
+                                </div>
+
+                            @endif
+
+                            </div>
+
 
                         @endif
 

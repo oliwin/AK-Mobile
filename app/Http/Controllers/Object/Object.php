@@ -160,12 +160,38 @@ class Object extends ObjectAbstract
 
     private function addValues(ParameterObject $parameters, $object_id = null)
     {
-        
+
         $this->changeCollection("object_parameters");
 
         $parameters = $parameters->data();
 
         //////////////////////////////
+
+        /* New parameters dinamycly */
+
+        foreach ($parameters["parameters_new"] as $k => $ids) {
+
+            foreach ($ids as $key => $id) {
+
+                $value = $parameters["values_new"][$k][$key];
+                $children = $parameters["children_new"][$k][$key];
+                $array_object_id = $parameters["parent_array_object_id"][$key];
+
+                $data = [
+                    "object_id" => $object_id,
+                    "parameter_id" => $id,
+                    "value" => $value,
+                    "parent" => $children,
+                    "array_object" => $array_object_id
+                ];
+
+            }
+
+            $this->collection->insert($data);
+
+        }
+
+        /* Standart parameters */
 
         foreach ($parameters["parameters"] as $k => $id) {
 
@@ -182,6 +208,8 @@ class Object extends ObjectAbstract
             $this->collection->insert($data);
 
         }
+
+        /* If incoming data is array */
 
         if (count($parameters["parameters_array"]) > 0) {
 
@@ -212,6 +240,8 @@ class Object extends ObjectAbstract
 
         $object_id = $this->_insertedID();
 
+        ///////////
+
         $this->addValues($parameterModel, $object_id);
 
 
@@ -222,7 +252,7 @@ class Object extends ObjectAbstract
 
 
         $this->cursor = $this->collection->find($selector);
-        
+
         $this->document = $this->cursor;
 
         return $this->document = iterator_to_array($this->document);
@@ -243,6 +273,8 @@ class Object extends ObjectAbstract
         $this->changeCollection("object_parameters");
 
         $this->collection->remove(array('object_id' => $id));
+
+        /// Insert all after reset
 
         $this->addValues($parameterObject, $id);
     }

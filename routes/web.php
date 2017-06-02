@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth:web']], function () {
   ## OBJECTS ##
   Route::get("prototypes/{id}/objects", "ObjectController@filterByPrototype");
   Route::get("objects/{id}/clone", "ObjectController@cloneObject");
+  Route::get("object/add/{id}", "ObjectController@addObjectArray");
 
   Route::resource('objects', 'ObjectController');
   Route::resource('prototypes', 'PrototypeController');

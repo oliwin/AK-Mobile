@@ -81,4 +81,5 @@ class ObjectController extends Controller
         echo "Information was updated in file! <br> Call <strong>".$this->writerReaderFile->file."</strong> or <strong>/config/db</strong> to display data";
 
     }
+
 }
